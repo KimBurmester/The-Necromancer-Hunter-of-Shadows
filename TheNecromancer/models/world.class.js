@@ -8,6 +8,9 @@ class World{
     background = [
         new Background()
     ]
+    moon = [
+        new Moon()
+    ]
     hill = [
         new Hills()
     ]
@@ -38,6 +41,7 @@ class World{
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         this.addObjectsToMap(this.background);
+        this.addObjectsToMap(this.moon);
         this.addObjectsToMap(this.hill);
 
         this.addObjectsToMap(this.fence);
