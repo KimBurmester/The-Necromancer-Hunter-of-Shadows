@@ -4,7 +4,7 @@ class Fence extends Model {
         positionY = 0;
 
     constructor(){
-        super().loadImage('El_Pollo_Loco\\img\\background-fence\\5-side-background-fence.png');
+        super().loadImage('TheNecromancer\\img\\background-fence\\5-side-background-fence.png');
 
         this.positionX = -300 + Math.random() * 150;
     }

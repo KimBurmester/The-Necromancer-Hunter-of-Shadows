@@ -4,7 +4,7 @@ class Cloud extends Model {
         positionY = 0;
 
     constructor(){
-        super().loadImage('El_Pollo_Loco\\img\\clouds\\2-side-clouds.png');
+        super().loadImage('TheNecromancer\\img\\clouds\\2-side-clouds.png');
 
         this.positionX = -300 + Math.random() * 150;
     }

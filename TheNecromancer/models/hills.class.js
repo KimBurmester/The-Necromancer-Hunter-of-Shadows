@@ -4,7 +4,7 @@ class Hills extends Model {
         positionY = 0;
 
     constructor(){
-        super().loadImage('El_Pollo_Loco\\img\\background-hill\\4-side-backgroundhill.png');
+        super().loadImage('TheNecromancer\\img\\background-hill\\4-side-backgroundhill.png');
 
         this.positionX = -300 + Math.random() * 150;
     }

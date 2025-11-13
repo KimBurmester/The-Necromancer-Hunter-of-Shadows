@@ -4,7 +4,7 @@ class Grave extends Model {
         positionY = 14.8;
 
     constructor(){
-        super().loadImage('El_Pollo_Loco\\img\\background-graves\\6-side-background-graves.png');
+        super().loadImage('TheNecromancer\\img\\background-graves\\6-side-background-graves.png');
 
         this.positionX = -3840 + Math.random() * 3840/2;
     }

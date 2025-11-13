@@ -4,7 +4,7 @@ class Moon extends Model {
     positionY = 150;
     
     constructor(){
-        super().loadImage('El_Pollo_Loco\\img\\moon\\3.png');
+        super().loadImage('TheNecromancer\\img\\moon\\3.png');
     
         this.positionX = 100 + Math.random() * 700;
     }
