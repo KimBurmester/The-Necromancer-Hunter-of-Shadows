@@ -3,7 +3,7 @@ class Enemy extends Model {
         super().loadImage('TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Idle\\Wraith_01_Idle_000.png');
     
         this.positionX = 250 + Math.random() * 500;
-        this.positionY = 245 + Math.random() * 20;
+        this.positionY = 240 + Math.random() * 20;
     }
 
 
