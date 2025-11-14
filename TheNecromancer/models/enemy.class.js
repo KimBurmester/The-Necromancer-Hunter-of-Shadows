@@ -11,7 +11,18 @@ class Enemy extends Model {
         'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_008.png',
         'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_009.png',
         'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_010.png',
-        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_011.png'
+        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_011.png',
+        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_010.png',
+        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_009.png',
+        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_008.png',
+        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_007.png',
+        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_006.png',
+        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_005.png',
+        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_004.png',
+        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_003.png',
+        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_002.png',
+        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_001.png',
+        'TheNecromancer\\img\\enemy\\Wraith_01\\PNG Sequences\\Walking\\Wraith_01_Moving Forward_000.png'
     ];
     currentImage = 0;
     
@@ -34,7 +45,7 @@ class Enemy extends Model {
             let path = this.Enemy_Walking[i];
             this.img = this.walkingImages[path];
             this.currentImage++;
-        }, 100);
+        }, 1000/10);
     }
 
     eat(){
