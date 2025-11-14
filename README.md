@@ -1,7 +1,7 @@
 # The Necromancer – Hunter of Shadows 👻🕯️
 
 **The Necromancer – Hunter of Shadows** ist ein kleines 2D-Spiel, das komplett mit **JavaScript** und handerstellten **Pixel-/2D-Grafiken aus dem Haus Craftpix.net** entwickelt wird.  
-Du spielst einen Nekromanten, der es mit finsteren Geistern aufnimmt, Schatten kontrolliert und unterwegs magische Gegenstände sammelt, um zu überleben – und letztlich die Dunkelheit selbst zu besiegen.
+Du spielst einen Nekromanten, der es mit finsteren Kreaturen aufnimmt, Schatten kontrolliert und unterwegs magische Gegenstände sammelt, um zu überleben – und letztlich die Dunkelheit selbst zu besiegen.
 
 > 🔮 *Sammle. Kämpfe. Überlebe im Reich der Schatten.*
 
@@ -9,8 +9,8 @@ Du spielst einen Nekromanten, der es mit finsteren Geistern aufnimmt, Schatten k
 
 ## 🕹️ Spielkonzept
 
-- **Rolle:** Du bist ein Nekromant auf Geisterjagd  
-- **Gegner:** Verschiedene Geist-Typen mit eigenen Verhaltensmustern  
+- **Rolle:** Du bist ein Nekromant auf der Jagd  
+- **Gegner:** Verschiedene Kreaturen mit eigenen Verhaltensmustern  
 - **Sammelbare Items:**  
   - Seelenfragmente  
   - Tränke & Runen  
@@ -54,7 +54,7 @@ Sobald eine frühe spielbare Version verfügbar ist, freue ich mich über:
 
 - Feedback zu Gameplay & Balance  
 - Bugreports  
-- Vorschläge für neue Geister, Items oder Skills  
+- Vorschläge für Kreaturen, Items oder Skills  
 
 ---
 
