@@ -2,6 +2,7 @@ class Enemy extends Model {
     
     constructor(enemyType = 'wraith_01'){
         super();
+        this.speed = 0.15 + Math.random() * 0.25;
         
         // Setze den Enemy-Typ (Standard: wraith_01)
         this.enemyType = enemyType;
@@ -24,13 +25,10 @@ class Enemy extends Model {
         this.animate();
     }
     animate(){
-        this.moveLeft();
+        super.moveLeft();
     }
 
     moveLeft(){
-        setInterval(() =>{
-            this.positionX -= this.speed;
-        }, 1000/60);
         setInterval(() =>{
             let i = this.currentImage % this.Enemy_Walking.length;
             let path = this.Enemy_Walking[i];
