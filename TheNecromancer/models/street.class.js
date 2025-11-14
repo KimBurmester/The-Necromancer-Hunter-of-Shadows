@@ -7,5 +7,12 @@ class Street extends Model {
         super().loadImage('TheNecromancer\\img\\street\\9-side-street.png');
 
         this.positionX = -300 + Math.random() * 150;
+
+        this.animate();
+    }
+        animate(){
+        setInterval(() =>{
+            this.positionX -= 0.28;
+        }, 1000/60);
     }
 }

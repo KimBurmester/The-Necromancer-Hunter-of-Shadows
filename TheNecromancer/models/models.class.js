@@ -6,10 +6,19 @@ class Model{
     img;
     width = 225;
     height = 225;
+    walkingImages = {}; //json
 
     loadImage(path){
         this.img = new Image();
         this.img.src = path;
+    }
+
+    loadImages(arr){
+        arr.forEach((path) => {
+            let img = new Image();
+            img.src = path;
+            this.walkingImages[path] = img;
+        });
     }
 
     moveRight(){

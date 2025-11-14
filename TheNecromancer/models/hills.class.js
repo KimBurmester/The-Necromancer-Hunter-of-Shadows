@@ -7,5 +7,12 @@ class Hills extends Model {
         super().loadImage('TheNecromancer\\img\\background-hill\\4-side-backgroundhill.png');
 
         this.positionX = -300 + Math.random() * 150;
+
+        this.animate();
+    }
+            animate(){
+        setInterval(() =>{
+            this.positionX -= 0.15;
+        }, 1000/60);
     }
 }
