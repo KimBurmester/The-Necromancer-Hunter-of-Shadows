@@ -4,6 +4,9 @@ body{
     align-items: center;
     background-color: darkgray;
 }
+button{
+    cursor:pointer;
+}
 
 canvas{
     background-color: black;
