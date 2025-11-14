@@ -1,18 +1,18 @@
 class Cloud extends Model {
-        height = canvas.height;
+        height = 680;
         width = 1920;
         positionY = 0;
+        speed = 0.15;
 
     constructor(){
         super().loadImage('TheNecromancer\\img\\clouds\\2-side-clouds.png');
-
-        this.positionX = -300 + Math.random() * 150;
+        this.setPosition();
         this.animate();
     }
-
     animate(){
-        setInterval(() =>{
-            this.positionX -= 0.15;
-        }, 1000/60);
+        this.moveLeft();
+    }
+    setPosition(){
+        this.positionX = -300 + Math.random() * 150;
     }
 }

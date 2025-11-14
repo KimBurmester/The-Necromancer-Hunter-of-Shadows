@@ -1,31 +1,37 @@
-class Model{
-    life;
-    speed;
-    positionX = 50;
-    positionY = 250;
-    img;
-    width = 225;
-    height = 225;
-    walkingImages = {}; //json
+class Model {
+  life;
+  positionX = 50;
+  positionY = 250;
+  img;
+  width = 225;
+  height = 225;
+  walkingImages = {}; //json
+  currentImage = 0;
+  speed = 0.15;
 
-    loadImage(path){
-        this.img = new Image();
-        this.img.src = path;
-    }
+  loadImage(path) {
+    this.img = new Image();
+    this.img.src = path;
+  }
 
-    loadImages(arr){
-        arr.forEach((path) => {
-            let img = new Image();
-            img.src = path;
-            this.walkingImages[path] = img;
-        });
-    }
+  loadImages(arr) {
+    arr.forEach((path) => {
+      let img = new Image();
+      img.src = path;
+      this.walkingImages[path] = img;
+    });
+  }
 
-    moveRight(){
-        console.log("Model moved right");
-    }
+  moveRight() {
+    setInterval(() => {
+      this.positionX += this.speed;
+    }, 1000 / 60);
+  }
 
-    moveLeft(){
-        console.log("Model moved left");
-    }
+  moveLeft() {
+    setInterval(() => {
+      this.positionX -= this.speed;
+    }, 1000 / 60);
+  }
+  setPostion() {}
 }
