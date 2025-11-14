@@ -23,9 +23,24 @@
     <div class="layer">
     <h1 class="title">Nekromant<br>Jäger der Schatten</h1>
 
-    <canvas id="canvas" width="720" height="480">
-
-    </canvas>
+    <div class="game-container">
+        <div class="sidebar left-sidebar">
+            <h3>Spiel</h3>
+            <button class="sidebar-btn" id="startGame">Spiel starten</button>
+            <button class="sidebar-btn" id="levelSelect">Level wählen</button>
+            <button class="sidebar-btn" id="highscore">Highscore</button>
+            <button class="sidebar-btn" id="settings">Einstellungen</button>
+        </div>
+        
+        <canvas id="canvas" width="720" height="480">
+        </canvas>
+        
+        <div class="sidebar right-sidebar">
+            <h3>Optionen</h3>
+            <button class="sidebar-btn" id="fullscreen">Vollbild</button>
+            <button class="sidebar-btn" id="toggleSound">Ton ein/aus</button>
+        </div>
+    </div>
     <div class="footer">
         <div class="footer-text">© 2024 Kim P. Burmester. All rights reserved.</div>
         <div class="footer-link">

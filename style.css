@@ -1,8 +1,9 @@
+@import url(./menus.css);
+
 body{
     display: flex;
     color: white;
     font-size: 26px;
-    font-weight: 100;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     justify-content: center;
     align-items: center;
@@ -18,7 +19,67 @@ body{
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 720px;
+    max-width: 920px;
+}
+
+.game-container{
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+}
+
+.sidebar{
+    width: 100px;
+    height: 484px;
+    background-color: rgb(15, 56, 66);
+    border: 2px solid rgb(50, 50, 50);
+    border-radius: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.left-sidebar{
+    border-radius: 8px 0 0 8px;
+    border-right: none;
+}
+
+.right-sidebar{
+    border-radius: 0 8px 8px 0;
+    border-left: none;
+}
+
+.sidebar h3{
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    text-align: center;
+    color: #ccc;
+    font-weight: normal;
+}
+
+.sidebar-btn{
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 8px 4px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+    word-wrap: break-word;
+    line-height: 1.2;
+}
+
+.sidebar-btn:hover{
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-btn:active{
+    background-color: rgba(255, 255, 255, 0.3);
 }
 button{
     cursor:pointer;
@@ -26,8 +87,9 @@ button{
 
 canvas{
     background-color: black;
-    border: 5px solid rgb(0, 0, 0);
-    border-radius: 10px;
+    border: 2px solid rgb(50, 50, 50);
+    border-left: none;
+    border-right: none;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -50,4 +112,9 @@ a{
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
+}
+
+.footer-link a:hover{
+    text-decoration: underline;
+    
 }
