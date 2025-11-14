@@ -5,6 +5,8 @@ Du spielst einen Nekromanten, der es mit finsteren Kreaturen aufnimmt, Schatten 
 
 > 🔮 *Sammle. Kämpfe. Überlebe im Reich der Schatten.*
 
+[The Necromancer Hunter of the Shadows](https://github.com/user-attachments/assets/3a3ee264-7e92-44f1-b9af-409009c7a701)
+
 ---
 
 ## 🕹️ Spielkonzept
