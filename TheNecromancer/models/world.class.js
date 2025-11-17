@@ -10,12 +10,22 @@ class World{
     clouds = [];
     canvas;
     ctx;
-    constructor(canvas){
+    keyboard;
+
+    constructor(canvas, keyboard){
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
+        this.keyboard = keyboard;
         this.createClouds();
+
+        this.setWorld();
+
+        this.character.startAnimation();
+
         this.draw();
     }
+
+
 
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -30,7 +40,11 @@ class World{
         this.addObjectsToMap(this.enemies);
         let self = this;
         requestAnimationFrame(() => self.draw());
+    }    
+    setWorld(){
+        this.character.world = this;
     }
+
     addObjectsToMap(objects){
         objects.forEach(o => this.addToMap(o));
     }

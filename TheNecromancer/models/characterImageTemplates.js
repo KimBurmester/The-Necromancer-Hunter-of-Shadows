@@ -13,7 +13,7 @@ class CharacterImageTemplates {
                 'TheNecromancer\\img\\character\\Walking\\0_Necromancer_of_the_Shadow_Walking_009.png',
                 'TheNecromancer\\img\\character\\Walking\\0_Necromancer_of_the_Shadow_Walking_010.png',
                 'TheNecromancer\\img\\character\\Walking\\0_Necromancer_of_the_Shadow_Walking_011.png',
-                'TheNecromancer\\img\\character\\Walking\\0_Necromancer_of_the_Shadow_Walking_010.png',
+                 'TheNecromancer\\img\\character\\Walking\\0_Necromancer_of_the_Shadow_Walking_010.png',
                 'TheNecromancer\\img\\character\\Walking\\0_Necromancer_of_the_Shadow_Walking_009.png',
                 'TheNecromancer\\img\\character\\Walking\\0_Necromancer_of_the_Shadow_Walking_008.png',
                 'TheNecromancer\\img\\character\\Walking\\0_Necromancer_of_the_Shadow_Walking_007.png',
