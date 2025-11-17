@@ -32,64 +32,50 @@ class Character extends Model {
 
     animate(){
         console.log('animate() gestartet');
-
-        setInterval(() => {
-            if(this.world.keyboard.RIGHT){
-            this.positionX += this.speed;
-            this.otherDirection = false;
-            }
-            if(this.world.keyboard.LEFT){
-            this.positionX -= this.speed;
-            this.otherDirection = true;
-            }
-        }, 1000/30);
-
-
-        setInterval(() => {
+                setInterval(() => {
             if (this.world && this.world.keyboard) {
                 
+                let isMoving = false;
+                
+                // Bewegung nach rechts
                 if (this.world.keyboard.RIGHT) {
                     this.positionX += this.speed;
+                    console.log('RIGHT gedrückt - Position X:', this.positionX);
+                    this.otherDirection = false;
+                    isMoving = true;
                 }
                 
+                // Bewegung nach links
                 if (this.world.keyboard.LEFT) {
                     this.positionX -= this.speed;
+                    console.log('LEFT gedrückt - Position X:', this.positionX);
+                    this.otherDirection = true;
+                    isMoving = true;
                 }
 
+                // Bewegung nach oben
                 if (this.world.keyboard.UP) {
                     this.positionY -= this.speed;
+                    console.log('UP gedrückt - Position Y:', this.positionY);
+                    isMoving = true;
                 }
 
+                // Bewegung nach unten
                 if (this.world.keyboard.DOWN) {
                     this.positionY += this.speed;
+                    console.log('DOWN gedrückt - Position Y:', this.positionY);
+                    isMoving = true;
                 }
 
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || 
-                    this.world.keyboard.UP || this.world.keyboard.DOWN) {
-
-                    console.log('Character bewegt sich! currentImage:', this.currentImage);
-
+                // Animation nur wenn sich bewegend
+                if (isMoving) {
                     let i = this.currentImage % this.Character_Walking.length;
                     let path = this.Character_Walking[i];
-                    console.log('Lade Bild:', path);
-                    console.log('Verfügbares Bild:', this.walkingImages[path]);
-
                     this.img = this.walkingImages[path];
                     this.currentImage++;
                 }
             }
-        }, 50);
+        }, 1000/30);
     }
 
-/*     animate(){
-    setInterval(() =>{
-        this.moveRight();
-        if(this.world.keyboard.RIGHT){
-            let i = this.currentImage % this.Character_Walking.length;
-            let path = this.Character_Walking[i];
-            this.img = this.walkingImages[path];
-            this.currentImage++;
-        };
-    },100);
-    } */
 }

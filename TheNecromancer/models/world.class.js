@@ -72,9 +72,9 @@ class World{
     }
     flipImageBack(mo){
         this.ctx.save();
-        this.ctx.translate(mo.width, 0);
+        this.ctx.translate(mo.positionX + mo.width / 2, mo.positionY + mo.height / 2);
         this.ctx.scale(-1, 1);
-        this.ctx.drawImage(mo.img, -mo.positionX - mo.width, mo.positionY, mo.width, mo.height);
+        this.ctx.drawImage(mo.img, -mo.width / 2, -mo.height / 2, mo.width, mo.height);
         this.ctx.restore();
     }
 
