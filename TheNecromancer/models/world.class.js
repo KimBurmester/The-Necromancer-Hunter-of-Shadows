@@ -18,21 +18,33 @@ class World{
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.createClouds();
-
         this.setWorld();
-
+        this.createBackgrounds();
         this.character.startAnimation();
-
         this.draw();
     }
 
-
+    createBackgrounds() {
+        let numberOfBackgrounds = 10;
+        for (let i = 0; i < numberOfBackgrounds; i++) {
+            let bg = new Background();
+            let hills = new Hills();
+            let grave = new Grave();
+            let street = new Street();
+            bg.positionX = i * bg.width;
+            hills.positionX = i * hills.width;
+            grave.positionX = i * grave.width;
+            street.positionX = i * street.width;
+            this.background.push(bg);
+            this.hill.push(hills);
+            this.grave.push(grave);
+            this.street.push(street);
+        }
+    }
 
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.ctx.translate(this.camera_x, 0);
-
         this.addObjectsToMap(this.background);
         this.addObjectsToMap(this.moon);
         this.addObjectsToMap(this.hill);
@@ -46,6 +58,7 @@ class World{
         let self = this;
         requestAnimationFrame(() => self.draw());
     }    
+
     setWorld(){
         this.character.world = this;
     }
@@ -61,6 +74,7 @@ class World{
             this.ctx.drawImage(mo.img, mo.positionX, mo.positionY, mo.width, mo.height);
         }
     }
+
     flipImageBack(mo){
         this.ctx.save();
         this.ctx.translate(mo.positionX + mo.width / 2, mo.positionY + mo.height / 2);

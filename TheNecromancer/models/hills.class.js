@@ -5,6 +5,6 @@ class Hills extends Model {
         positionX = 0;
 
     constructor(){
-        super().loadImage('TheNecromancer\\img\\background-hill\\4-side-backgroundhill.png');
+        super().loadImage('TheNecromancer\\img\\background-hill\\4-side-backgroundhill.png', 0);
     }
 }

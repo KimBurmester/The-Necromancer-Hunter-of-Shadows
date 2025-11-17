@@ -5,6 +5,6 @@ class Background extends Model {
         positionX = 0;
 
     constructor(){
-        super().loadImage('TheNecromancer\\img\\halloween-backgrounds\\1.png');
+        super().loadImage('TheNecromancer\\img\\halloween-backgrounds\\1.png', 0);
     }
 }

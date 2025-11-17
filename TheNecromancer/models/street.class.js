@@ -4,6 +4,6 @@ class Street extends Model {
         positionY = 0;
         positionX = 0;
     constructor(){
-        super().loadImage('TheNecromancer\\img\\street\\9-side-street.png');
+        super().loadImage('TheNecromancer\\img\\street\\9-side-street.png', 0);
     }
 }

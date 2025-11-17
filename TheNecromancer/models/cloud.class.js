@@ -5,7 +5,7 @@ class Cloud extends Model {
         speed = 0.15;
 
     constructor(){
-        super().loadImage('TheNecromancer\\img\\clouds\\2-side-clouds.png');
+        super().loadImage('TheNecromancer\\img\\clouds\\2-side-clouds.png', 0);
         this.setPosition();
         this.animate();
     }

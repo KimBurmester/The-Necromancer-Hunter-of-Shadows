@@ -4,6 +4,6 @@ class Grave extends Model {
         positionY = 14.8;
         positionX = 0;
     constructor(){
-        super().loadImage('TheNecromancer\\img\\background-graves\\6-side-background-graves.png');
+        super().loadImage('TheNecromancer\\img\\background-graves\\6-side-background-graves.png', 0);
     }
 }
