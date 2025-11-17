@@ -29,14 +29,17 @@ class World{
         for (let i = 0; i < numberOfBackgrounds; i++) {
             let bg = new Background();
             let hills = new Hills();
+            let fence = new Fence();
             let grave = new Grave();
             let street = new Street();
             bg.positionX = i * bg.width;
             hills.positionX = i * hills.width;
+            fence.positionX = i * fence.width;
             grave.positionX = i * grave.width;
             street.positionX = i * street.width;
             this.background.push(bg);
             this.hill.push(hills);
+            this.fence.push(fence);
             this.grave.push(grave);
             this.street.push(street);
         }
