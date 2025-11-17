@@ -1,6 +1,5 @@
 let canvas;
 let world;
-// Globale Keyboard-Instanz zum Testen
 let keyboard = new Keyboard();
 
 
@@ -9,14 +8,9 @@ function init(){
     world = new World(canvas, keyboard);
     ctx = canvas.getContext('2d');
     
-    // Keyboard-Instanz aus World verwenden
-    /* keyboard = world.keyboard; */
-
     console.log('Der Charakter ist geladen.', world.character);
     console.log('Der Feind ist geladen.', world.enemies);
     console.log('Keyboard ist geladen und aktiv:', keyboard);
-    
-    // Test-Nachricht für Tastatureingaben
     console.log('Drücke jetzt Tasten um die Keyboard-Eingaben zu testen!');
 }
 
