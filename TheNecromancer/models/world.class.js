@@ -11,7 +11,7 @@ class World{
     canvas;
     ctx;
     keyboard;
-    camera_x = -100;
+    camera_x = 0;
 
     constructor(canvas, keyboard){
         this.ctx = canvas.getContext('2d');
