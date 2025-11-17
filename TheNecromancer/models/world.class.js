@@ -11,6 +11,7 @@ class World{
     canvas;
     ctx;
     keyboard;
+    camera_x = -100;
 
     constructor(canvas, keyboard){
         this.ctx = canvas.getContext('2d');
@@ -29,6 +30,9 @@ class World{
 
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.ctx.translate(this.camera_x, 0);
+
         this.addObjectsToMap(this.background);
         this.addObjectsToMap(this.moon);
         this.addObjectsToMap(this.hill);
@@ -38,6 +42,7 @@ class World{
         this.addObjectsToMap(this.street);
         this.addToMap(this.character);
         this.addObjectsToMap(this.enemies);
+        this.ctx.translate(-this.camera_x, 0);
         let self = this;
         requestAnimationFrame(() => self.draw());
     }    
@@ -48,20 +53,6 @@ class World{
     addObjectsToMap(objects){
         objects.forEach(o => this.addToMap(o));
     }
-/*     addToMap(mo){
-        if(mo.otherDirection){
-            this.ctx.save();
-            this.ctx.translate(mo.img.width, 0);
-            this.ctx.scale(-1,1);
-            mo.positionX = mo.positionX * -1;        
-        }
-
-        this.ctx.drawImage(mo.img, mo.positionX, mo.positionY, mo.width, mo.height);
-        if(mo.otherDirection){
-            mo.positionX = mo.positionX * -1; 
-            this.ctx.restore();
-        }
-    } */
 
     addToMap(mo){
         if(mo.otherDirection){

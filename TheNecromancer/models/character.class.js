@@ -49,6 +49,7 @@ class Character extends Model {
                     this.img = this.walkingImages[path];
                     this.currentImage++;
                 }
+                this.world.camera_x = -this.positionX;
             }
         }, 1000/30);
     }
