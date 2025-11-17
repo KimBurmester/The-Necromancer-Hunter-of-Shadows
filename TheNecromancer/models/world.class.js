@@ -48,9 +48,36 @@ class World{
     addObjectsToMap(objects){
         objects.forEach(o => this.addToMap(o));
     }
-    addToMap(mo){
+/*     addToMap(mo){
+        if(mo.otherDirection){
+            this.ctx.save();
+            this.ctx.translate(mo.img.width, 0);
+            this.ctx.scale(-1,1);
+            mo.positionX = mo.positionX * -1;        
+        }
+
         this.ctx.drawImage(mo.img, mo.positionX, mo.positionY, mo.width, mo.height);
+        if(mo.otherDirection){
+            mo.positionX = mo.positionX * -1; 
+            this.ctx.restore();
+        }
+    } */
+
+    addToMap(mo){
+        if(mo.otherDirection){
+            this.flipImageBack(mo);
+        } else {
+            this.ctx.drawImage(mo.img, mo.positionX, mo.positionY, mo.width, mo.height);
+        }
     }
+    flipImageBack(mo){
+        this.ctx.save();
+        this.ctx.translate(mo.width, 0);
+        this.ctx.scale(-1, 1);
+        this.ctx.drawImage(mo.img, -mo.positionX - mo.width, mo.positionY, mo.width, mo.height);
+        this.ctx.restore();
+    }
+
     createClouds() {
         let numberOfClouds = 5;
         for (let i = 0; i < numberOfClouds; i++) {

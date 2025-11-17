@@ -1,7 +1,7 @@
 class Character extends Model {
 
     world;
-    speed = 10;
+    speed = 5;
 
     constructor(){
         super();
@@ -36,6 +36,11 @@ class Character extends Model {
         setInterval(() => {
             if(this.world.keyboard.RIGHT){
             this.positionX += this.speed;
+            this.otherDirection = false;
+            }
+            if(this.world.keyboard.LEFT){
+            this.positionX -= this.speed;
+            this.otherDirection = true;
             }
         }, 1000/30);
 
