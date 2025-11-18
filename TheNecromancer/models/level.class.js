@@ -1,16 +1,20 @@
 class Level {î
-    character;
     enemies;
     background;
-    moon;
     hill;
     grave;
     fence;
     street;
     clouds;
-    canvas;
-    ctx;
-    keyboard;
-    camera_x;
+
+    constructor(enemies, background, hill, grave, fence, street, clouds) {
+        this.enemies = enemies;
+        this.background = background;
+        this.hill = hill;
+        this.grave = grave;
+        this.fence = fence;
+        this.street = street;
+        this.clouds = clouds;
+    }
 
 }

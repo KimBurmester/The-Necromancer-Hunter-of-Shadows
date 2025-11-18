@@ -1,5 +1,5 @@
 class Fence extends Model {
-        height = canvas.height;
+        height = 480;
         width = 1920/2;
         positionY = 25;
         positionX = 0;

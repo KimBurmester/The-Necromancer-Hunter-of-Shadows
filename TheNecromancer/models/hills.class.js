@@ -1,5 +1,5 @@
 class Hills extends Model {
-        height = canvas.height;
+        height = 480;
         width = 1920/2;
         positionY = 0;
         positionX = 0;

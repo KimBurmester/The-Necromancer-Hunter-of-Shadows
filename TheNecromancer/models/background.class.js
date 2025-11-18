@@ -1,5 +1,5 @@
 class Background extends Model {
-        height = 1080;
+        height = 1080/2;
         width = 1920/2;
         positionY = 0;
         positionX = 0;

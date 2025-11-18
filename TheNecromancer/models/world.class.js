@@ -1,13 +1,13 @@
 class World{
     character = new Character();
-    enemies = [new Enemy(),new Enemy(),new Enemy(),new Enemy(),new Enemy(),new Enemy()];
-    background = [new Background()]
-    moon = [new Moon()]
-    hill = [new Hills()]
-    grave = [new Grave()]
-    fence = [new Fence()]
-    street = [new Street()]
-    clouds = [];
+    enemies = level1.enemies;
+    background = level1.background;
+    /* moon = level1.moon; */
+    hill = level1.hill;
+    grave = level1.grave;
+    fence = level1.fence;
+    street = level1.street;
+    clouds = level1.clouds;
     canvas;
     ctx;
     keyboard;
@@ -46,10 +46,10 @@ class World{
     }
 
     draw(){
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, 720, 480);
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.background);
-        this.addObjectsToMap(this.moon);
+        /* this.addObjectsToMap(this.moon); */
         this.addObjectsToMap(this.hill);
         this.addObjectsToMap(this.fence);
         this.addObjectsToMap(this.clouds);
@@ -87,11 +87,8 @@ class World{
     }
 
     createClouds() {
-        let numberOfClouds = 5;
-        for (let i = 0; i < numberOfClouds; i++) {
-            let cloud = new Cloud();
+        this.clouds.forEach((cloud, i) => {
             cloud.positionX = i * (cloud.width - 10);
-            this.clouds.push(cloud);
-        }
+        });
     }
 }

@@ -1,6 +1,6 @@
 class Moon extends Model {
-    height = canvas.height/2;
-    width = canvas.width/2;
+    height = 480/2;
+    width = 750/2;
     positionY = -50;
     
     constructor(){
