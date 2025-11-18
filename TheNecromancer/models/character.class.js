@@ -7,6 +7,7 @@ class Character extends Model {
         this.Character_Walking = ImageTemplateManager.getCharacterImages('walking');
         if (this.Character_Walking.length > 0) {
             this.loadImage(this.Character_Walking[0]);
+            this.positionX = -820;
         }
         this.loadImages(this.Character_Walking);
     };
@@ -49,7 +50,7 @@ class Character extends Model {
                     this.img = this.walkingImages[path];
                     this.currentImage++;
                 }
-                this.world.camera_x = -this.positionX;
+                this.world.camera_x = -this.positionX + 60;
             }
         }, 1000/30);
     }

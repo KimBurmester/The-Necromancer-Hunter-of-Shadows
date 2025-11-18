@@ -21,22 +21,24 @@ class World{
         this.setWorld();
         this.createBackgrounds();
         this.character.startAnimation();
+        this.camera_x = -820;
         this.draw();
     }
 
     createBackgrounds() {
         let numberOfBackgrounds = 10;
+        let startOffset = -2;
         for (let i = 0; i < numberOfBackgrounds; i++) {
             let bg = new Background();
             let hills = new Hills();
             let fence = new Fence();
             let grave = new Grave();
             let street = new Street();
-            bg.positionX = i * bg.width;
-            hills.positionX = i * hills.width;
-            fence.positionX = i * fence.width;
-            grave.positionX = i * grave.width;
-            street.positionX = i * street.width;
+            bg.positionX = (i + startOffset) * bg.width;
+            hills.positionX = (i + startOffset) * hills.width;
+            fence.positionX = (i + startOffset) * fence.width;
+            grave.positionX = (i + startOffset) * grave.width;
+            street.positionX = (i + startOffset) * street.width;
             this.background.push(bg);
             this.hill.push(hills);
             this.fence.push(fence);
