@@ -22,13 +22,13 @@ class Character extends Model {
                 
                 let isMoving = false;
                 
-                if (this.world.keyboard.RIGHT) {
+                if (this.world.keyboard.RIGHT && this.positionX < 7490) {
                     this.positionX += this.speed;
                     console.log('RIGHT gedrückt - Position X:', this.positionX);
                     this.otherDirection = false;
                     isMoving = true;
                 }
-                if (this.world.keyboard.LEFT) {
+                if (this.world.keyboard.LEFT && this.positionX > -1500) {
                     this.positionX -= this.speed;
                     console.log('LEFT gedrückt - Position X:', this.positionX);
                     this.otherDirection = true;
@@ -50,7 +50,12 @@ class Character extends Model {
                     this.img = this.walkingImages[path];
                     this.currentImage++;
                 }
-                this.world.camera_x = -this.positionX + 60;
+                                
+                let newCameraX = -this.positionX + 60;
+                let minCameraX = -(7490 - 720 + 60);
+                let maxCameraX = 820;
+                
+                this.world.camera_x = Math.max(minCameraX, Math.min(maxCameraX, newCameraX));
             }
         }, 1000/30);
     }
