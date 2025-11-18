@@ -11,9 +11,9 @@ class Character extends Model {
         }
         this.loadImages(this.Character_Walking);
     };
-
     startAnimation() {
         this.animate();
+        
     }
 
     animate(){

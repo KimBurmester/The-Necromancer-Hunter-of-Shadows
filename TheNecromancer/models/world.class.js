@@ -26,7 +26,7 @@ class World{
     }
 
     createBackgrounds() {
-        let numberOfBackgrounds = 10;
+        let numberOfBackgrounds = 2;
         let startOffset = -2;
         for (let i = 0; i < numberOfBackgrounds; i++) {
             let bg = new Background();
@@ -66,7 +66,15 @@ class World{
 
     setWorld(){
         this.character.world = this;
+        this.enemies.forEach(enemy => {
+        enemy.world = this;
+    });
+    if (this.endboss) {
+        this.endboss.world = this;
+        console.log('✅ Endboss hat World-Referenz erhalten');
     }
+    }
+    
 
     addObjectsToMap(objects){
         objects.forEach(o => this.addToMap(o));
@@ -94,3 +102,4 @@ class World{
         });
     }
 }
+
