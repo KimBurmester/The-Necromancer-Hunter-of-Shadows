@@ -1,10 +1,10 @@
 class Background extends Model {
-        height = canvas.height;
-        width = canvas.width;
+        height = 1080;
+        width = 1920/2;
         positionY = 0;
         positionX = 0;
 
     constructor(){
-        super().loadImage('TheNecromancer\\img\\halloween-backgrounds\\1.png', 0);
+        super().loadImage('TheNecromancer\\img\\background\\1.png', 0);
     }
 }
