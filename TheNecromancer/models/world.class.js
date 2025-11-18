@@ -1,8 +1,8 @@
 class World{
     character = new Character();
     enemies = level1.enemies;
+    endboss = level1.endboss
     background = level1.background;
-    /* moon = level1.moon; */
     hill = level1.hill;
     grave = level1.grave;
     fence = level1.fence;
@@ -51,7 +51,6 @@ class World{
         this.ctx.clearRect(0, 0, 720, 480);
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.background);
-        /* this.addObjectsToMap(this.moon); */
         this.addObjectsToMap(this.hill);
         this.addObjectsToMap(this.fence);
         this.addObjectsToMap(this.clouds);
@@ -59,6 +58,7 @@ class World{
         this.addObjectsToMap(this.street);
         this.addToMap(this.character);
         this.addObjectsToMap(this.enemies);
+        this.addToMap(this.endboss);
         this.ctx.translate(-this.camera_x, 0);
         let self = this;
         requestAnimationFrame(() => self.draw());
