@@ -2,8 +2,11 @@ class Endboss extends Model{
     isIdle = true;
     idleTime = 3000;
     speed = 2;
-    hasStarted = false; // Flag, um zu prüfen, ob Endboss bereits aktiviert wurde
-    world;     
+    hasStarted = false;
+    world;
+    animationDirection = 1; // 1 = vorwärts, -1 = rückwärts
+    currentIdleImage = 0;
+    currentWalkImage = 0;
     
     constructor(){
         super();
@@ -34,10 +37,10 @@ class Endboss extends Model{
         this.loadImages(this.Endboss_Dying);
         
         // Position am Ende der Karte - Golem ist größer
-        this.positionX = 720; //7350
-        this.positionY = 185;
-        this.width = 280;
-        this.height = 300;
+        this.positionX = 720;
+        this.positionY = 17;
+        this.width = 500;
+        this.height = 500;
         this.otherDirection = true;
 
         this.baseY = this.positionY;
@@ -47,30 +50,28 @@ class Endboss extends Model{
     }
 
     checkCharacterDistance() {
-    setInterval(() => {
-        if (!this.hasStarted && this.world && this.world.character) {
-            // Prüfe, ob Character in Sichtweite ist (Canvas-Breite = 720)
-            let distanceToEndboss = this.positionX - this.world.character.positionX;
-            
-            console.log('--- Endboss Distance Check ---');
-            console.log('Character Position X:', this.world.character.positionX);
-            console.log('Endboss Position X:', this.positionX);
-            console.log('Distanz zum Endboss:', distanceToEndboss);
-            console.log('Canvas Breite (Sichtweite):', 720);
-            console.log('Ist in Sichtweite?', distanceToEndboss <= 720);
-            console.log('----------------------------');
-            
-            if (distanceToEndboss <= 720) {
-                console.log('🔥 Character hat Endboss erreicht! Starte Kampf...');
-                this.hasStarted = true;
-                this.startIdlePhase();
+        setInterval(() => {
+            if (!this.hasStarted && this.world && this.world.character) {
+                let distanceToEndboss = this.positionX - this.world.character.positionX;
+                
+                console.log('--- Endboss Distance Check ---');
+                console.log('Character Position X:', this.world.character.positionX);
+                console.log('Endboss Position X:', this.positionX);
+                console.log('Distanz zum Endboss:', distanceToEndboss);
+                console.log('Canvas Breite (Sichtweite):', 720);
+                console.log('Ist in Sichtweite?', distanceToEndboss <= 720);
+                console.log('----------------------------');
+                
+                if (distanceToEndboss <= 720) {
+                    console.log('🔥 Character hat Endboss erreicht! Starte Kampf...');
+                    this.hasStarted = true;
+                    this.startIdlePhase();
+                }
             }
-        }
-    }, 100); // Prüfe alle 100ms
-}
+        }, 100);
+    }
 
     startIdlePhase() {
-        // Nach idleTime zu Walking wechseln
         setTimeout(() => {
             this.isIdle = false;
             this.animate();
@@ -83,10 +84,20 @@ class Endboss extends Model{
                 clearInterval(idleInterval);
                 return;
             }
-            let i = this.currentImage % this.Endboss_Idle.length;
-            let path = this.Endboss_Idle[i];
+            
+            // Zeige aktuelles Bild
+            let path = this.Endboss_Idle[this.currentIdleImage];
             this.img = this.walkingImages[path];
-            this.currentImage++;
+            
+            // Nächstes Bild berechnen
+            this.currentIdleImage += this.animationDirection;
+            
+            // Richtung umkehren wenn Ende erreicht (0→5→4→3...→0)
+            if (this.currentIdleImage >= this.Endboss_Idle.length - 1) {
+                this.animationDirection = -1; // Ab jetzt rückwärts
+            } else if (this.currentIdleImage <= 0) {
+                this.animationDirection = 1; // Ab jetzt vorwärts
+            }
         }, 150);
     }
 
@@ -98,13 +109,22 @@ class Endboss extends Model{
         setInterval(() => {
             if (this.isIdle) return;
             
-            // Bewege Endboss nach links (langsamer als normale Enemies)
+            // Bewege Endboss nach links
             this.positionX -= this.speed;
             
-            let i = this.currentImage % this.Endboss_Walking.length;
-            let path = this.Endboss_Walking[i];
+            // Zeige aktuelles Bild
+            let path = this.Endboss_Walking[this.currentWalkImage];
             this.img = this.walkingImages[path];
-            this.currentImage++;
+            
+            // Nächstes Bild berechnen
+            this.currentWalkImage += this.animationDirection;
+            
+            // Richtung umkehren wenn Ende erreicht (0→11→10→9...→0)
+            if (this.currentWalkImage >= this.Endboss_Walking.length - 1) {
+                this.animationDirection = -1; // Ab jetzt rückwärts
+            } else if (this.currentWalkImage <= 0) {
+                this.animationDirection = 1; // Ab jetzt vorwärts
+            }
         }, 120);
     }
 }
