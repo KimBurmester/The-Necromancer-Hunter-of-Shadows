@@ -29,6 +29,34 @@ isAboveGround(){
     return this.positionY < 250;
 }
 
+  /**
+   * Gibt die Hitbox-Dimensionen für dieses Objekt zurück
+   * Kann in Subklassen überschrieben werden
+   */
+  getHitbox() {
+    return {
+      x: this.positionX,
+      y: this.positionY,
+      width: this.width,
+      height: this.height
+    };
+  }
+
+  /**
+   * Prüft ob dieses Objekt mit einem anderen kollidiert
+   * @param {Model} other - Das andere Objekt
+   * @returns {boolean} - true wenn Kollision, sonst false
+   */
+  isColliding(other) {
+    let myHitbox = this.getHitbox();
+    let otherHitbox = other.getHitbox();
+    
+    return myHitbox.x < otherHitbox.x + otherHitbox.width &&
+           myHitbox.x + myHitbox.width > otherHitbox.x &&
+           myHitbox.y < otherHitbox.y + otherHitbox.height &&
+           myHitbox.y + myHitbox.height > otherHitbox.y;
+  }
+
   loadImage(path) {
     this.img = new Image();
     this.img.src = path.replace(/\\/g, '/');
@@ -37,10 +65,8 @@ isAboveGround(){
   loadImages(arr) {
     arr.forEach((path) => {
       let img = new Image();
-      // WICHTIG: Normalisiere Pfad für Browser
       let normalizedPath = path.replace(/\\/g, '/');
       img.src = normalizedPath;
-      // Speichere mit normalisiertem Pfad
       this.walkingImages[normalizedPath] = img;
     });
   }
