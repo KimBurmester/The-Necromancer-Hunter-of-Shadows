@@ -1,10 +1,11 @@
 class Endboss extends Model{
     isIdle = true;
-    idleTime = 3000;
+    idleTime = 6000;
     speed = 2;
     hasStarted = false;
     world;
-    animationDirection = 1; // 1 = vorwärts, -1 = rückwärts
+    idleAnimationDirection = 1; // Separate Direction für Idle
+    walkAnimationDirection = 1; // Separate Direction für Walking
     currentIdleImage = 0;
     currentWalkImage = 0;
     
@@ -54,14 +55,6 @@ class Endboss extends Model{
             if (!this.hasStarted && this.world && this.world.character) {
                 let distanceToEndboss = this.positionX - this.world.character.positionX;
                 
-                console.log('--- Endboss Distance Check ---');
-                console.log('Character Position X:', this.world.character.positionX);
-                console.log('Endboss Position X:', this.positionX);
-                console.log('Distanz zum Endboss:', distanceToEndboss);
-                console.log('Canvas Breite (Sichtweite):', 720);
-                console.log('Ist in Sichtweite?', distanceToEndboss <= 720);
-                console.log('----------------------------');
-                
                 if (distanceToEndboss <= 720) {
                     console.log('🔥 Character hat Endboss erreicht! Starte Kampf...');
                     this.hasStarted = true;
@@ -74,6 +67,8 @@ class Endboss extends Model{
     startIdlePhase() {
         setTimeout(() => {
             this.isIdle = false;
+            this.currentWalkImage = 0; // Reset Walking-Animation
+            this.walkAnimationDirection = 1; // Reset Direction
             this.animate();
         }, this.idleTime);
     }
@@ -87,16 +82,18 @@ class Endboss extends Model{
             
             // Zeige aktuelles Bild
             let path = this.Endboss_Idle[this.currentIdleImage];
-            this.img = this.walkingImages[path];
+            if (this.walkingImages[path]) {
+                this.img = this.walkingImages[path];
+            }
             
             // Nächstes Bild berechnen
-            this.currentIdleImage += this.animationDirection;
+            this.currentIdleImage += this.idleAnimationDirection;
             
             // Richtung umkehren wenn Ende erreicht (0→5→4→3...→0)
             if (this.currentIdleImage >= this.Endboss_Idle.length - 1) {
-                this.animationDirection = -1; // Ab jetzt rückwärts
+                this.idleAnimationDirection = -1;
             } else if (this.currentIdleImage <= 0) {
-                this.animationDirection = 1; // Ab jetzt vorwärts
+                this.idleAnimationDirection = 1;
             }
         }, 150);
     }
@@ -114,16 +111,18 @@ class Endboss extends Model{
             
             // Zeige aktuelles Bild
             let path = this.Endboss_Walking[this.currentWalkImage];
-            this.img = this.walkingImages[path];
+            if (this.walkingImages[path]) {
+                this.img = this.walkingImages[path];
+            }
             
             // Nächstes Bild berechnen
-            this.currentWalkImage += this.animationDirection;
+            this.currentWalkImage += this.walkAnimationDirection;
             
             // Richtung umkehren wenn Ende erreicht (0→11→10→9...→0)
             if (this.currentWalkImage >= this.Endboss_Walking.length - 1) {
-                this.animationDirection = -1; // Ab jetzt rückwärts
+                this.walkAnimationDirection = -1;
             } else if (this.currentWalkImage <= 0) {
-                this.animationDirection = 1; // Ab jetzt vorwärts
+                this.walkAnimationDirection = 1;
             }
         }, 120);
     }
