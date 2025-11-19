@@ -15,13 +15,16 @@ class Model {
 
 applyGravity(){
     setInterval(() => {
-        if(this.positionY < 230){
+        if(this.isAboveGround()){
             this.positionY -= this.speedY;
             this.speedY -= this.acceleration;
         }
     }, 1000 / 25);
 }
 
+isAboveGround(){
+    return this.positionY < 230;
+}
 
   loadImage(path) {
     this.img = new Image();
