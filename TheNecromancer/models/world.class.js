@@ -137,26 +137,30 @@ class World{
         return null;
     }
 
-    flipImageBack(mo){
-        this.ctx.save();
-        this.ctx.translate(mo.positionX + mo.width / 2, mo.positionY + mo.height / 2);
-        this.ctx.scale(-1, 1);
-        this.ctx.drawImage(mo.img, -mo.width / 2, -mo.height / 2, mo.width, mo.height);
-        
-        this.ctx.scale(-1, 1);
-        
-        let hitbox = this.getHitboxDimensions(mo);
-        if (hitbox) {
-            this.drawHitbox(
-                -mo.width/2 + hitbox.offsetX,
-                -mo.height/2 + hitbox.offsetY,
-                mo.width - hitbox.widthReduction,
-                mo.height - hitbox.heightReduction
-            );
+flipImageBack(mo){
+    this.ctx.save();
+    this.ctx.translate(mo.positionX + mo.width / 2, mo.positionY + mo.height / 2);
+    this.ctx.scale(-1, 1);
+    this.ctx.drawImage(mo.img, -mo.width / 2, -mo.height / 2, mo.width, mo.height);
+    
+    this.ctx.scale(-1, 1);
+    
+    let hitbox = this.getHitboxDimensions(mo);
+    if (hitbox) {
+        let hitboxX = -mo.width/2 + hitbox.offsetX;
+        if (this.isCharacter(mo)) {
+            hitboxX += 20;
         }
-        
-        this.ctx.restore();
+        this.drawHitbox(
+            hitboxX,
+            -mo.height/2 + hitbox.offsetY,
+            mo.width - hitbox.widthReduction,
+            mo.height - hitbox.heightReduction
+        );
     }
+    
+    this.ctx.restore();
+}
 
     createClouds() {
         this.clouds.forEach((cloud, i) => {
