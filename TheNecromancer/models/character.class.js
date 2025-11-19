@@ -7,8 +7,8 @@ class Character extends Model {
     currentAnimationState = 'idle';
     isJumping = false;
     isFalling = false;
-    jumpStartHeight = 250; // Start-Position beim Sprung
-    maxJumpHeight = 80; // Höchster Punkt (kleinster Y-Wert)
+    jumpStartHeight = 250;
+    maxJumpHeight = 80;
 
     constructor(){
         super();
@@ -40,7 +40,6 @@ class Character extends Model {
 
     jump() {
         if (this.positionY >= 250 && !this.isJumping) {
-            console.log('🚀 Sprung gestartet!');
             this.speedY = 30;
             this.isJumping = true;
             this.isFalling = false;
@@ -50,125 +49,140 @@ class Character extends Model {
     }
 
     getJumpStartFrame() {
-        // Berechne Frame basierend auf Höhe (250 → 80)
-        let totalFrames = this.Character_Jump_Start.length; // 6 Frames
-        let jumpRange = this.jumpStartHeight - this.maxJumpHeight; // 250 - 80 = 170
-        let currentHeight = this.jumpStartHeight - this.positionY; // Wie weit ist er schon gesprungen?
-        
-        // Frame berechnen (0-5)
+        let totalFrames = this.Character_Jump_Start.length; 
+        let jumpRange = this.jumpStartHeight - this.maxJumpHeight;
+        let currentHeight = this.jumpStartHeight - this.positionY;         
         let frame = Math.floor((currentHeight / jumpRange) * totalFrames);
-        frame = Math.min(frame, totalFrames - 1); // Max 5 (letztes Frame)
-        frame = Math.max(frame, 0); // Min 0
+        frame = Math.min(frame, totalFrames - 1);
+        frame = Math.max(frame, 0);
         
-        console.log(`⬆️ Hochsprung - Y: ${this.positionY.toFixed(0)}, Frame: ${frame}/${totalFrames-1}`);
         return frame;
     }
 
     getJumpEndFrame() {
-        // Berechne Frame basierend auf Höhe (80 → 250)
-        let totalFrames = this.Character_Jump_End.length; // 6 Frames
-        let jumpRange = this.jumpStartHeight - this.maxJumpHeight; // 250 - 80 = 170
-        let currentHeight = this.jumpStartHeight - this.positionY; // Wie weit ist er vom Boden entfernt?
-        
-        // Frame berechnen (0-5) - umgekehrt, weil er nach unten fällt
+        let totalFrames = this.Character_Jump_End.length;
+        let jumpRange = this.jumpStartHeight - this.maxJumpHeight;
+        let currentHeight = this.jumpStartHeight - this.positionY;
         let frame = Math.floor(((jumpRange - currentHeight) / jumpRange) * totalFrames);
-        frame = Math.min(frame, totalFrames - 1); // Max 5
-        frame = Math.max(frame, 0); // Min 0
+        frame = Math.min(frame, totalFrames - 1);
+        frame = Math.max(frame, 0);
         
-        console.log(`⬇️ Runterfall - Y: ${this.positionY.toFixed(0)}, Frame: ${frame}/${totalFrames-1}`);
         return frame;
     }
 
-    animate(){
-        setInterval(() => {
-            if (this.world && this.world.keyboard) {
-                
-                this.isMoving = false;
-                
-                if (this.world.keyboard.RIGHT && this.positionX < 7490) {
-                    this.positionX += this.speed;
-                    this.otherDirection = false;
-                    this.isMoving = true;
-                    if (!this.isJumping) {
-                        this.currentAnimationState = 'walking';
-                    }
+
+animate(){
+    let frameCount = 0;
+    
+    setInterval(() => {
+        if (this.world && this.world.keyboard) {
+            
+            this.isMoving = false;
+            
+            if (this.world.keyboard.RIGHT && this.positionX < 495) {
+                this.positionX += this.speed;
+                this.otherDirection = false;
+                this.isMoving = true;
+                if (!this.isJumping) {
+                    this.currentAnimationState = 'walking';
                 }
-                if (this.world.keyboard.LEFT && this.positionX > -1500) {
-                    this.positionX -= this.speed;
-                    this.otherDirection = true;
-                    this.isMoving = true;
-                    if (!this.isJumping) {
-                        this.currentAnimationState = 'walking';
-                    }
+            }
+            if (this.world.keyboard.LEFT && this.positionX > -820) {
+                this.positionX -= this.speed;
+                this.otherDirection = true;
+                this.isMoving = true;
+                if (!this.isJumping) {
+                    this.currentAnimationState = 'walking';
+                }
+            }
+            
+            if (this.world.keyboard.SPACE) {
+                this.jump();
+            }
+            
+            // Jump Animation
+            if (this.isJumping) {
+                if (this.speedY < 0 && !this.isFalling) {
+                    this.isFalling = true;
+                    this.currentAnimationState = 'jumping_end';
                 }
                 
-                if (this.world.keyboard.SPACE) {
-                    this.jump();
-                }
-                
-                // Jump Animation
-                if (this.isJumping) {
-                    // Wechsel zu Fall-Animation wenn Character nach unten fällt
-                    if (this.speedY < 0 && !this.isFalling) {
-                        console.log('⬇️ Falle runter - wechsle zu Jump End Animation');
-                        this.isFalling = true;
-                        this.currentAnimationState = 'jumping_end';
-                    }
+                if (this.currentAnimationState === 'jumping_start') {
+                    let frameIndex = this.getJumpStartFrame();
+                    let path = this.Character_Jump_Start[frameIndex].replace(/\\/g, '/');
                     
-                    // Jump Start Animation (nach oben) - Frame basiert auf Höhe
-                    if (this.currentAnimationState === 'jumping_start') {
-                        let frameIndex = this.getJumpStartFrame();
-                        let path = this.Character_Jump_Start[frameIndex].replace(/\\/g, '/');
-                        
-                        if (this.walkingImages[path]) {
-                            this.img = this.walkingImages[path];
-                        }
-                    }
-                    
-                    // Jump End Animation (nach unten) - Frame basiert auf Höhe
-                    if (this.currentAnimationState === 'jumping_end') {
-                        let frameIndex = this.getJumpEndFrame();
-                        let path = this.Character_Jump_End[frameIndex].replace(/\\/g, '/');
-                        
-                        if (this.walkingImages[path]) {
-                            this.img = this.walkingImages[path];
-                        }
-                    }
-                    
-                    // Landung
-                    if (this.positionY >= 250 && this.speedY <= 0) {
-                        console.log('🛬 Landung!');
-                        this.isJumping = false;
-                        this.isFalling = false;
-                        this.currentAnimationState = this.isMoving ? 'walking' : 'idle';
-                        this.currentImage = 0;
-                        this.idleTime = 0;
-                    }
-                }
-                // Walking Animation
-                else if (this.isMoving && this.currentAnimationState === 'walking') {
-                    let i = this.currentImage % this.Character_Walking.length;
-                    let path = this.Character_Walking[i].replace(/\\/g, '/');
                     if (this.walkingImages[path]) {
                         this.img = this.walkingImages[path];
                     }
-                    this.currentImage++;
-                    this.idleTime = 0;
-                } 
-                // Zurück zu Idle
-                else if (!this.isMoving && !this.isJumping && this.currentAnimationState === 'walking') {
-                    this.currentAnimationState = 'idle';
-                    this.currentImage = 0;
                 }
-                 
-                let newCameraX = -this.positionX + 60;
-                let minCameraX = -(7490 - 720 + 60);
-                let maxCameraX = 820;
                 
-                this.world.camera_x = Math.max(minCameraX, Math.min(maxCameraX, newCameraX));
+                if (this.currentAnimationState === 'jumping_end') {
+                    let frameIndex = this.getJumpEndFrame();
+                    let path = this.Character_Jump_End[frameIndex].replace(/\\/g, '/');
+                    
+                    if (this.walkingImages[path]) {
+                        this.img = this.walkingImages[path];
+                    }
+                }
+                
+                if (this.positionY >= 250 && this.speedY <= 0) {
+                    this.isJumping = false;
+                    this.isFalling = false;
+                    this.currentAnimationState = this.isMoving ? 'walking' : 'idle';
+                    this.currentImage = 0;
+                    this.idleTime = 0;
+                }
             }
-        }, 1000/30);
-    }
+            // Walking Animation
+            else if (this.isMoving && this.currentAnimationState === 'walking') {
+                let i = this.currentImage % this.Character_Walking.length;
+                let path = this.Character_Walking[i].replace(/\\/g, '/');
+                if (this.walkingImages[path]) {
+                    this.img = this.walkingImages[path];
+                }
+                this.currentImage++;
+                this.idleTime = 0;
+            } 
+            else if (!this.isMoving && !this.isJumping && this.currentAnimationState === 'walking') {
+                this.currentAnimationState = 'idle';
+                this.currentImage = 0;
+            }
+             
+            // KORRIGIERTE KAMERA-LOGIK
+            let canvasWidth = 720;
+            
+            // Kamera folgt Character mit Offset von 60px
+            let newCameraX = -this.positionX + 60;
+            
+            // Grenzen für camera_x
+            let maxCameraX = 820;  // Linke Grenze (Start)
+            let minCameraX = -60;  // Rechte Grenze (Ende bei Endboss)
+            
+            // Kamera zwischen den Grenzen halten
+            this.world.camera_x = Math.max(minCameraX, Math.min(maxCameraX, newCameraX));
+            
+            // Log nur alle 30 Frames (ca. jede Sekunde)
+            if (frameCount % 30 === 0) {
+                console.log('═══════════════════════════════════');
+                console.log('📍 Character Position X:', this.positionX.toFixed(2));
+                console.log('📷 Berechnet camera_x:', newCameraX.toFixed(2));
+                console.log('📐 minCameraX:', minCameraX, '| maxCameraX:', maxCameraX);
+                console.log('🎥 Finale camera_x:', this.world.camera_x.toFixed(2));
+                
+                if (this.world.camera_x === maxCameraX) {
+                    console.log('⬅️ LINKS ENDE: Kamera am Anfang fixiert');
+                } else if (this.world.camera_x === minCameraX) {
+                    console.log('➡️ RECHTS ENDE: Kamera am Ende fixiert');
+                } else {
+                    console.log('✅ NORMAL: Camera folgt Character');
+                }
+                console.log('═══════════════════════════════════');
+            }
+            
+            frameCount++;
+        }
+    }, 1000/30);
+}
 
     animateIdle() {
         setInterval(() => {
