@@ -99,6 +99,44 @@ class World{
         }
     }
 
+    setupHitboxStyle() {
+        this.ctx.beginPath();
+        this.ctx.lineWidth = 5;
+        this.ctx.strokeStyle = 'red';
+    }
+
+    drawHitbox(x, y, width, height) {
+        this.setupHitboxStyle();
+        this.ctx.strokeRect(x, y, width, height);
+        this.ctx.stroke();
+    }
+
+    getHitboxDimensions(mo) {
+        if(this.isCharacter(mo)){
+            return {
+                offsetX: 50,
+                offsetY: 50,
+                widthReduction: 120,
+                heightReduction: 85
+            };
+        } else if(this.isEnemy(mo)){
+            return {
+                offsetX: 70,
+                offsetY: 25,
+                widthReduction: 135,
+                heightReduction: 85
+            };
+        } else if(this.isEndboss(mo)){
+            return {
+                offsetX: 150,
+                offsetY: 120,
+                widthReduction: 290,
+                heightReduction: 205
+            };
+        }
+        return null;
+    }
+
     flipImageBack(mo){
         this.ctx.save();
         this.ctx.translate(mo.positionX + mo.width / 2, mo.positionY + mo.height / 2);
@@ -107,18 +145,14 @@ class World{
         
         this.ctx.scale(-1, 1);
         
-        if(this.isCharacter(mo)){
-            this.ctx.strokeStyle = 'red';
-            this.ctx.lineWidth = 5;
-            this.ctx.strokeRect(-mo.width/2 + 50, -mo.height/2 + 50, mo.width - 120, mo.height - 85);
-        } else if(this.isEnemy(mo)){
-            this.ctx.strokeStyle = 'red';
-            this.ctx.lineWidth = 5;
-            this.ctx.strokeRect(-mo.width/2 + 70, -mo.height/2 + 25, mo.width - 135, mo.height - 85);
-        } else if(this.isEndboss(mo)){
-            this.ctx.strokeStyle = 'red';
-            this.ctx.lineWidth = 5;
-            this.ctx.strokeRect(-mo.width/2 + 150, -mo.height/2 + 120, mo.width - 290, mo.height - 205);
+        let hitbox = this.getHitboxDimensions(mo);
+        if (hitbox) {
+            this.drawHitbox(
+                -mo.width/2 + hitbox.offsetX,
+                -mo.height/2 + hitbox.offsetY,
+                mo.width - hitbox.widthReduction,
+                mo.height - hitbox.heightReduction
+            );
         }
         
         this.ctx.restore();
@@ -132,24 +166,15 @@ class World{
 
     drawFrameModel(mo){
         this.ctx.drawImage(mo.img, mo.positionX, mo.positionY, mo.width, mo.height);
-        if(this.isCharacter(mo)){
-            this.ctx.beginPath();
-            this.ctx.lineWidth = 5;
-            this.ctx.strokeStyle = 'red';
-            this.ctx.strokeRect(mo.positionX + 50, mo.positionY + 50, mo.width - 120, mo.height - 85);
-            this.ctx.stroke();
-        } else if(this.isEnemy(mo)){
-            this.ctx.beginPath();
-            this.ctx.lineWidth = 5;
-            this.ctx.strokeStyle = 'red';
-            this.ctx.strokeRect(mo.positionX + 70, mo.positionY + 25, mo.width - 135, mo.height - 85);
-            this.ctx.stroke();
-        } else if(this.isEndboss(mo)){
-            this.ctx.beginPath();
-            this.ctx.lineWidth = 5;
-            this.ctx.strokeStyle = 'red';
-            this.ctx.strokeRect(mo.positionX + 150, mo.positionY + 120, mo.width - 290, mo.height - 205);
-            this.ctx.stroke();
+        
+        let hitbox = this.getHitboxDimensions(mo);
+        if (hitbox) {
+            this.drawHitbox(
+                mo.positionX + hitbox.offsetX,
+                mo.positionY + hitbox.offsetY,
+                mo.width - hitbox.widthReduction,
+                mo.height - hitbox.heightReduction
+            );
         }
     }
 }
