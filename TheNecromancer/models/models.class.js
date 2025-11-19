@@ -1,7 +1,7 @@
 class Model {
   life;
   positionX = 50;
-  positionY = 250;
+  positionY = 230;
   img;
   width = 225;
   height = 225;
@@ -9,6 +9,18 @@ class Model {
   currentImage = 0;
   speed = 0.15;
   otherDirection = false;
+  speedY = 0;
+  acceleration = 2.5;
+
+
+applyGravity(){
+    setInterval(() => {
+        if(this.positionY < 230){
+            this.positionY -= this.speedY;
+            this.speedY -= this.acceleration;
+        }
+    }, 1000 / 25);
+}
 
 
   loadImage(path) {

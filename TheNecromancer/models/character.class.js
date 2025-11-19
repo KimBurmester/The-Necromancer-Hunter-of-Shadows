@@ -8,12 +8,13 @@ class Character extends Model {
         if (this.Character_Walking.length > 0) {
             this.loadImage(this.Character_Walking[0]);
             this.positionX = -820;
+            this.positionY = 80;
         }
         this.loadImages(this.Character_Walking);
-    };
+        this.applyGravity();
+    }
     startAnimation() {
         this.animate();
-        
     }
 
     animate(){
