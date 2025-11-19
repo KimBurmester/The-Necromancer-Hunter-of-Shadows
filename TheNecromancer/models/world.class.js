@@ -22,8 +22,36 @@ class World{
         this.createBackgrounds();
         this.character.startAnimation();
         this.camera_x = -820;
+        this.checkCollisions();
         this.draw();
     }
+
+    checkCollisions() {
+    setInterval(() => {
+        this.checkEnemyCollisions();
+        this.checkEndbossCollision();
+    }, 1000 / 60); // 60 FPS
+}
+
+checkEnemyCollisions() {
+    this.enemies.forEach((enemy, index) => {
+        if (this.character.isColliding(enemy)) {
+            console.log('💥 KOLLISION mit Enemy', index + 1);
+            console.log('Character Hitbox:', this.character.getHitbox());
+            console.log('Enemy Hitbox:', enemy.getHitbox());
+            // Hier kannst du Schaden verursachen, Leben abziehen, etc.
+        }
+    });
+}
+
+checkEndbossCollision() {
+    if (this.endboss && this.character.isColliding(this.endboss)) {
+        console.log('💥 KOLLISION mit ENDBOSS!');
+        console.log('Character Hitbox:', this.character.getHitbox());
+        console.log('Endboss Hitbox:', this.endboss.getHitbox());
+        // Hier kannst du Schaden verursachen
+    }
+}
 
     createBackgrounds() {
         let numberOfBackgrounds = 2;

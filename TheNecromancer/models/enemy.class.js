@@ -51,4 +51,12 @@ class Enemy extends Model {
             this.positionY = this.baseY + Math.sin(this.floatOffset) * this.floatAmplitude;
         }, 1000/60); // 60 FPS für smooth floating
     }
+    getHitbox() {
+    return {
+        x: this.positionX + 70,
+        y: this.positionY + 25,
+        width: this.width - 135,
+        height: this.height - 85
+    };
+}
 }

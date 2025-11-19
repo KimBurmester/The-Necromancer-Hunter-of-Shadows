@@ -213,4 +213,12 @@ class Character extends Model {
             }
         }, 100);
     }
+    getHitbox() {
+    return {
+        x: this.positionX + 50,
+        y: this.positionY + 50,
+        width: this.width - 120,
+        height: this.height - 85
+    };
+}
 }

@@ -126,4 +126,13 @@ class Endboss extends Model{
             }
         }, 120);
     }
+
+    getHitbox() {
+    return {
+        x: this.positionX + 150,
+        y: this.positionY + 120,
+        width: this.width - 290,
+        height: this.height - 205
+    };
+}
 }
