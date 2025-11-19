@@ -125,17 +125,20 @@ class CharacterImageTemplates {
                 'TheNecromancer\\img\\character\\Running\\0_Necromancer_of_the_Shadow_Running_000.png'
             ],
             jumping_start: [
-                'TheNecromancer\\img\\character\\Jump Start\\0_Necromancer_of_the_Shadow_Jump Start_000.png',
-                'TheNecromancer\\img\\character\\Jump Start\\0_Necromancer_of_the_Shadow_Jump Start_001.png',
-                'TheNecromancer\\img\\character\\Jump Start\\0_Necromancer_of_the_Shadow_Jump Start_002.png',
-                'TheNecromancer\\img\\character\\Jump Start\\0_Necromancer_of_the_Shadow_Jump Start_003.png',
-                'TheNecromancer\\img\\character\\Jump Start\\0_Necromancer_of_the_Shadow_Jump Start_004.png',
-                'TheNecromancer\\img\\character\\Jump Start\\0_Necromancer_of_the_Shadow_Jump Start_005.png',
-                'TheNecromancer\\img\\character\\Jump Start\\0_Necromancer_of_the_Shadow_Jump Start_004.png',
-                'TheNecromancer\\img\\character\\Jump Start\\0_Necromancer_of_the_Shadow_Jump Start_003.png',
-                'TheNecromancer\\img\\character\\Jump Start\\0_Necromancer_of_the_Shadow_Jump Start_002.png',
-                'TheNecromancer\\img\\character\\Jump Start\\0_Necromancer_of_the_Shadow_Jump Start_001.png',
-                'TheNecromancer\\img\\character\\Jump Start\\0_Necromancer_of_the_Shadow_Jump Start_000.png',
+                'TheNecromancer//img//character//Jump Start//0_Necromancer_of_the_Shadow_Jump Start_000.png',
+                'TheNecromancer//img//character//Jump Start//0_Necromancer_of_the_Shadow_Jump Start_001.png',
+                'TheNecromancer//img//character//Jump Start//0_Necromancer_of_the_Shadow_Jump Start_003.png',
+                'TheNecromancer//img//character//Jump Start//0_Necromancer_of_the_Shadow_Jump Start_004.png',
+                'TheNecromancer//img//character//Jump Start//0_Necromancer_of_the_Shadow_Jump Start_005.png',
+                'TheNecromancer//img//character//Jump Start//0_Necromancer_of_the_Shadow_Jump Start_002.png'
+            ],
+            jumping_end: [
+                'TheNecromancer//img//character//Jump Start//0_Necromancer_of_the_Shadow_Jump Start_004.png',
+                'TheNecromancer//img//character//Jump Start//0_Necromancer_of_the_Shadow_Jump Start_003.png',
+                'TheNecromancer//img//character//Jump Start//0_Necromancer_of_the_Shadow_Jump Start_002.png',
+                'TheNecromancer//img//character//Jump Start//0_Necromancer_of_the_Shadow_Jump Start_001.png',
+                'TheNecromancer//img//character//Jump Start//0_Necromancer_of_the_Shadow_Jump Start_000.png',
+                'TheNecromancer//img//character//Jump Start//0_Necromancer_of_the_Shadow_Jump Start_005.png'
             ],
             Dying: [
                 'TheNecromancer\\img\\character\\Dying\\0_Necromancer_of_the_Shadow_Dying_000.png',
