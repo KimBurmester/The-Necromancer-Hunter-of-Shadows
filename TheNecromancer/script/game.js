@@ -6,12 +6,6 @@ let keyboard = new Keyboard();
 function init(){
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-    ctx = canvas.getContext('2d');
-    
-    console.log('Der Charakter ist geladen.', world.character);
-    console.log('Der Feind ist geladen.', world.enemies);
-    console.log('Keyboard ist geladen und aktiv:', keyboard);
-    console.log('Drücke jetzt Tasten um die Keyboard-Eingaben zu testen!');
 }
 
 window.addEventListener('keydown', (event) => {
