@@ -36,20 +36,23 @@ class World {
   checkEnemyCollisions() {
     this.enemies.forEach((enemy, index) => {
       if (this.character.isColliding(enemy)) {
-        console.log("💥 KOLLISION mit Enemy", index + 1);
+        this.character.energy -= 0.05;
+/*      console.log("💥 KOLLISION mit Enemy", index + 1);
         console.log("Character Hitbox:", this.character.getHitbox());
-        console.log("Enemy Hitbox:", enemy.getHitbox());
-        // Hier kannst du Schaden verursachen, Leben abziehen, etc.
+        console.log("Enemy Hitbox:", enemy.getHitbox()); */
+        console.log("Character Energy after collision by Enemy:", this.character.energy);
       }
     });
   }
 
   checkEndbossCollision() {
     if (this.endboss && this.character.isColliding(this.endboss)) {
-      console.log("💥 KOLLISION mit ENDBOSS!");
+      this.character.energy -= 0.1;
+/*       console.log("💥 KOLLISION mit ENDBOSS!");
       console.log("Character Hitbox:", this.character.getHitbox());
-      console.log("Endboss Hitbox:", this.endboss.getHitbox());
+      console.log("Endboss Hitbox:", this.endboss.getHitbox()); */
       // Hier kannst du Schaden verursachen
+      console.log("Character Energy after collision by Endboss:", this.character.energy);
     }
   }
 
