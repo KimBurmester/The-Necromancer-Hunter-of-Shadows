@@ -170,6 +170,20 @@ class CharacterImageTemplates {
                 'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Slashing_009.png',
                 'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Slashing_010.png',
                 'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Slashing_011.png'
+            ],
+            hurting: [
+                'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Hurt_000.png',
+                'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Hurt_001.png',
+                'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Hurt_002.png',
+                'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Hurt_003.png',
+                'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Hurt_004.png',
+                'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Hurt_005.png',
+                'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Hurt_006.png',
+                'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Hurt_007.png',
+                'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Hurt_008.png',
+                'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Hurt_009.png',
+                'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Hurt_010.png',
+                'TheNecromancer\\img\\character\\Slashing\\0_Necromancer_of_the_Shadow_Hurt_011.png'
             ]
         };
     }
