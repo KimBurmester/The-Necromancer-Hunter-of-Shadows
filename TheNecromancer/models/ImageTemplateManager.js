@@ -63,11 +63,9 @@ class ImageTemplateManager {
         'idle': { folder: 'Idle/', count: 6, name: 'Idle' },
         'idle_blinking': { folder: 'Idle Blinking/', count: 9, name: 'Idle Blinking' },
         'walking': { folder: 'Walking/', count: 12, name: 'Walking' },
-        'running': { folder: 'Running/', count: 8, name: 'Running' },
         'hurt': { folder: 'Hurt/', count: 3, name: 'Hurt' },
         'dying': { folder: 'Dying/', count: 15, name: 'Dying' },
-        'slashing': { folder: 'Slashing/', count: 12, name: 'Slashing' },
-        'throwing': { folder: 'Throwing/', count: 12, name: 'Throwing' }
+        'slashing': { folder: 'Slashing/', count: 12, name: 'Slashing' }
     };
     
     if (animations[animationType]) {
