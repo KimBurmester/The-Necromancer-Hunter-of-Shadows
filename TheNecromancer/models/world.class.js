@@ -9,6 +9,7 @@ class World {
   fence = level1.fence;
   street = level1.street;
   clouds = level1.clouds;
+  statusbar = new Statusbar();
   canvas;
   ctx;
   keyboard;
@@ -45,10 +46,11 @@ positionEndboss() {
   }
 
 checkEnemyCollisions() {
-    this.enemies.forEach((enemy, index) => {
+    this.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy) && this.character.energy > 0) {
             if (!this.character.isHurtRecently()) {
                 this.character.hit();
+                this.statusbar.setEnergy(this.character.energy);
             }
         }
     });
@@ -59,6 +61,7 @@ checkEndbossCollision() {
         if (!this.character.isHurtRecently()) {
             this.character.hit();
             this.character.hit();
+            this.statusbar.setEnergy(this.character.energy);
         }
     }
 }
@@ -103,6 +106,7 @@ createBackgrounds() {
     this.addObjectsToMap(this.enemies);
     this.addToMap(this.endboss);
     this.ctx.translate(-this.camera_x, 0);
+    this.addToMap(this.statusbar);
     let self = this;
     requestAnimationFrame(() => self.draw());
   }
@@ -133,13 +137,17 @@ createBackgrounds() {
     return mo instanceof Endboss;
   }
 
-  addToMap(mo) {
-    if (mo.otherDirection) {
-      this.flipImageBack(mo);
-    } else {
-      this.drawFrameModel(mo);
+addToMap(mo) {
+    if (mo instanceof Statusbar) {
+        mo.draw(this.ctx);
+        return;
     }
-  }
+    if (mo.otherDirection) {
+        this.flipImageBack(mo);
+    } else {
+        this.drawFrameModel(mo);
+    }
+}
 
   setupHitboxStyle() {
     this.ctx.beginPath();
