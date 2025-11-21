@@ -256,8 +256,6 @@ updateCamera() {
             this.isHurt = true;
             this.currentAnimationState = 'hurting';
             this.currentImage = 0;
-            
-            console.log('💥 Character wurde getroffen!', 'Energy:', this.energy);
         }
     }
         
