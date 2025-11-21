@@ -18,30 +18,21 @@ constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
-    
-    this.createClouds();
     this.setWorld();
     this.createBackgrounds();
+    this.createClouds();
     this.positionEndboss();
     this.level.calculateLevelEnd();
     this.character.startAnimation();
-    
-    // ✅ KORRIGIERT: Kamera startet so, dass Background sichtbar ist
-    // Character bei -820, Background bei -1920
-    // Kamera muss 1100 nach links (1920 - 820 = 1100)
     this.camera_x = 1100;
-    
     this.checkCollisions();
     this.draw();
 }
 
 positionEndboss() {
     if (this.endboss && this.background.length > 0) {
-        // Finde den letzten Background
         let lastBg = this.background[this.background.length - 1];
         let levelEnd = lastBg.positionX + lastBg.width;
-        
-        // Setze Endboss 300px vor dem Ende
         this.endboss.positionX = levelEnd - 300;
     }
 }
@@ -68,9 +59,9 @@ positionEndboss() {
   }
 
 createBackgrounds() {
-    let numberOfBackgrounds = 5; // ✅ Mehr Backgrounds für längeres Level
+    let numberOfBackgrounds = 5;
     let bgWidth = 960;
-    let startX = -1920; // ✅ Start weit links
+    let startX = -1920;
     
     for (let i = 0; i < numberOfBackgrounds; i++) {
         let bg = new Background();
@@ -78,8 +69,6 @@ createBackgrounds() {
         let fence = new Fence();
         let grave = new Grave();
         let street = new Street();
-        
-        // ✅ Backgrounds nahtlos nebeneinander
         let posX = startX + (i * bgWidth);
         
         bg.positionX = posX;
@@ -199,9 +188,7 @@ createBackgrounds() {
       mo.width,
       mo.height
     );
-
     this.ctx.scale(-1, 1);
-
     let hitbox = this.getHitboxDimensions(mo);
     if (hitbox) {
       let hitboxX = -mo.width / 2 + hitbox.offsetX;
@@ -215,19 +202,24 @@ createBackgrounds() {
         mo.height - hitbox.heightReduction
       );
     }
-
     this.ctx.restore();
   }
 
-  createClouds() {
-    this.clouds.forEach((cloud, i) => {
-      cloud.positionX = i * (cloud.width - 10);
-    });
-  }
+createClouds() {
+    let numberOfClouds = this.background.length * 2;
+    let cloudWidth = 1920;
+    let startX = -1920 - cloudWidth;
+    this.clouds = [];
+    for (let i = 0; i < numberOfClouds; i++) {
+        let cloud = new Cloud();
+        cloud.positionX = startX + (i * cloudWidth);
+        cloud.positionY = 0;
+        this.clouds.push(cloud);
+    }
+}
 
   drawFrameModel(mo) {
     this.ctx.drawImage(mo.img, mo.positionX, mo.positionY, mo.width, mo.height);
-
     let hitbox = this.getHitboxDimensions(mo);
     if (hitbox) {
       this.drawHitbox(
