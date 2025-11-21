@@ -180,8 +180,13 @@ class Character extends Model {
   animate() {
     setInterval(() => {
       if (this.world && this.world.keyboard) {
-        this.handleDead();
-        this.handleHurt();
+          if (this.isDeadCheck() && !this.isDead) {
+                this.isDead = true;
+                this.currentAnimationState = "dead";
+                this.currentImage = 0;
+          }
+          if (this.isDead) { this.handleDeadAnimation(); return; }
+          if (this.isHurt) { this.handleHurtAnimation(); return; }
         this.handleMovement();
         this.handleJumpingAndWalking();
         this.updateCamera();
@@ -228,7 +233,7 @@ class Character extends Model {
 
   animateIdle() {
     setInterval(() => {
-      if (!this.isMoving && !this.isJumping) {
+      if (!this.isMoving && !this.isJumping && !this.isDead && !this.isHurt) {
         this.idleTime += 100;
         this.handleIdleState();
       }
@@ -263,13 +268,6 @@ class Character extends Model {
     return this.energy === 0;
   }
 
-  handleHurt() {
-    if (this.isHurt) {
-      this.handleHurtAnimation();
-      return;
-    }
-  }
-
   handleHurtAnimation() {
     if (this.isHurt && this.Character_Hurt.length > 0) {
       let i = this.currentImage % this.Character_Hurt.length;
@@ -280,18 +278,6 @@ class Character extends Model {
         this.currentAnimationState = "idle";
         this.currentImage = 0;
       }
-    }
-  }
-
-  handleDead() {
-    if (this.isDeadCheck() && !this.isDead) {
-      this.isDead = true;
-      this.currentAnimationState = "dead";
-      this.currentImage = 0;
-    }
-    if (this.isDead) {
-      this.handleDeadAnimation();
-      return;
     }
   }
 

@@ -10,10 +10,12 @@ class World {
   street = level1.street;
   clouds = level1.clouds;
   statusbar = new Statusbar();
+  diamond = new Diamond();
   canvas;
   ctx;
   keyboard;
   camera_x = 0;
+  lootable = [];
 
 constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -22,6 +24,7 @@ constructor(canvas, keyboard) {
     this.setWorld();
     this.createBackgrounds();
     this.createClouds();
+    this.createDiamonds();
     this.positionEndboss();
     this.level.calculateLevelEnd();
     this.character.startAnimation();
@@ -38,12 +41,70 @@ positionEndboss() {
     }
 }
 
-  checkCollisions() {
+createDiamonds() {
+    this.lootable = [];
+    let numberOfDiamonds = 5;
+    
+    // ✅ Berechne Level-Länge basierend auf Backgrounds
+    let levelStartX = -820;
+    let levelEndX = 0;
+    
+    if (this.background.length > 0) {
+        let lastBg = this.background[this.background.length - 1];
+        levelEndX = lastBg.positionX + lastBg.width - 200; // 200px Abstand vom Ende
+    }
+    
+    let levelLength = levelEndX - levelStartX;
+    let spacing = levelLength / (numberOfDiamonds + 1); // +1 für bessere Verteilung
+    
+    console.log('💎 Diamond-Verteilung:');
+    console.log('  Level Start:', levelStartX);
+    console.log('  Level End:', levelEndX);
+    console.log('  Level Länge:', levelLength);
+    console.log('  Spacing:', spacing);
+    
+    for (let i = 0; i < numberOfDiamonds; i++) {
+        let diamond = new Looting();
+        
+        // ✅ Gleichmäßige Verteilung über die Level-Länge
+        diamond.positionX = levelStartX + 400 + (i * spacing) + (Math.random() * 50 - 25); // ±25px Variation
+        diamond.positionY = 280;
+        
+        console.log(`  Diamond ${i + 1}: X=${diamond.positionX.toFixed(0)}`);
+        
+        this.lootable.push(diamond);
+    }
+    
+    console.log('✅ Gesamt Diamonds erstellt:', this.lootable.length);
+}
+
+checkCollisions() {
     setInterval(() => {
       this.checkEnemyCollisions();
       this.checkEndbossCollision();
+      this.checkDiamondCollection();
     }, 1000 / 60);
   }
+
+checkDiamondCollection() {
+    for (let i = this.lootable.length - 1; i >= 0; i--) {
+        let diamond = this.lootable[i];
+        
+        if (!diamond.collected && this.character.isColliding(diamond)) {
+            diamond.collected = true;
+            
+            // ✅ VORHER diamonds erhöhen
+            this.diamond.addDiamond();
+            
+            // ✅ DANN aus Array entfernen
+            this.lootable.splice(i, 1);
+            
+            console.log('💎 Diamond eingesammelt!');
+            console.log('  Aktueller Score:', this.diamond.diamonds);
+            console.log('  Verbleibende Diamonds:', this.lootable.length);
+        }
+    }
+}
 
 checkEnemyCollisions() {
     this.enemies.forEach((enemy) => {
@@ -104,9 +165,11 @@ createBackgrounds() {
     this.addObjectsToMap(this.street);
     this.addToMap(this.character);
     this.addObjectsToMap(this.enemies);
+    this.addObjectsToMap(this.lootable);//Coins
     this.addToMap(this.endboss);
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusbar);
+    this.addToMap(this.diamond);
     let self = this;
     requestAnimationFrame(() => self.draw());
   }
@@ -138,7 +201,7 @@ createBackgrounds() {
   }
 
 addToMap(mo) {
-    if (mo instanceof Statusbar) {
+    if (mo instanceof Statusbar || mo instanceof Diamond) {
         mo.draw(this.ctx);
         return;
     }
