@@ -9,8 +9,6 @@ function init(){
 }
 
 window.addEventListener('keydown', (event) => {
-    console.log(event.code + ' Taste gedrückt');
-
     switch(event.code) {
         case 'ArrowLeft':
         case 'KeyA':
@@ -35,8 +33,6 @@ window.addEventListener('keydown', (event) => {
 });
 
 window.addEventListener('keyup', (event) => {
-    console.log(event.code + ' Taste losgelassen');
-
     switch(event.code) {
         case 'ArrowLeft':
         case 'KeyA':

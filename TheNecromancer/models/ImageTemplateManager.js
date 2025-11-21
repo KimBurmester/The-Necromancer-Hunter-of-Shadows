@@ -81,12 +81,11 @@ class ImageTemplateManager {
     }
     static generateEndbossImagePaths(basePath, count, animationName) {
     const paths = [];
-    for (let i = 0; i < count; i++) {
+        for (let i = 0; i < count; i++) {
         // Format: 0_Golem_Walking_000.png
         const paddedNumber = i.toString().padStart(3, '0');
         paths.push(`${basePath}0_Golem_${animationName}_${paddedNumber}.png`);
     }
-    console.log('Generierte Endboss-Pfade für ' + animationName + ':', paths);
     return paths;
 }
 

@@ -12,23 +12,15 @@ class Endboss extends Model{
     constructor(){
         super();
         
-        console.log('Endboss wird erstellt...');
-        
         // Lade Endboss-Bilder
         this.Endboss_Idle = ImageTemplateManager.getEndbossImages('idle');
         this.Endboss_Walking = ImageTemplateManager.getEndbossImages('walking');
         this.Endboss_Hurt = ImageTemplateManager.getEndbossImages('hurt');
         this.Endboss_Dying = ImageTemplateManager.getEndbossImages('dying');
         
-        console.log('Endboss Idle Bilder:', this.Endboss_Idle);
-        console.log('Endboss Walking Bilder:', this.Endboss_Walking);
-        
         // Lade das erste Idle-Bild als Standard
         if (this.Endboss_Idle.length > 0) {
             this.loadImage(this.Endboss_Idle[0]);
-            console.log('Erstes Endboss-Bild geladen:', this.Endboss_Idle[0]);
-        } else {
-            console.error('Keine Endboss Idle-Bilder gefunden!');
         }
         
         // Lade alle Bilder
@@ -56,7 +48,6 @@ class Endboss extends Model{
                 let distanceToEndboss = this.positionX - this.world.character.positionX;
                 
                 if (distanceToEndboss <= 720) {
-                    console.log('🔥 Character hat Endboss erreicht! Starte Kampf...');
                     this.hasStarted = true;
                     this.startIdlePhase();
                 }

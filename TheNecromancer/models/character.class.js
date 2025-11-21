@@ -70,19 +70,22 @@ class Character extends Model {
         return Math.max(0, Math.min(frame, totalFrames - 1));
     }
 
-    handleMovement() {
-        this.isMoving = false;
-        
-        if (this.world.keyboard.RIGHT && this.positionX < 495) {
-            this.moveRight();
-        }
-        if (this.world.keyboard.LEFT && this.positionX > -820) {
-            this.moveLeft();
-        }
-        if (this.world.keyboard.SPACE) {
-            this.jump();
-        }
+handleMovement() {
+    if (this.isHurt) return;
+    this.isMoving = false;
+    let levelEndX = this.world.level.levelEndX - 225;
+    let levelStartX = this.world.level.levelStartX;
+       
+    if (this.world.keyboard.RIGHT && this.positionX < levelEndX) {
+        this.moveRight();
     }
+    if (this.world.keyboard.LEFT && this.positionX > levelStartX) {
+        this.moveLeft();
+    }
+    if (this.world.keyboard.SPACE) {
+        this.jump();
+    }
+}
 
     moveRight() {
         this.positionX += this.speed;
@@ -148,12 +151,16 @@ class Character extends Model {
         }
     }
 
-    updateCamera() {
-        let newCameraX = -this.positionX + 60;
-        let maxCameraX = 820;
-        let minCameraX = -60;
-        this.world.camera_x = Math.max(minCameraX, Math.min(maxCameraX, newCameraX));
-    }
+updateCamera() {
+    let canvasWidth = 720;
+    let newCameraX = -this.positionX + 60;
+    
+    // ✅ Dynamische Kamera-Grenzen
+    let maxCameraX = -this.world.level.levelStartX; // Start
+    let minCameraX = -(this.world.level.levelEndX - canvasWidth + 60); // Ende
+    
+    this.world.camera_x = Math.max(minCameraX, Math.min(maxCameraX, newCameraX));
+}
 
     animate(){
         setInterval(() => {

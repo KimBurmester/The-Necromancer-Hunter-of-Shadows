@@ -1,5 +1,6 @@
 class World {
   character = new Character();
+  level = level1;
   enemies = level1.enemies;
   endboss = level1.endboss;
   background = level1.background;
@@ -13,18 +14,37 @@ class World {
   keyboard;
   camera_x = 0;
 
-  constructor(canvas, keyboard) {
+constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+    
     this.createClouds();
     this.setWorld();
     this.createBackgrounds();
+    this.positionEndboss();
+    this.level.calculateLevelEnd();
     this.character.startAnimation();
-    this.camera_x = -820;
+    
+    // ✅ KORRIGIERT: Kamera startet so, dass Background sichtbar ist
+    // Character bei -820, Background bei -1920
+    // Kamera muss 1100 nach links (1920 - 820 = 1100)
+    this.camera_x = 1100;
+    
     this.checkCollisions();
     this.draw();
-  }
+}
+
+positionEndboss() {
+    if (this.endboss && this.background.length > 0) {
+        // Finde den letzten Background
+        let lastBg = this.background[this.background.length - 1];
+        let levelEnd = lastBg.positionX + lastBg.width;
+        
+        // Setze Endboss 300px vor dem Ende
+        this.endboss.positionX = levelEnd - 300;
+    }
+}
 
   checkCollisions() {
     setInterval(() => {
@@ -37,10 +57,6 @@ class World {
     this.enemies.forEach((enemy, index) => {
       if (this.character.isColliding(enemy)) {
         this.character.energy -= 0.05;
-/*      console.log("💥 KOLLISION mit Enemy", index + 1);
-        console.log("Character Hitbox:", this.character.getHitbox());
-        console.log("Enemy Hitbox:", enemy.getHitbox()); */
-        console.log("Character Energy after collision by Enemy:", this.character.energy);
       }
     });
   }
@@ -48,35 +64,37 @@ class World {
   checkEndbossCollision() {
     if (this.endboss && this.character.isColliding(this.endboss)) {
       this.character.energy -= 0.1;
-/*       console.log("💥 KOLLISION mit ENDBOSS!");
-      console.log("Character Hitbox:", this.character.getHitbox());
-      console.log("Endboss Hitbox:", this.endboss.getHitbox()); */
-      // Hier kannst du Schaden verursachen
-      console.log("Character Energy after collision by Endboss:", this.character.energy);
     }
   }
 
-  createBackgrounds() {
-    let numberOfBackgrounds = 2;
-    let startOffset = -2;
+createBackgrounds() {
+    let numberOfBackgrounds = 5; // ✅ Mehr Backgrounds für längeres Level
+    let bgWidth = 960;
+    let startX = -1920; // ✅ Start weit links
+    
     for (let i = 0; i < numberOfBackgrounds; i++) {
-      let bg = new Background();
-      let hills = new Hills();
-      let fence = new Fence();
-      let grave = new Grave();
-      let street = new Street();
-      bg.positionX = (i + startOffset) * bg.width;
-      hills.positionX = (i + startOffset) * hills.width;
-      fence.positionX = (i + startOffset) * fence.width;
-      grave.positionX = (i + startOffset) * grave.width;
-      street.positionX = (i + startOffset) * street.width;
-      this.background.push(bg);
-      this.hill.push(hills);
-      this.fence.push(fence);
-      this.grave.push(grave);
-      this.street.push(street);
+        let bg = new Background();
+        let hills = new Hills();
+        let fence = new Fence();
+        let grave = new Grave();
+        let street = new Street();
+        
+        // ✅ Backgrounds nahtlos nebeneinander
+        let posX = startX + (i * bgWidth);
+        
+        bg.positionX = posX;
+        hills.positionX = posX;
+        fence.positionX = posX;
+        grave.positionX = posX;
+        street.positionX = posX;
+        
+        this.background.push(bg);
+        this.hill.push(hills);
+        this.fence.push(fence);
+        this.grave.push(grave);
+        this.street.push(street);
     }
-  }
+}
 
   draw() {
     this.ctx.clearRect(0, 0, 720, 480);
@@ -102,7 +120,6 @@ class World {
     });
     if (this.endboss) {
       this.endboss.world = this;
-      console.log("✅ Endboss hat World-Referenz erhalten");
     }
   }
 
