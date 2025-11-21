@@ -1,45 +1,101 @@
 class Endboss extends Model{
+    isHurt = false;
+    lastHit = 0;
+    isDead = false;
+    health = 100;
     isIdle = true;
     idleTime = 6000;
     speed = 2;
     hasStarted = false;
     world;
-    idleAnimationDirection = 1; // Separate Direction für Idle
-    walkAnimationDirection = 1; // Separate Direction für Walking
     currentIdleImage = 0;
     currentWalkImage = 0;
+    idleAnimationDirection = 1;
+    walkAnimationDirection = 1;
     
     constructor(){
         super();
-        
-        // Lade Endboss-Bilder
-        this.Endboss_Idle = ImageTemplateManager.getEndbossImages('idle');
-        this.Endboss_Walking = ImageTemplateManager.getEndbossImages('walking');
-        this.Endboss_Hurt = ImageTemplateManager.getEndbossImages('hurt');
-        this.Endboss_Dying = ImageTemplateManager.getEndbossImages('dying');
-        
-        // Lade das erste Idle-Bild als Standard
-        if (this.Endboss_Idle.length > 0) {
-            this.loadImage(this.Endboss_Idle[0]);
-        }
-        
-        // Lade alle Bilder
+        this.Endboss_Idle = ImageTemplateManager.getEnemyImages('endboss', 'idle');
+        this.Endboss_Walking = ImageTemplateManager.getEnemyImages('endboss', 'walking');
+        this.Endboss_Hurt = ImageTemplateManager.getEnemyImages('endboss', 'hurt');
         this.loadImages(this.Endboss_Idle);
         this.loadImages(this.Endboss_Walking);
         this.loadImages(this.Endboss_Hurt);
-        this.loadImages(this.Endboss_Dying);
         
-        // Position am Ende der Karte - Golem ist größer
-        this.positionX = 720;
-        this.positionY = 17;
-        this.width = 500;
-        this.height = 500;
-        this.otherDirection = true;
-
-        this.baseY = this.positionY;
+        // ✅ KORRIGIERT: Prüfe ob Array nicht leer ist
+        if (this.Endboss_Idle && this.Endboss_Idle.length > 0) {
+            this.loadImage(this.Endboss_Idle[0]);
+        }
         
-        this.animateIdle();
+        this.positionX = 400;
+        this.positionY = 24;
+        this.width = 525;
+        this.height = 400;
+        this.animate();
         this.checkCharacterDistance();
+    }
+
+    takeDamage(damage) {
+        this.health -= damage;
+        this.lastHit = Date.now();
+        this.isHurt = true;
+        
+        console.log(`💥 ENDBOSS getroffen! Health: ${this.health}`);
+        
+        if (this.health <= 0) {
+            this.isDead = true;
+            console.log('💀 ENDBOSS besiegt!');
+        }
+        
+        setTimeout(() => {
+            this.isHurt = false;
+        }, 500);
+    }
+
+    animate() {
+        // ✅ ANIMATION Interval
+        setInterval(() => {
+            if (this.isDead) return;
+            
+            if (this.isHurt && this.Endboss_Hurt.length > 0) {
+                this.playAnimation(this.Endboss_Hurt);
+            } else if (this.isIdle) {
+                // Idle Animation mit Richtungswechsel
+                let path = this.Endboss_Idle[this.currentIdleImage];
+                if (this.walkingImages[path]) {
+                    this.img = this.walkingImages[path];
+                }
+                
+                this.currentIdleImage += this.idleAnimationDirection;
+                
+                if (this.currentIdleImage >= this.Endboss_Idle.length - 1) {
+                    this.idleAnimationDirection = -1;
+                } else if (this.currentIdleImage <= 0) {
+                    this.idleAnimationDirection = 1;
+                }
+            } else {
+                // Walking Animation mit Richtungswechsel
+                let path = this.Endboss_Walking[this.currentWalkImage];
+                if (this.walkingImages[path]) {
+                    this.img = this.walkingImages[path];
+                }
+                
+                this.currentWalkImage += this.walkAnimationDirection;
+                
+                if (this.currentWalkImage >= this.Endboss_Walking.length - 1) {
+                    this.walkAnimationDirection = -1;
+                } else if (this.currentWalkImage <= 0) {
+                    this.walkAnimationDirection = 1;
+                }
+            }
+        }, 150);
+
+        // ✅ BEWEGUNG Interval - NUR HIER!
+        setInterval(() => {
+            if (!this.isIdle && !this.isDead) {
+                this.positionX -= this.speed; // ✅ Direkt hier bewegen
+            }
+        }, 1000 / 60);
     }
 
     checkCharacterDistance() {
@@ -49,81 +105,22 @@ class Endboss extends Model{
                 
                 if (distanceToEndboss <= 720) {
                     this.hasStarted = true;
-                    this.startIdlePhase();
+                    setTimeout(() => {
+                        this.isIdle = false;
+                        this.currentWalkImage = 0;
+                        this.walkAnimationDirection = 1;
+                    }, this.idleTime);
                 }
             }
         }, 100);
     }
 
-    startIdlePhase() {
-        setTimeout(() => {
-            this.isIdle = false;
-            this.currentWalkImage = 0; // Reset Walking-Animation
-            this.walkAnimationDirection = 1; // Reset Direction
-            this.animate();
-        }, this.idleTime);
-    }
-
-    animateIdle() {
-        let idleInterval = setInterval(() => {
-            if (!this.isIdle) {
-                clearInterval(idleInterval);
-                return;
-            }
-            
-            // Zeige aktuelles Bild
-            let path = this.Endboss_Idle[this.currentIdleImage];
-            if (this.walkingImages[path]) {
-                this.img = this.walkingImages[path];
-            }
-            
-            // Nächstes Bild berechnen
-            this.currentIdleImage += this.idleAnimationDirection;
-            
-            // Richtung umkehren wenn Ende erreicht (0→5→4→3...→0)
-            if (this.currentIdleImage >= this.Endboss_Idle.length - 1) {
-                this.idleAnimationDirection = -1;
-            } else if (this.currentIdleImage <= 0) {
-                this.idleAnimationDirection = 1;
-            }
-        }, 150);
-    }
-
-    animate() {
-        this.moveLeft();
-    }
-
-    moveLeft() {
-        setInterval(() => {
-            if (this.isIdle) return;
-            
-            // Bewege Endboss nach links
-            this.positionX -= this.speed;
-            
-            // Zeige aktuelles Bild
-            let path = this.Endboss_Walking[this.currentWalkImage];
-            if (this.walkingImages[path]) {
-                this.img = this.walkingImages[path];
-            }
-            
-            // Nächstes Bild berechnen
-            this.currentWalkImage += this.walkAnimationDirection;
-            
-            // Richtung umkehren wenn Ende erreicht (0→11→10→9...→0)
-            if (this.currentWalkImage >= this.Endboss_Walking.length - 1) {
-                this.walkAnimationDirection = -1;
-            } else if (this.currentWalkImage <= 0) {
-                this.walkAnimationDirection = 1;
-            }
-        }, 120);
-    }
-
     getHitbox() {
-    return {
-        x: this.positionX + 150,
-        y: this.positionY + 120,
-        width: this.width - 290,
-        height: this.height - 205
-    };
-}
+        return {
+            x: this.positionX + 150,
+            y: this.positionY + 120,
+            width: this.width - 290,
+            height: this.height - 205
+        };
+    }
 }

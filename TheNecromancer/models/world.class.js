@@ -83,8 +83,55 @@ checkCollisions() {
       this.checkEnemyCollisions();
       this.checkEndbossCollision();
       this.checkDiamondCollection();
+      this.checkAttackHits();
     }, 1000 / 60);
   }
+
+  checkAttackHits() {
+    if (this.character.isAttacking) {
+        let attackHitbox = this.character.getAttackHitbox();
+        
+        // ✅ Prüfe Enemies
+        this.enemies.forEach((enemy, index) => {
+            if (!enemy.isDead) {
+                let enemyHitbox = enemy.getHitbox();
+                
+                if (this.isHitboxColliding(attackHitbox, enemyHitbox)) {
+                    enemy.takeDamage(10);
+                    
+                    // Entferne Enemy wenn tot
+                    if (enemy.isDead) {
+                        setTimeout(() => {
+                            this.enemies.splice(index, 1);
+                            console.log('🗑️ Toter Enemy entfernt');
+                        }, 500); // Warte 500ms bevor Entfernung
+                    }
+                }
+            }
+        });
+        
+        // ✅ Prüfe Endboss
+        if (this.endboss && !this.endboss.isDead) {
+            let endbossHitbox = this.endboss.getHitbox();
+            
+            if (this.isHitboxColliding(attackHitbox, endbossHitbox)) {
+                this.endboss.takeDamage(5);
+                
+                // Endboss besiegt?
+                if (this.endboss.isDead) {
+                    console.log('🎉 LEVEL GESCHAFFT! Endboss besiegt!');
+                }
+            }
+        }
+    }
+}
+
+isHitboxColliding(hitbox1, hitbox2) {
+    return hitbox1.x < hitbox2.x + hitbox2.width &&
+           hitbox1.x + hitbox1.width > hitbox2.x &&
+           hitbox1.y < hitbox2.y + hitbox2.height &&
+           hitbox1.y + hitbox1.height > hitbox2.y;
+}
 
 checkDiamondCollection() {
     for (let i = this.lootable.length - 1; i >= 0; i--) {
@@ -294,7 +341,13 @@ createClouds() {
     }
 }
 
-  drawFrameModel(mo) {
+drawFrameModel(mo) {
+    // ✅ Prüfe ob Bild existiert, bevor es gezeichnet wird
+    if (!mo.img) {
+        console.warn('Bild noch nicht geladen für:', mo.constructor.name);
+        return;
+    }
+    
     this.ctx.drawImage(mo.img, mo.positionX, mo.positionY, mo.width, mo.height);
     let hitbox = this.getHitboxDimensions(mo);
     if (hitbox) {
@@ -305,5 +358,5 @@ createClouds() {
         mo.height - hitbox.heightReduction
       );
     }
-  }
+}
 }

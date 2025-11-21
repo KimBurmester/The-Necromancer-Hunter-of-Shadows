@@ -1,62 +1,82 @@
 class Enemy extends Model {
-    
+    isHurt = false;
+    lastHit = 0;
+    isDead = false;
+    health = 30;
+    currentImage = 0;
+
     constructor(enemyType = 'wraith_01'){
         super();
-        this.speed = 0.15 + Math.random() * 0.25;
-        
-        // Setze den Enemy-Typ (Standard: wraith_01)
         this.enemyType = enemyType;
-        
-        // Lade Enemy-Bilder über den ImageTemplateManager
-        this.Enemy_Walking = ImageTemplateManager.getEnemyImages(this.enemyType, 'walking');
-        
-        // Lade das erste Bild als Standard
-        if (this.Enemy_Walking.length > 0) {
-            this.loadImage(this.Enemy_Walking[0]);
+        this.speed = 0.15 + Math.random() * 0.25;
+        this.Enemy_Idle = ImageTemplateManager.getEnemyImages(this.enemyType, 'idle');
+        this.Enemy_Hurt = ImageTemplateManager.getEnemyImages(this.enemyType, 'hurt');
+        this.loadImages(this.Enemy_Idle);
+        this.loadImages(this.Enemy_Hurt);
+        if (this.Enemy_Idle && this.Enemy_Idle.length > 0) {
+            this.loadImage(this.Enemy_Idle[0]);
         }
-        
-        // Lade alle Walking-Bilder
-        this.loadImages(this.Enemy_Walking);
-        
-        // Setze zufällige Position
-        this.positionX = 250 + Math.random() * 500;
-        this.positionY = 240 + Math.random() * 20;
-
-        // Schwebende Bewegung - Variablen
-        this.baseY = this.positionY; // Ursprüngliche Y-Position speichern
-        this.floatAmplitude = 10 + Math.random() * 5; // Wie hoch/tief schwebt er (10-25px)
-        this.floatSpeed = 0.02 + Math.random() * 0.03; // Geschwindigkeit der Schwebung
-        this.floatOffset = Math.random() * Math.PI * 2;
-        
+        this.positionX = 200 + Math.random() * 500;
+        this.positionY = 240;
+        this.width = 160;
+        this.height = 160;
         this.animate();
     }
-    animate(){
-        super.moveLeft();
-        this.floatingMovement();
+
+    takeDamage(damage) {
+        this.health -= damage;
+        this.lastHit = Date.now();
+        this.isHurt = true;
+        
+        console.log(`💥 Enemy getroffen! Health: ${this.health}`);
+        
+        if (this.health <= 0) {
+            this.isDead = true;
+            console.log('💀 Enemy besiegt!');
+        }
+        
+        setTimeout(() => {
+            this.isHurt = false;
+        }, 300);
     }
 
-    moveLeft(){
-        setInterval(() =>{
-            let i = this.currentImage % this.Enemy_Walking.length;
-            let path = this.Enemy_Walking[i];
+    playAnimation(images) {
+        if (!images || images.length === 0) return;
+        
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        
+        if (this.walkingImages && this.walkingImages[path]) {
             this.img = this.walkingImages[path];
-            this.currentImage++;
-        }, 1000/10);
+        }
+        
+        this.currentImage++;
     }
 
-    floatingMovement(){
+    animate(){
         setInterval(() => {
-            // Schwebende Auf- und Abwärtsbewegung mit Sinus-Funktion
-            this.floatOffset += this.floatSpeed;
-            this.positionY = this.baseY + Math.sin(this.floatOffset) * this.floatAmplitude;
-        }, 1000/60); // 60 FPS für smooth floating
+            if (this.isDead) {
+                return;
+            }
+            if (this.isHurt && this.Enemy_Hurt.length > 0) {
+                this.playAnimation(this.Enemy_Hurt);
+            } else {
+                this.playAnimation(this.Enemy_Idle);
+            }
+        }, 200);
+        setInterval(() => {
+            if (!this.isDead) {
+                this.positionX -= this.speed;
+            }
+        }, 1000 / 60);
     }
+
     getHitbox() {
-    return {
-        x: this.positionX + 70,
-        y: this.positionY + 25,
-        width: this.width - 135,
-        height: this.height - 85
-    };
-}
+        return {
+            x: this.positionX + 70,
+            y: this.positionY + 25,
+            width: this.width - 135,
+            height: this.height - 85
+        };
+    }
 }

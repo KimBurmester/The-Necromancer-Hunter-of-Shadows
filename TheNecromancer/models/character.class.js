@@ -18,7 +18,12 @@ class Character extends Model {
     this.loadAllCharacterImages();
     this.setInitialPosition();
     this.applyGravity();
-  }
+    this.isHurt = false;
+    this.isDead = false;
+    this.lastHit = 0;
+    this.isAttacking = false;
+    this.attackCooldown = false;
+}  
 
   loadAllCharacterImages() {
     this.Character_Walking = ImageTemplateManager.getCharacterImages("walking");
@@ -38,6 +43,50 @@ class Character extends Model {
     this.loadImages(this.Character_Dead);
     this.loadImages(this.Character_Slashing);
   }
+
+  attack() {
+    if (!this.isAttacking && !this.attackCooldown && !this.isDead) {
+        this.isAttacking = true;
+        this.currentAnimationState = 'slashing';
+        this.currentImage = 0;
+        
+        console.log('⚔️ Character schlägt zu!', 'Richtung:', this.otherDirection ? 'Links' : 'Rechts');
+        
+        // Animation-Dauer: ca. 12 Frames à 33ms = 400ms
+        setTimeout(() => {
+            this.isAttacking = false;
+            this.attackCooldown = true;
+            
+            // Cooldown nach Angriff
+            setTimeout(() => {
+                this.attackCooldown = false;
+            }, 200); // 200ms Cooldown
+        }, 400);
+    }
+}
+getAttackHitbox() {
+    let attackRange = 100; // Reichweite des Schlags
+    let hitboxWidth = 120;
+    
+    if (this.otherDirection) {
+        // Character schaut nach links
+        return {
+            x: this.positionX - attackRange + 30,
+            y: this.positionY + 80,
+            width: hitboxWidth,
+            height: 100
+        };
+    } else {
+        // Character schaut nach rechts
+        return {
+            x: this.positionX + this.width - 50,
+            y: this.positionY + 80,
+            width: hitboxWidth,
+            height: 100
+        };
+    }
+}
+
 
   setInitialPosition() {
     if (this.Character_Idle.length > 0) {
@@ -80,22 +129,53 @@ class Character extends Model {
     return Math.max(0, Math.min(frame, totalFrames - 1));
   }
 
-  handleMovement() {
-    if (this.isHurt) return;
+handleMovement() {
+    if (this.isHurt || this.isDead) return;
+    
+    // ✅ Während Angriff keine Bewegung, aber Richtungsänderung erlaubt
+    if (this.isAttacking) {
+        // Erlaube Richtungsänderung während Angriff
+        if (this.world.keyboard.LEFT) {
+            this.otherDirection = true;
+        }
+        if (this.world.keyboard.RIGHT) {
+            this.otherDirection = false;
+        }
+        // Prüfe auf Angriff
+        if (this.world.keyboard.D) {
+            this.attack();
+        }
+        return;
+    }
+    
     this.isMoving = false;
     let levelEndX = this.world.level.levelEndX - 225;
-    let levelStartX = this.world.level.levelStartX;
-
+    let levelStartX = -1520;
+       
     if (this.world.keyboard.RIGHT && this.positionX < levelEndX) {
-      this.moveRight();
+        this.moveRight();
     }
     if (this.world.keyboard.LEFT && this.positionX > levelStartX) {
-      this.moveLeft();
+        this.moveLeft();
     }
     if (this.world.keyboard.SPACE) {
-      this.jump();
+        this.jump();
     }
-  }
+    if (this.world.keyboard.D) { // ✅ NEU: Angriff mit D-Taste
+        this.attack();
+    }
+}
+
+handleAttackAnimation() {
+    if (this.isAttacking && this.Character_Slashing.length > 0) {
+        let i = this.currentImage % this.Character_Slashing.length;
+        this.playAnimation(this.Character_Slashing, i);
+        this.currentImage++;
+        
+        // Animation läuft bis zum Ende (wird durch setTimeout in attack() beendet)
+    }
+}
+
 
   moveRight() {
     this.positionX += this.speed;
@@ -177,22 +257,35 @@ class Character extends Model {
     );
   }
 
-  animate() {
+
+animate() {
     setInterval(() => {
-      if (this.world && this.world.keyboard) {
-          if (this.isDeadCheck() && !this.isDead) {
+        if (this.world && this.world.keyboard) {
+            if (this.isDeadCheck() && !this.isDead) {
                 this.isDead = true;
                 this.currentAnimationState = "dead";
                 this.currentImage = 0;
-          }
-          if (this.isDead) { this.handleDeadAnimation(); return; }
-          if (this.isHurt) { this.handleHurtAnimation(); return; }
-        this.handleMovement();
-        this.handleJumpingAndWalking();
-        this.updateCamera();
-      }
+                console.log('💀 Character ist gestorben!');
+            }
+            if (this.isDead) {
+                this.handleDeadAnimation();
+                return;
+            }
+            if (this.isHurt) {
+                this.handleHurtAnimation();
+                return;
+            }
+            if (this.isAttacking) {
+                this.handleAttackAnimation();
+                this.handleMovement();
+                return;
+            }
+            this.handleMovement();
+            this.handleJumpingAndWalking();
+            this.updateCamera();
+        }
     }, 1000 / 30);
-  }
+}
 
   playIdleFrame(animationArray) {
     let i = this.currentImage % animationArray.length;
