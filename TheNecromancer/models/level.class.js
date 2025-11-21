@@ -27,7 +27,7 @@ calculateLevelEnd() {
     let maxX = 0;
     
     if (this.background.length > 0) {
-        this.background.forEach((bg, index) => {
+        this.background.forEach((bg) => {
             let bgEndX = bg.positionX + bg.width;
             if (bgEndX > maxX) {
                 maxX = bgEndX;
