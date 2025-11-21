@@ -44,19 +44,24 @@ positionEndboss() {
     }, 1000 / 60);
   }
 
-  checkEnemyCollisions() {
+checkEnemyCollisions() {
     this.enemies.forEach((enemy, index) => {
-      if (this.character.isColliding(enemy)) {
-        this.character.energy -= 0.05;
-      }
+        if (this.character.isColliding(enemy) && this.character.energy > 0) {
+            if (!this.character.isHurtRecently()) {
+                this.character.hit();
+            }
+        }
     });
-  }
+}
 
-  checkEndbossCollision() {
-    if (this.endboss && this.character.isColliding(this.endboss)) {
-      this.character.energy -= 0.1;
+checkEndbossCollision() {
+    if (this.endboss && this.character.isColliding(this.endboss) && this.character.energy > 0) {
+        if (!this.character.isHurtRecently()) {
+            this.character.hit();
+            this.character.hit();
+        }
     }
-  }
+}
 
 createBackgrounds() {
     let numberOfBackgrounds = 5;

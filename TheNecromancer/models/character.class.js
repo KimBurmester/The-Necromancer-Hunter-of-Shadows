@@ -9,6 +9,9 @@ class Character extends Model {
     isFalling = false;
     jumpStartHeight = 250;
     maxJumpHeight = 80;
+    isHurt = false;
+    isDead = false;
+    lastHit = 0;
 
     constructor(){
         super();
@@ -23,12 +26,17 @@ class Character extends Model {
         this.Character_Idle_Blinking = ImageTemplateManager.getCharacterImages('idle_blinking');
         this.Character_Jump_Start = ImageTemplateManager.getCharacterImages('jumping_start');
         this.Character_Jump_End = ImageTemplateManager.getCharacterImages('jumping_end');
+        this.Character_Hurt = ImageTemplateManager.getCharacterImages('hurting');
+        this.Character_Dead = ImageTemplateManager.getCharacterImages('dying');
+        
         
         this.loadImages(this.Character_Walking);
         this.loadImages(this.Character_Idle);
         this.loadImages(this.Character_Idle_Blinking);
         this.loadImages(this.Character_Jump_Start);
         this.loadImages(this.Character_Jump_End);
+        this.loadImages(this.Character_Hurt);
+        this.loadImages(this.Character_Dead);
     }
 
     setInitialPosition() {
@@ -154,10 +162,8 @@ handleMovement() {
 updateCamera() {
     let canvasWidth = 720;
     let newCameraX = -this.positionX + 60;
-    
-    // ✅ Dynamische Kamera-Grenzen
-    let maxCameraX = -this.world.level.levelStartX; // Start
-    let minCameraX = -(this.world.level.levelEndX - canvasWidth + 60); // Ende
+    let maxCameraX = -this.world.level.levelStartX;
+    let minCameraX = -(this.world.level.levelEndX - canvasWidth + 60);
     
     this.world.camera_x = Math.max(minCameraX, Math.min(maxCameraX, newCameraX));
 }
@@ -165,6 +171,20 @@ updateCamera() {
     animate(){
         setInterval(() => {
             if (this.world && this.world.keyboard) {
+                if (this.isDeadCheck() && !this.isDead) {
+                    this.isDead = true;
+                    this.currentAnimationState = 'dead';
+                    this.currentImage = 0;
+                    console.log('💀 Character ist gestorben!');
+                }
+                if (this.isDead) {
+                    this.handleDeadAnimation();
+                    return;
+                }
+                if (this.isHurt) {
+                    this.handleHurtAnimation();
+                    return;
+                }
                 this.handleMovement();
                 
                 if (this.isJumping) {
@@ -172,7 +192,6 @@ updateCamera() {
                 } else {
                     this.handleWalkingAnimation();
                 }
-                
                 this.updateCamera();
             }
         }, 1000/30);
@@ -226,6 +245,51 @@ updateCamera() {
         y: this.positionY + 50,
         width: this.width - 120,
         height: this.height - 85
-    };
-}
+        };
+    }
+    hit() {
+        this.energy -= 1;
+        if (this.energy < 0) {
+            this.energy = 0;
+        } else {
+            this.lastHit = Date.now();
+            this.isHurt = true;
+            this.currentAnimationState = 'hurting';
+            this.currentImage = 0;
+            
+            console.log('💥 Character wurde getroffen!', 'Energy:', this.energy);
+        }
+    }
+        
+    isHurtRecently() {
+        let timePassed = Date.now() - this.lastHit;
+        return timePassed < 500;
+    }
+
+    isDeadCheck() {
+        return this.energy === 0;
+    }
+
+    handleHurtAnimation() {
+        if (this.isHurt && this.Character_Hurt.length > 0) {
+            let i = this.currentImage % this.Character_Hurt.length;
+            this.playAnimation(this.Character_Hurt, i);
+            this.currentImage++;
+            if (this.currentImage >= this.Character_Hurt.length) {
+                this.isHurt = false;
+                this.currentAnimationState = 'idle';
+                this.currentImage = 0;
+            }
+        }
+    }
+
+    handleDeadAnimation() {
+        if (this.isDead && this.Character_Dead.length > 0) {
+            let i = Math.min(this.currentImage, this.Character_Dead.length - 1);
+            this.playAnimation(this.Character_Dead, i);
+            if (this.currentImage < this.Character_Dead.length - 1) {
+                this.currentImage++;
+            }
+        }
+    }
 }
