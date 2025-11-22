@@ -1,5 +1,10 @@
 @import url(./menus.css);
 
+@font-face{
+    font-family: 'cinzel';
+    src:url('/TheNecromancer/fonts/Cinzel/static/Cinzel-Regular.ttf') format('truetype');
+}
+
 body{
     display: flex;
     color: white;
@@ -11,6 +16,7 @@ body{
     margin: 0;
     padding: 0;
     background-color: rgb(8, 31, 37);
+    font-family: 'cinzel', Arial, Helvetica, sans-serif;
 }
 
 .layer{
@@ -19,7 +25,7 @@ body{
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 920px;
+    max-width: 1080px;
 }
 
 .game-container{
@@ -29,7 +35,7 @@ body{
 }
 
 .sidebar{
-    width: 150px;
+    width: 180px;
     height: 484px;
     background-color: rgb(15, 56, 66);
     border: 2px solid rgb(50, 50, 50);
