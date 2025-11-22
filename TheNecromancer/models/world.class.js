@@ -236,9 +236,9 @@ addToMap(mo) {
     }
     
     if (mo instanceof Endboss) {
-        if (mo.isDead || mo.isHurt) {
+        if (mo.isDead) {
             this.drawFrameModel(mo);
-        } else if (mo.otherDirection) {
+        } else if (mo.otherDirection || mo.isHurt) {
             this.flipImageBack(mo);
         } else {
             this.drawFrameModel(mo);

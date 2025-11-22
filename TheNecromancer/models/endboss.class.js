@@ -15,6 +15,7 @@ class Endboss extends Model{
     idleAnimationDirection = 1;
     walkAnimationDirection = 1;
     otherDirection = true;
+    originalDirection = true;
     lastDamageTime = 0;
     
     constructor(){
@@ -37,6 +38,7 @@ class Endboss extends Model{
         this.positionY = 100;
         this.width = 525;
         this.height = 400;
+        this.originalDirection = this.otherDirection;
         this.animate();
         this.checkCharacterDistance();
     }
@@ -53,15 +55,18 @@ class Endboss extends Model{
         this.lastHit = now;
         this.isHurt = true;
         this.currentHurtImage = 0;
+        this.otherDirection = false;
         
         if (this.health <= 0) {
             this.isDead = true;
             this.isHurt = false;
             this.currentDyingImage = 0;
+            this.otherDirection = false;
         }
         
         setTimeout(() => {
             this.isHurt = false;
+            this.otherDirection = this.originalDirection;
         }, 600);
     }
 
