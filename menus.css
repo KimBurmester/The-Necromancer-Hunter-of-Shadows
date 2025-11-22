@@ -20,8 +20,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 720px;
-    height: 480px;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     z-index: 1000;
 }
@@ -29,25 +29,25 @@
 .controller-left,
 .controller-right {
     position: absolute;
-    bottom: 15px;
+    bottom: 3%;
     display: flex;
     gap: 12px;
     pointer-events: all;
 }
 
 .controller-left {
-    left: 15px;
+    left: 2%;
 }
 
 .controller-right {
-    right: 15px;
+    right: 2%;
     flex-direction: column-reverse;
 }
 
 .controller-menu {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 2%;
+    right: 2%;
     display: flex;
     gap: 8px;
     pointer-events: all;
@@ -140,7 +140,7 @@
 }
 
 /* Responsive Anpassungen */
-@media (max-width: 1150px) {
+@media (max-width: 1260px) {
     .game-container {
         flex-direction: column;
         align-items: center;

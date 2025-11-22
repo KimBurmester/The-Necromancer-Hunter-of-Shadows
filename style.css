@@ -32,6 +32,7 @@ body{
     display: flex;
     align-items: flex-start;
     gap: 0;
+    position: relative; /* ✅ Für absolute Positionierung der Touch-Controls */
 }
 
 .sidebar{

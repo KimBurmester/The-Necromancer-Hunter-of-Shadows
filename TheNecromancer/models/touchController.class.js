@@ -130,7 +130,7 @@ class TouchController {
 
     checkTouchDevice() {
         const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        const isNarrowScreen = window.innerWidth < 1150; // ✅ Breakpoint auf 1150px
+        const isNarrowScreen = window.innerWidth < 1260; // ✅ Breakpoint auf 1260px
         
         const touchControls = document.getElementById('touch-controls');
         const gameSidebars = document.querySelectorAll('.sidebar');
