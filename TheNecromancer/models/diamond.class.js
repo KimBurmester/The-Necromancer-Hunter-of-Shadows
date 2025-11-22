@@ -58,9 +58,8 @@ class Diamond extends Model {
 
     drawDiamondIcon(ctx) {
         ctx.save();
-        ctx.fillStyle = '#00CED1'; // ✅ Cyan für Diamond
+        ctx.fillStyle = '#00CED1';
         ctx.beginPath();
-        // Diamant-Form (Raute)
         const centerX = this.positionX + 25;
         const centerY = this.positionY + this.height / 2;
         const size = 12;

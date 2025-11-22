@@ -68,8 +68,6 @@ function checkLandscapeFullscreen() {
     const isSmallScreen = window.innerWidth <= 900 && window.innerHeight <= 500;
     
     if (isMobile && isLandscape && isSmallScreen) {
-        console.log('🎮 Optimales Spielformat erkannt! Drücke F für Vollbild.');
-        
         const fullscreenBtn = document.querySelector('.btn-fullscreen');
         if (fullscreenBtn && !fullscreen.isFullscreen) {
             fullscreenBtn.style.animation = 'pulse 2s infinite';

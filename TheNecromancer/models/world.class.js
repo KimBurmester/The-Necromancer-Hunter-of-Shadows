@@ -91,7 +91,6 @@ checkAttackHits() {
             }
         }
         
-        // Prüfe Endboss
         if (this.endboss && !this.endboss.isDead && !this.endboss.wasHitThisAttack) {
             let endbossHitbox = this.endboss.getHitbox();
             
@@ -99,20 +98,17 @@ checkAttackHits() {
                 this.endboss.takeDamage(5);
                 this.endboss.wasHitThisAttack = true;
                 
-                if (this.endboss.isDead) {
-                  /*//FIX: Endscreen nach 10 sec*/
-                }
+                if (this.endboss.isDead) {}
             }
         }
     }
     
-    // ✅ Zurücksetzen des Treffer-Status wenn Angriff vorbei
     if (!this.character.isAttacking) {
         this.enemies.forEach(enemy => {
             enemy.wasHitThisAttack = false;
         });
         if (this.endboss) {
-            this.endboss.wasHitThisAttack = false; // ✅ NEU
+            this.endboss.wasHitThisAttack = false;
         }
     }
 }
@@ -194,7 +190,7 @@ createBackgrounds() {
     this.addObjectsToMap(this.street);
     this.addToMap(this.character);
     this.addObjectsToMap(this.enemies);
-    this.addObjectsToMap(this.lootable);//Coins
+    this.addObjectsToMap(this.lootable);
     this.addToMap(this.endboss);
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusbar);
@@ -324,21 +320,21 @@ createClouds() {
 }
 
 drawFrameModel(mo) {
-    // ✅ Prüfe ob Bild existiert, bevor es gezeichnet wird
-    if (!mo.img) {
-        console.warn('Bild noch nicht geladen für:', mo.constructor.name);
+    if (!mo.img || !mo.img.complete || mo.img.naturalHeight === 0) {
         return;
     }
     
-    this.ctx.drawImage(mo.img, mo.positionX, mo.positionY, mo.width, mo.height);
-    let hitbox = this.getHitboxDimensions(mo);
-    if (hitbox) {
-      this.drawHitbox(
-        mo.positionX + hitbox.offsetX,
-        mo.positionY + hitbox.offsetY,
-        mo.width - hitbox.widthReduction,
-        mo.height - hitbox.heightReduction
-      );
-    }
+    try {
+        this.ctx.drawImage(mo.img, mo.positionX, mo.positionY, mo.width, mo.height);
+        let hitbox = this.getHitboxDimensions(mo);
+        if (hitbox) {
+          this.drawHitbox(
+            mo.positionX + hitbox.offsetX,
+            mo.positionY + hitbox.offsetY,
+            mo.width - hitbox.widthReduction,
+            mo.height - hitbox.heightReduction
+          );
+        }
+    } catch (error) {}
 }
 }

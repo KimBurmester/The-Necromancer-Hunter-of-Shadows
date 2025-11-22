@@ -240,22 +240,12 @@ class EnemyImageTemplates {
                 ]
             },
             wraith_03: {
-                walking: [
-                    // Hier können Wraith_03 Walking-Animationen hinzugefügt werden
-                ],
-                attacking: [
-                    // Hier können Wraith_03 Attacking-Animationen hinzugefügt werden
-                ]
+                walking: [],
+                attacking: []
             }
         };
     }
 
-    /**
-     * Gibt die Bild-Arrays für einen bestimmten Enemy-Typ und Animationstyp zurück
-     * @param {string} enemyType - Der gewünschte Enemy-Typ (z.B. 'wraith_01')
-     * @param {string} animationType - Der gewünschte Animationstyp (z.B. 'walking')
-     * @returns {Array} Array mit Bildpfaden oder leeres Array falls nicht gefunden
-     */
     getImages(enemyType, animationType) {
         if (this.templates[enemyType] && this.templates[enemyType][animationType]) {
             return this.templates[enemyType][animationType];
@@ -263,19 +253,10 @@ class EnemyImageTemplates {
         return [];
     }
 
-    /**
-     * Gibt alle verfügbaren Enemy-Typen zurück
-     * @returns {Array} Array mit verfügbaren Enemy-Typen
-     */
     getAvailableEnemyTypes() {
         return Object.keys(this.templates);
     }
 
-    /**
-     * Gibt alle verfügbaren Animationstypen für einen bestimmten Enemy-Typ zurück
-     * @param {string} enemyType - Der Enemy-Typ
-     * @returns {Array} Array mit verfügbaren Animationstypen
-     */
     getAvailableAnimations(enemyType) {
         if (this.templates[enemyType]) {
             return Object.keys(this.templates[enemyType]);
@@ -283,12 +264,6 @@ class EnemyImageTemplates {
         return [];
     }
 
-    /**
-     * Fügt einen neuen Enemy-Typ oder eine neue Animation hinzu
-     * @param {string} enemyType - Der Enemy-Typ
-     * @param {string} animationType - Der Animationstyp
-     * @param {Array} imageArray - Array mit Bildpfaden
-     */
     addAnimation(enemyType, animationType, imageArray) {
         if (!this.templates[enemyType]) {
             this.templates[enemyType] = {};

@@ -30,10 +30,6 @@ isAboveGround(){
     return this.positionY < 250;
 }
 
-  /**
-   * Gibt die Hitbox-Dimensionen für dieses Objekt zurück
-   * Kann in Subklassen überschrieben werden
-   */
   getHitbox() {
     return {
       x: this.positionX,
@@ -43,11 +39,6 @@ isAboveGround(){
     };
   }
 
-  /**
-   * Prüft ob dieses Objekt mit einem anderen kollidiert
-   * @param {Model} other - Das andere Objekt
-   * @returns {boolean} - true wenn Kollision, sonst false
-   */
   isColliding(other) {
     let myHitbox = this.getHitbox();
     let otherHitbox = other.getHitbox();

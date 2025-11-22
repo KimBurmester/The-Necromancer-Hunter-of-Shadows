@@ -28,8 +28,6 @@ class Endboss extends Model{
         if (this.Endboss_Idle && this.Endboss_Idle.length > 0) {
             this.img = new Image();
             this.img.src = this.Endboss_Idle[0];
-        } else {
-            console.error('❌ Endboss_Idle ist leer!');
         }
         this.positionX = 400;
         this.positionY = 100;

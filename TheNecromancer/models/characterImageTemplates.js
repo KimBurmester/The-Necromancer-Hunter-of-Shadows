@@ -188,28 +188,14 @@ class CharacterImageTemplates {
         };
     }
 
-    /**
-     * Gibt die Bild-Arrays für einen bestimmten Animationstyp zurück
-     * @param {string} animationType - Der gewünschte Animationstyp
-     * @returns {Array} Array mit Bildpfaden oder leeres Array falls nicht gefunden
-     */
     getImages(animationType) {
         return this.templates[animationType] || [];
     }
 
-    /**
-     * Gibt alle verfügbaren Animationstypen zurück
-     * @returns {Array} Array mit verfügbaren Animationstypen
-     */
     getAvailableAnimations() {
         return Object.keys(this.templates);
     }
 
-    /**
-     * Fügt einen neuen Animationstyp hinzu oder aktualisiert einen bestehenden
-     * @param {string} animationType - Der Name des Animationstyps
-     * @param {Array} imageArray - Array mit Bildpfaden
-     */
     addAnimation(animationType, imageArray) {
         this.templates[animationType] = imageArray;
     }

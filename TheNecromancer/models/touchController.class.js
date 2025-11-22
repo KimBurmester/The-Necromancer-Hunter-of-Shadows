@@ -18,14 +18,19 @@ class TouchController {
 
             if (key) {
                 btn.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
+                    if (e.cancelable) {
+                        e.preventDefault();
+                    }
                     this.handleButtonPress(key, btn);
-                });
+                }, { passive: false });
 
                 btn.addEventListener('touchend', (e) => {
-                    e.preventDefault();
+                    if (e.cancelable) {
+                        e.preventDefault();
+                    }
                     this.handleButtonRelease(key, btn);
-                });
+                }, { passive: false });
+                
                 btn.addEventListener('mousedown', (e) => {
                     e.preventDefault();
                     this.handleButtonPress(key, btn);
@@ -73,16 +78,18 @@ class TouchController {
                 this.keyboard.M = true;
                 break;
             case 'F':
-                // Vollbild-Toggle
                 if (window.fullscreen) {
                     window.fullscreen.toggleFullscreen();
                 }
                 break;
         }
         button.classList.add('pressed');
-        if (navigator.vibrate) {
-            navigator.vibrate(50);
-        }
+        
+        try {
+            if (navigator.vibrate && typeof navigator.vibrate === 'function') {
+                navigator.vibrate(50);
+            }
+        } catch (error) {}
     }
 
     handleButtonRelease(key, button) {
@@ -106,7 +113,6 @@ class TouchController {
                 this.keyboard.M = false;
                 break;
             case 'F':
-                // Kein Release für Vollbild nötig
                 break;
         }
         button.classList.remove('pressed');
@@ -126,9 +132,12 @@ class TouchController {
                 alert('Einstellungen werden geöffnet...');
                 break;
         }
-        if (navigator.vibrate) {
-            navigator.vibrate(100);
-        }
+        
+        try {
+            if (navigator.vibrate && typeof navigator.vibrate === 'function') {
+                navigator.vibrate(100);
+            }
+        } catch (error) {}
     }
 
     checkTouchDevice() {

@@ -14,13 +14,11 @@ class ImageTemplateManager {
         return this.characterTemplates.getImages(animationType);
     }
 
-    // ✅ KORRIGIERT: Endboss wird separat behandelt
     static getEnemyImages(enemyType, animationType) {
         if (!this.enemyTemplates) {
             this.initialize();
         }
         
-        // ✅ Prüfe ob Endboss
         if (enemyType === 'endboss') {
             return this.getEndbossImages(animationType);
         }

@@ -56,7 +56,6 @@ class Fullscreen {
         try {
             if (elem.requestFullscreen) {
                 elem.requestFullscreen().catch(err => {
-                    console.warn('⚠️ Fullscreen nicht möglich:', err.message);
                     this.showFullscreenHint();
                 });
             } else if (elem.webkitRequestFullscreen) {
@@ -66,11 +65,9 @@ class Fullscreen {
             } else if (elem.msRequestFullscreen) {
                 elem.msRequestFullscreen();
             } else {
-                console.warn('⚠️ Fullscreen API nicht unterstützt');
                 this.showFullscreenHint();
             }
         } catch (error) {
-            console.warn('⚠️ Fullscreen Fehler:', error.message);
             this.showFullscreenHint();
         }
     }
@@ -111,17 +108,13 @@ class Fullscreen {
         const isSmallMobileScreen = width <= 450 && height <= 950;
         
         if (isMobile && isPortrait && isSmallMobileScreen) {
-            console.log('📱 Mobile Portrait erkannt - Landscape empfohlen!');
-            
             if (!sessionStorage.getItem('landscape-hint-shown')) {
                 this.showLandscapeHint();
                 sessionStorage.setItem('landscape-hint-shown', 'true');
             }
         }
         
-        if (isMobile && !isPortrait && !this.isFullscreen && isSmallMobileScreen) {
-            console.log('🔄 Landscape-Modus erkannt - Vollbild verfügbar');
-        }
+        if (isMobile && !isPortrait && !this.isFullscreen && isSmallMobileScreen) {}
     }
 
     showLandscapeHint() {
