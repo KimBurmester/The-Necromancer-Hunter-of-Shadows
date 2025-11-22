@@ -37,71 +37,77 @@ class Endboss extends Model{
         this.checkCharacterDistance();
     }
 
-    takeDamage(damage) {
+takeDamage(damage) {
+    if (this.isDead) return;
+    const now = Date.now();
+    if (now - this.lastDamageTime < 500) {
+        return;
+    }
+    
+    this.lastDamageTime = now;
+    this.health -= damage;
+    this.lastHit = now;
+    this.isHurt = true;
+    this.currentIdleImage = 0;
+    
+    if (this.health <= 0) {
+        this.isDead = true;
+        this.isHurt = false;
+    }
+    
+    setTimeout(() => {
+        this.isHurt = false;
+    }, 500);
+}
+
+animate() {
+    setInterval(() => {
         if (this.isDead) return;
-        const now = Date.now();
-        if (now - this.lastDamageTime < 500) {
+        
+        if (this.isHurt && this.Endboss_Hurt.length > 0) {
+            let path = this.Endboss_Hurt[this.currentIdleImage % this.Endboss_Hurt.length];
+            if (this.walkingImages[path]) {
+                this.img = this.walkingImages[path];
+            }
+            this.currentIdleImage++;
             return;
         }
         
-        this.lastDamageTime = now;
-        this.health -= damage;
-        this.lastHit = now;
-        this.isHurt = true;
-        if (this.health <= 0) {
-            this.isDead = true;
-        }
-        
-        setTimeout(() => {
-            this.isHurt = false;
-        }, 500);
-    }
-
-    animate() {
-        setInterval(() => {
-            if (this.isDead) return;
+        if (this.isIdle) {
+            let path = this.Endboss_Idle[this.currentIdleImage];
+            if (this.walkingImages[path]) {
+                this.img = this.walkingImages[path];
+            }
             
-            if (this.isHurt && this.Endboss_Hurt.length > 0) {
-                let path = this.Endboss_Hurt[this.currentIdleImage % this.Endboss_Hurt.length];
-                if (this.walkingImages[path]) {
-                    this.img = this.walkingImages[path];
-                }
-                this.currentIdleImage++;
-            } else if (this.isIdle) {
-                let path = this.Endboss_Idle[this.currentIdleImage];
-                if (this.walkingImages[path]) {
-                    this.img = this.walkingImages[path];
-                }
-                
-                this.currentIdleImage += this.idleAnimationDirection;
-                
-                if (this.currentIdleImage >= this.Endboss_Idle.length - 1) {
-                    this.idleAnimationDirection = -1;
-                } else if (this.currentIdleImage <= 0) {
-                    this.idleAnimationDirection = 1;
-                }
-            } else {
-                let path = this.Endboss_Walking[this.currentWalkImage];
-                if (this.walkingImages[path]) {
-                    this.img = this.walkingImages[path];
-                }
-                
-                this.currentWalkImage += this.walkAnimationDirection;
-                
-                if (this.currentWalkImage >= this.Endboss_Walking.length - 1) {
-                    this.walkAnimationDirection = -1;
-                } else if (this.currentWalkImage <= 0) {
-                    this.walkAnimationDirection = 1;
-                }
+            this.currentIdleImage += this.idleAnimationDirection;
+            
+            if (this.currentIdleImage >= this.Endboss_Idle.length - 1) {
+                this.idleAnimationDirection = -1;
+            } else if (this.currentIdleImage <= 0) {
+                this.idleAnimationDirection = 1;
             }
-        }, 150);
+        } else {
+            let path = this.Endboss_Walking[this.currentWalkImage];
+            if (this.walkingImages[path]) {
+                this.img = this.walkingImages[path];
+            }
+            
+            this.currentWalkImage += this.walkAnimationDirection;
+            
+            if (this.currentWalkImage >= this.Endboss_Walking.length - 1) {
+                this.walkAnimationDirection = -1;
+            } else if (this.currentWalkImage <= 0) {
+                this.walkAnimationDirection = 1;
+            }
+        }
+    }, 150);
 
-        setInterval(() => {
-            if (!this.isIdle && !this.isDead) {
-                this.positionX -= this.speed;
-            }
-        }, 1000 / 60);
-    }
+    setInterval(() => {
+        if (!this.isIdle && !this.isDead) {
+            this.positionX -= this.speed;
+        }
+    }, 1000 / 60);
+}
 
     checkCharacterDistance() {
         setInterval(() => {
@@ -120,12 +126,12 @@ class Endboss extends Model{
         }, 100);
     }
 
-    getHitbox() {
-        return {
-            x: this.positionX + 150,
-            y: this.positionY + 120,
-            width: this.width - 290,
-            height: this.height - 205
-        };
-    }
+getHitbox() {
+    return {
+        x: this.positionX + 180,
+        y: this.positionY + 150,
+        width: this.width - 360,
+        height: this.height - 250
+    };
+}
 }

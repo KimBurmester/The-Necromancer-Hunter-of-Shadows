@@ -44,17 +44,16 @@ class Character extends Model {
     this.loadImages(this.Character_Slashing);
   }
 
-  attack() {
-    if (!this.isAttacking && !this.attackCooldown && !this.isDead) {
+attack() {
+    if (!this.isAttacking && !this.isDead) {
         this.isAttacking = true;
         this.currentAnimationState = 'slashing';
         this.currentImage = 0;
-            setTimeout(() => {
+        
+        setTimeout(() => {
             this.isAttacking = false;
-            this.attackCooldown = true;
-            setTimeout(() => {
-                this.attackCooldown = false;
-            }, 200);
+            this.currentAnimationState = 'idle';
+            this.currentImage = 0;
         }, 400);
     }
 }
@@ -158,6 +157,10 @@ handleAttackAnimation() {
         let i = this.currentImage % this.Character_Slashing.length;
         this.playAnimation(this.Character_Slashing, i);
         this.currentImage++;
+        
+        if (this.currentImage >= this.Character_Slashing.length) {
+            this.currentImage = 0;
+        }
     }
 }
 

@@ -72,13 +72,18 @@ checkCollisions() {
 checkAttackHits() {
     if (this.character.isAttacking && this.character.currentImage === 6) {
         let attackHitbox = this.character.getAttackHitbox();
+        
         for (let i = this.enemies.length - 1; i >= 0; i--) {
             let enemy = this.enemies[i];
+            
             if (!enemy.isDead && !enemy.wasHitThisAttack) {
                 let enemyHitbox = enemy.getHitbox();
-                if (this.isHitboxColliding(attackHitbox, enemyHitbox)) {
+                let distance = Math.abs(this.character.positionX - enemy.positionX);
+                
+                if (this.isHitboxColliding(attackHitbox, enemyHitbox) && distance < 150) {
                     enemy.takeDamage(10);
                     enemy.wasHitThisAttack = true;
+                    
                     if (enemy.isDead) {
                         setTimeout(() => {
                             let enemyIndex = this.enemies.indexOf(enemy);
@@ -93,12 +98,11 @@ checkAttackHits() {
         
         if (this.endboss && !this.endboss.isDead && !this.endboss.wasHitThisAttack) {
             let endbossHitbox = this.endboss.getHitbox();
+            let distance = Math.abs(this.character.positionX - this.endboss.positionX);
             
-            if (this.isHitboxColliding(attackHitbox, endbossHitbox)) {
+            if (this.isHitboxColliding(attackHitbox, endbossHitbox) && distance < 200) {
                 this.endboss.takeDamage(5);
                 this.endboss.wasHitThisAttack = true;
-                
-                if (this.endboss.isDead) {}
             }
         }
     }
