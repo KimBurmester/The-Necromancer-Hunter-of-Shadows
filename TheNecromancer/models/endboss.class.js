@@ -5,16 +5,19 @@ class Endboss extends Model{
     health = 100;
     isIdle = true;
     idleTime = 6000;
-    speed = 2;
+    speed = 0.5;
     hasStarted = false;
     world;
     currentIdleImage = 0;
     currentWalkImage = 0;
     idleAnimationDirection = 1;
     walkAnimationDirection = 1;
+    otherDirection = true;
+    lastDamageTime = 0;
     
     constructor(){
         super();
+        this.wasHitThisAttack = false;
         this.Endboss_Idle = ImageTemplateManager.getEnemyImages('endboss', 'idle');
         this.Endboss_Walking = ImageTemplateManager.getEnemyImages('endboss', 'walking');
         this.Endboss_Hurt = ImageTemplateManager.getEnemyImages('endboss', 'hurt');
@@ -22,13 +25,14 @@ class Endboss extends Model{
         this.loadImages(this.Endboss_Walking);
         this.loadImages(this.Endboss_Hurt);
         
-        // ✅ KORRIGIERT: Prüfe ob Array nicht leer ist
         if (this.Endboss_Idle && this.Endboss_Idle.length > 0) {
-            this.loadImage(this.Endboss_Idle[0]);
+            this.img = new Image();
+            this.img.src = this.Endboss_Idle[0];
+        } else {
+            console.error('❌ Endboss_Idle ist leer!');
         }
-        
         this.positionX = 400;
-        this.positionY = 24;
+        this.positionY = 100;
         this.width = 525;
         this.height = 400;
         this.animate();
@@ -36,15 +40,18 @@ class Endboss extends Model{
     }
 
     takeDamage(damage) {
+        if (this.isDead) return;
+        const now = Date.now();
+        if (now - this.lastDamageTime < 500) {
+            return;
+        }
+        
+        this.lastDamageTime = now;
         this.health -= damage;
-        this.lastHit = Date.now();
+        this.lastHit = now;
         this.isHurt = true;
-        
-        console.log(`💥 ENDBOSS getroffen! Health: ${this.health}`);
-        
         if (this.health <= 0) {
             this.isDead = true;
-            console.log('💀 ENDBOSS besiegt!');
         }
         
         setTimeout(() => {
@@ -53,14 +60,16 @@ class Endboss extends Model{
     }
 
     animate() {
-        // ✅ ANIMATION Interval
         setInterval(() => {
             if (this.isDead) return;
             
             if (this.isHurt && this.Endboss_Hurt.length > 0) {
-                this.playAnimation(this.Endboss_Hurt);
+                let path = this.Endboss_Hurt[this.currentIdleImage % this.Endboss_Hurt.length];
+                if (this.walkingImages[path]) {
+                    this.img = this.walkingImages[path];
+                }
+                this.currentIdleImage++;
             } else if (this.isIdle) {
-                // Idle Animation mit Richtungswechsel
                 let path = this.Endboss_Idle[this.currentIdleImage];
                 if (this.walkingImages[path]) {
                     this.img = this.walkingImages[path];
@@ -74,7 +83,6 @@ class Endboss extends Model{
                     this.idleAnimationDirection = 1;
                 }
             } else {
-                // Walking Animation mit Richtungswechsel
                 let path = this.Endboss_Walking[this.currentWalkImage];
                 if (this.walkingImages[path]) {
                     this.img = this.walkingImages[path];
@@ -90,10 +98,9 @@ class Endboss extends Model{
             }
         }, 150);
 
-        // ✅ BEWEGUNG Interval - NUR HIER!
         setInterval(() => {
             if (!this.isIdle && !this.isDead) {
-                this.positionX -= this.speed; // ✅ Direkt hier bewegen
+                this.positionX -= this.speed;
             }
         }, 1000 / 60);
     }

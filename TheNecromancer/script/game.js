@@ -1,11 +1,12 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-
+let fullscreen;
 
 function init(){
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
+    fullscreen = new Fullscreen(canvas);
 }
 
 window.addEventListener('keydown', (event) => {
@@ -27,6 +28,9 @@ window.addEventListener('keydown', (event) => {
             break;
         case 'KeyD':
             keyboard.D = true;
+            break;
+        case 'KeyF':
+            fullscreen.toggleFullscreen();
             break;
     }
 });

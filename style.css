@@ -29,7 +29,7 @@ body{
 }
 
 .sidebar{
-    width: 100px;
+    width: 150px;
     height: 484px;
     background-color: rgb(15, 56, 66);
     border: 2px solid rgb(50, 50, 50);
@@ -61,13 +61,25 @@ body{
 }
 
 .sidebar-btn{
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(10, 142, 142, 0.3);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 4px;
     padding: 8px 4px;
     font-size: 11px;
     cursor: pointer;
+    text-align: center;
+    word-wrap: break-word;
+    line-height: 1.2;
+}
+
+.control{
+    background-color: rgba(9, 148, 170, 0.48);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 8px 4px;
+    font-size: 11px;
     transition: background-color 0.3s;
     text-align: center;
     word-wrap: break-word;
@@ -125,3 +137,23 @@ a{
 a.footer-link:hover{
     text-decoration: underline;
 }
+
+/* In style.css */
+
+#canvas.fullscreen {
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: contain;
+    background: #000;
+}
+
+/* Fullscreen-Button Hover-Effekt */
+#fullscreen:hover {
+    background-color: rgb(15, 56, 66);
+    transform: scale(1.05);
+}
+
+#fullscreen:active {
+    transform: scale(0.98);
+}
+

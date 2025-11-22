@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css"> 
 <script src="TheNecromancer/models/models.class.js"></script>
 <script src="TheNecromancer/models/keyboard.class.js"></script>
+<script src="TheNecromancer/models/fullscreen.class.js"></script>
 <script src="TheNecromancer/models/characterImageTemplates.js"></script>
 <script src="TheNecromancer/models/enemyImageTemplates.js"></script>
 <script src="TheNecromancer/models/ImageTemplateManager.js"></script>
@@ -38,7 +39,7 @@
             <button class="sidebar-btn" id="startGame">Spiel starten</button>
             <button class="sidebar-btn" id="levelSelect">Level wählen</button>
             <button class="sidebar-btn" id="highscore">Highscore</button>
-            <button class="sidebar-btn" id="settings">Einstellungen</button>
+            <button class="sidebar-btn" id="fullscreen">Vollbild (Taste F)</button>
         </div>
         
         <canvas id="canvas" width="720" height="480">
@@ -46,8 +47,11 @@
         
         <div class="sidebar right-sidebar">
             <h3>Optionen</h3>
-            <button class="sidebar-btn" id="fullscreen">Vollbild</button>
-            <button class="sidebar-btn" id="toggleSound">Ton ein/aus</button>
+            <div class="control">Pfeil Links - Zurück</div>
+            <div class="control">Pfeil Rechts - Vorwärts</div>
+            <div class="control">Space - Springen</div>
+            <div class="control">Taste D - Kämpfen</div>
+            <div class="control">Ton ein/aus (Taste M)</div>
         </div>
     </div>
     <div class="footer">

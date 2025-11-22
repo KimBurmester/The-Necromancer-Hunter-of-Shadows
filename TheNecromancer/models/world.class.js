@@ -44,38 +44,20 @@ positionEndboss() {
 createDiamonds() {
     this.lootable = [];
     let numberOfDiamonds = 5;
-    
-    // ✅ Berechne Level-Länge basierend auf Backgrounds
     let levelStartX = -820;
     let levelEndX = 0;
-    
     if (this.background.length > 0) {
         let lastBg = this.background[this.background.length - 1];
-        levelEndX = lastBg.positionX + lastBg.width - 200; // 200px Abstand vom Ende
+        levelEndX = lastBg.positionX + lastBg.width - 200;
     }
-    
     let levelLength = levelEndX - levelStartX;
-    let spacing = levelLength / (numberOfDiamonds + 1); // +1 für bessere Verteilung
-    
-    console.log('💎 Diamond-Verteilung:');
-    console.log('  Level Start:', levelStartX);
-    console.log('  Level End:', levelEndX);
-    console.log('  Level Länge:', levelLength);
-    console.log('  Spacing:', spacing);
-    
+    let spacing = levelLength / (numberOfDiamonds + 1);
     for (let i = 0; i < numberOfDiamonds; i++) {
         let diamond = new Looting();
-        
-        // ✅ Gleichmäßige Verteilung über die Level-Länge
-        diamond.positionX = levelStartX + 400 + (i * spacing) + (Math.random() * 50 - 25); // ±25px Variation
-        diamond.positionY = 280;
-        
-        console.log(`  Diamond ${i + 1}: X=${diamond.positionX.toFixed(0)}`);
-        
+        diamond.positionX = levelStartX + 400 + (i * spacing) + (Math.random() * 50 - 25);
+        diamond.positionY = 280;       
         this.lootable.push(diamond);
     }
-    
-    console.log('✅ Gesamt Diamonds erstellt:', this.lootable.length);
 }
 
 checkCollisions() {
@@ -87,41 +69,50 @@ checkCollisions() {
     }, 1000 / 60);
   }
 
-  checkAttackHits() {
-    if (this.character.isAttacking) {
+checkAttackHits() {
+    if (this.character.isAttacking && this.character.currentImage === 6) {
         let attackHitbox = this.character.getAttackHitbox();
-        
-        // ✅ Prüfe Enemies
-        this.enemies.forEach((enemy, index) => {
-            if (!enemy.isDead) {
+        for (let i = this.enemies.length - 1; i >= 0; i--) {
+            let enemy = this.enemies[i];
+            if (!enemy.isDead && !enemy.wasHitThisAttack) {
                 let enemyHitbox = enemy.getHitbox();
-                
                 if (this.isHitboxColliding(attackHitbox, enemyHitbox)) {
                     enemy.takeDamage(10);
-                    
-                    // Entferne Enemy wenn tot
+                    enemy.wasHitThisAttack = true;
                     if (enemy.isDead) {
                         setTimeout(() => {
-                            this.enemies.splice(index, 1);
-                            console.log('🗑️ Toter Enemy entfernt');
-                        }, 500); // Warte 500ms bevor Entfernung
+                            let enemyIndex = this.enemies.indexOf(enemy);
+                            if (enemyIndex !== -1) {
+                                this.enemies.splice(enemyIndex, 1);
+                            }
+                        }, 1000);
                     }
                 }
             }
-        });
+        }
         
-        // ✅ Prüfe Endboss
-        if (this.endboss && !this.endboss.isDead) {
+        // Prüfe Endboss
+        if (this.endboss && !this.endboss.isDead && !this.endboss.wasHitThisAttack) {
             let endbossHitbox = this.endboss.getHitbox();
             
             if (this.isHitboxColliding(attackHitbox, endbossHitbox)) {
                 this.endboss.takeDamage(5);
+                this.endboss.wasHitThisAttack = true;
                 
-                // Endboss besiegt?
                 if (this.endboss.isDead) {
-                    console.log('🎉 LEVEL GESCHAFFT! Endboss besiegt!');
+                  /*//FIX: Endscreen nach 10 sec*/
                 }
             }
+        }
+    }
+    
+    // ✅ Zurücksetzen des Treffer-Status wenn Angriff vorbei
+    if (!this.character.isAttacking) {
+        this.enemies.forEach(enemy => {
+            enemy.wasHitThisAttack = false;
+        });
+        if (this.endboss) {
+            this.endboss.wasHitThisAttack = false; // ✅ NEU
         }
     }
 }
@@ -136,19 +127,10 @@ isHitboxColliding(hitbox1, hitbox2) {
 checkDiamondCollection() {
     for (let i = this.lootable.length - 1; i >= 0; i--) {
         let diamond = this.lootable[i];
-        
         if (!diamond.collected && this.character.isColliding(diamond)) {
             diamond.collected = true;
-            
-            // ✅ VORHER diamonds erhöhen
             this.diamond.addDiamond();
-            
-            // ✅ DANN aus Array entfernen
             this.lootable.splice(i, 1);
-            
-            console.log('💎 Diamond eingesammelt!');
-            console.log('  Aktueller Score:', this.diamond.diamonds);
-            console.log('  Verbleibende Diamonds:', this.lootable.length);
         }
     }
 }
