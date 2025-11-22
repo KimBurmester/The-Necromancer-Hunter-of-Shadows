@@ -36,7 +36,7 @@ class Enemy extends Model {
 
     if (this.Enemy_Idle && this.Enemy_Idle.length > 0) {
       this.img = new Image();
-      this.img.src = this.Enemy_Idle[0];
+      this.img.src = this.Enemy_Idle[0].replace(/\\/g, '/');
     }
     this.positionX = 200 + Math.random() * 500;
     this.positionY = 240;
@@ -60,7 +60,7 @@ class Enemy extends Model {
     } else {
       setTimeout(() => {
         this.isHurt = false;
-      }, 400);
+      }, 600);
     }
   }
 
@@ -68,7 +68,7 @@ class Enemy extends Model {
     if (!images || images.length === 0) return;
 
     let i = this.currentImage % images.length;
-    let path = images[i];
+    let path = images[i].replace(/\\/g, '/');
 
     if (this.walkingImages && this.walkingImages[path]) {
       this.img = this.walkingImages[path];
@@ -86,8 +86,10 @@ class Enemy extends Model {
         return;
       }
 
-      if (this.isHurt && this.Enemy_Hurt.length > 0) {
-        this.playAnimation(this.Enemy_Hurt);
+      if (this.isHurt) {
+        if (this.Enemy_Hurt && this.Enemy_Hurt.length > 0) {
+          this.playAnimation(this.Enemy_Hurt);
+        }
         return;
       }
 
@@ -96,7 +98,7 @@ class Enemy extends Model {
       } else {
         this.playAnimation(this.Enemy_Idle);
       }
-    }, 200);
+    }, 100);
 
     setInterval(() => {
       if (!this.isDead) {
