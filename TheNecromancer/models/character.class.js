@@ -49,27 +49,20 @@ class Character extends Model {
         this.isAttacking = true;
         this.currentAnimationState = 'slashing';
         this.currentImage = 0;
-        
-        console.log('⚔️ Character schlägt zu!', 'Richtung:', this.otherDirection ? 'Links' : 'Rechts');
-        
-        // Animation-Dauer: ca. 12 Frames à 33ms = 400ms
-        setTimeout(() => {
+            setTimeout(() => {
             this.isAttacking = false;
             this.attackCooldown = true;
-            
-            // Cooldown nach Angriff
             setTimeout(() => {
                 this.attackCooldown = false;
-            }, 200); // 200ms Cooldown
+            }, 200);
         }, 400);
     }
 }
 getAttackHitbox() {
-    let attackRange = 100; // Reichweite des Schlags
+    let attackRange = 100;
     let hitboxWidth = 120;
     
     if (this.otherDirection) {
-        // Character schaut nach links
         return {
             x: this.positionX - attackRange + 30,
             y: this.positionY + 80,
@@ -77,7 +70,6 @@ getAttackHitbox() {
             height: 100
         };
     } else {
-        // Character schaut nach rechts
         return {
             x: this.positionX + this.width - 50,
             y: this.positionY + 80,
@@ -131,17 +123,13 @@ getAttackHitbox() {
 
 handleMovement() {
     if (this.isHurt || this.isDead) return;
-    
-    // ✅ Während Angriff keine Bewegung, aber Richtungsänderung erlaubt
-    if (this.isAttacking) {
-        // Erlaube Richtungsänderung während Angriff
+        if (this.isAttacking) {
         if (this.world.keyboard.LEFT) {
             this.otherDirection = true;
         }
         if (this.world.keyboard.RIGHT) {
             this.otherDirection = false;
         }
-        // Prüfe auf Angriff
         if (this.world.keyboard.D) {
             this.attack();
         }
@@ -151,7 +139,6 @@ handleMovement() {
     this.isMoving = false;
     let levelEndX = this.world.level.levelEndX - 225;
     let levelStartX = -1520;
-       
     if (this.world.keyboard.RIGHT && this.positionX < levelEndX) {
         this.moveRight();
     }
@@ -161,7 +148,7 @@ handleMovement() {
     if (this.world.keyboard.SPACE) {
         this.jump();
     }
-    if (this.world.keyboard.D) { // ✅ NEU: Angriff mit D-Taste
+    if (this.world.keyboard.D) {
         this.attack();
     }
 }
@@ -171,8 +158,6 @@ handleAttackAnimation() {
         let i = this.currentImage % this.Character_Slashing.length;
         this.playAnimation(this.Character_Slashing, i);
         this.currentImage++;
-        
-        // Animation läuft bis zum Ende (wird durch setTimeout in attack() beendet)
     }
 }
 
@@ -265,7 +250,6 @@ animate() {
                 this.isDead = true;
                 this.currentAnimationState = "dead";
                 this.currentImage = 0;
-                console.log('💀 Character ist gestorben!');
             }
             if (this.isDead) {
                 this.handleDeadAnimation();
