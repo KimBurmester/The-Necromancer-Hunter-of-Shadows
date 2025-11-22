@@ -234,6 +234,18 @@ addToMap(mo) {
         mo.draw(this.ctx);
         return;
     }
+    
+    if (mo instanceof Endboss) {
+        if (mo.isDead || mo.isHurt) {
+            this.drawFrameModel(mo);
+        } else if (mo.otherDirection) {
+            this.flipImageBack(mo);
+        } else {
+            this.drawFrameModel(mo);
+        }
+        return;
+    }
+    
     if (mo.otherDirection) {
         this.flipImageBack(mo);
     } else {
