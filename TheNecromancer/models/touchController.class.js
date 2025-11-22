@@ -63,6 +63,9 @@ class TouchController {
             case 'UP':
                 this.keyboard.UP = true;
                 break;
+            case 'SPACE':
+                this.keyboard.SPACE = true;
+                break;
             case 'D':
                 this.keyboard.D = true;
                 break;
@@ -90,6 +93,9 @@ class TouchController {
             case 'UP':
                 this.keyboard.UP = false;
                 break;
+            case 'SPACE':
+                this.keyboard.SPACE = false;
+                break;
             case 'D':
                 this.keyboard.D = false;
                 break;
@@ -105,6 +111,9 @@ class TouchController {
 
     handleAction(action) {
         switch(action) {
+            case 'help':
+                this.showControlsHelp();
+                break;
             case 'home':
                 if (confirm('Zurück zum Hauptmenü?')) {
                     location.reload();
@@ -121,12 +130,12 @@ class TouchController {
 
     checkTouchDevice() {
         const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        const isMobile = window.innerWidth <= 768;
+        const isNarrowScreen = window.innerWidth < 1150; // ✅ Breakpoint auf 1150px
         
         const touchControls = document.getElementById('touch-controls');
         const gameSidebars = document.querySelectorAll('.sidebar');
         
-        if (isTouchDevice || isMobile) {
+        if (isTouchDevice || isNarrowScreen) {
             touchControls.style.display = 'flex';
             gameSidebars.forEach(sidebar => {
                 sidebar.style.display = 'none';
@@ -139,5 +148,20 @@ class TouchController {
             });
             this.isActive = false;
         }
+    }
+
+    showControlsHelp() {
+        const helpText = `🎮 STEUERUNG\n\n` +
+            `◀️ ▶️ Links/Rechts - Bewegen\n` +
+            `⬆️ Leertaste - Springen\n` +
+            `🗡️ Taste D - Angreifen\n` +
+            `🎵 Taste M - Musik An/Aus\n` +
+            `🖥️ Taste F - Vollbild\n\n` +
+            `💡 TIPPS:\n` +
+            `• Sammle Diamanten für Punkte\n` +
+            `• Besiege Gegner mit deinem Schwert\n` +
+            `• Der Endboss ist sehr stark!`;
+        
+        alert(helpText);
     }
 }
