@@ -8,7 +8,9 @@ function init(){
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
     fullscreen = new Fullscreen(canvas);
+    window.fullscreen = fullscreen; // ✅ Global verfügbar machen
     touchController = new TouchController(keyboard);
+    checkLandscapeFullscreen();
 }
 
 window.addEventListener('keydown', (event) => {
@@ -58,4 +60,19 @@ window.addEventListener('keyup', (event) => {
             keyboard.D = false;
             break;
     }
+});
+
+function checkLandscapeFullscreen() {
+    if (window.innerWidth <= 650 && window.innerHeight <= 400 && window.matchMedia('(orientation: landscape)').matches) {
+        if (fullscreen && !fullscreen.isFullscreen) {
+            // User-Interaktion erforderlich für Fullscreen
+            // Nicht automatisch aufrufen, da Browser dies blockieren
+            console.log('Landscape-Modus erkannt. Drücke F für Vollbild.');
+        }
+    }
+}
+
+window.addEventListener('resize', checkLandscapeFullscreen);
+window.addEventListener('orientationchange', () => {
+    setTimeout(checkLandscapeFullscreen, 300);
 });

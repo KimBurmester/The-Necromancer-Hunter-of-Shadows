@@ -73,7 +73,10 @@ class TouchController {
                 this.keyboard.M = true;
                 break;
             case 'F':
-                this.keyboard.F = true;
+                // Vollbild-Toggle
+                if (window.fullscreen) {
+                    window.fullscreen.toggleFullscreen();
+                }
                 break;
         }
         button.classList.add('pressed');
@@ -103,7 +106,7 @@ class TouchController {
                 this.keyboard.M = false;
                 break;
             case 'F':
-                this.keyboard.F = false;
+                // Kein Release für Vollbild nötig
                 break;
         }
         button.classList.remove('pressed');
