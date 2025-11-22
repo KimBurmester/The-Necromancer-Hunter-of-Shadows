@@ -2,11 +2,13 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let fullscreen;
+let touchController;
 
 function init(){
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
     fullscreen = new Fullscreen(canvas);
+    touchController = new TouchController(keyboard);
 }
 
 window.addEventListener('keydown', (event) => {

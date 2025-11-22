@@ -1,0 +1,196 @@
+#canvas.fullscreen {
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: contain;
+    background: #000;
+}
+
+#fullscreen:hover {
+    background-color: rgb(15, 56, 66);
+    transform: scale(1.05);
+}
+
+#fullscreen:active {
+    transform: scale(0.98);
+}
+
+
+.touch-controls {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 200px;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.controller-left,
+.controller-right {
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+    gap: 15px;
+    pointer-events: all;
+}
+
+.controller-left {
+    left: 20px;
+}
+
+.controller-right {
+    right: 20px;
+    flex-direction: column-reverse;
+}
+
+.controller-menu {
+    position: absolute;
+    top: -250px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    pointer-events: all;
+}
+
+.touch-btn {
+    width: 70px;
+    height: 70px;
+    background: rgba(15, 56, 66, 0.8);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.touch-btn img {
+    width: 35px;
+    height: 35px;
+    filter: brightness(0) invert(1); /* SVG weiß machen */
+    opacity: 0.8;
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+.touch-btn:active,
+.touch-btn.pressed {
+    transform: scale(0.9);
+    background: rgba(10, 142, 142, 0.9);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 2px 10px rgba(10, 142, 142, 0.7);
+}
+
+.touch-btn:active img,
+.touch-btn.pressed img {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+/* Menü-Buttons kleiner */
+.controller-menu .touch-btn {
+    width: 50px;
+    height: 50px;
+}
+
+.controller-menu .touch-btn img {
+    width: 25px;
+    height: 25px;
+}
+
+/* Spezielle Button-Stile */
+.btn-jump {
+    background: rgba(76, 175, 80, 0.8);
+}
+
+.btn-attack {
+    background: rgba(244, 67, 54, 0.8);
+}
+
+.btn-jump:active,
+.btn-jump.pressed {
+    background: rgba(76, 175, 80, 1);
+    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.7);
+}
+
+.btn-attack:active,
+.btn-attack.pressed {
+    background: rgba(244, 67, 54, 1);
+    box-shadow: 0 2px 10px rgba(244, 67, 54, 0.7);
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 768px) {
+    .game-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sidebar {
+        display: none !important; /* Verstecke Sidebars auf Mobile */
+    }
+
+    canvas {
+        border: 2px solid rgb(50, 50, 50);
+        width: 100vw !important;
+        height: auto !important;
+        max-height: 60vh;
+    }
+
+    .touch-controls {
+        display: flex !important;
+    }
+
+    .title {
+        font-size: 24px;
+        margin: 10px 0;
+    }
+
+    .footer {
+        font-size: 12px;
+        margin-top: 220px; /* Platz für Controller */
+    }
+}
+
+@media (max-width: 480px) {
+    .touch-btn {
+        width: 60px;
+        height: 60px;
+    }
+
+    .touch-btn img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .controller-menu .touch-btn {
+        width: 45px;
+        height: 45px;
+    }
+
+    .controller-menu .touch-btn img {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+/* Landscape Mode */
+@media (max-height: 500px) and (orientation: landscape) {
+    .controller-left,
+    .controller-right {
+        bottom: 10px;
+    }
+
+    .controller-menu {
+        top: 10px;
+    }
+
+    .touch-btn {
+        width: 55px;
+        height: 55px;
+    }
+}

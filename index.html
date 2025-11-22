@@ -8,6 +8,7 @@
 <script src="TheNecromancer/models/models.class.js"></script>
 <script src="TheNecromancer/models/keyboard.class.js"></script>
 <script src="TheNecromancer/models/fullscreen.class.js"></script>
+<script src="TheNecromancer/models/touchController.class.js"></script>
 <script src="TheNecromancer/models/characterImageTemplates.js"></script>
 <script src="TheNecromancer/models/enemyImageTemplates.js"></script>
 <script src="TheNecromancer/models/ImageTemplateManager.js"></script>
@@ -54,6 +55,47 @@
             <div class="control">Ton ein/aus (Taste M)</div>
         </div>
     </div>
+
+        <!-- ✅ NEU: Touch-Controller für Mobile -->
+    <div id="touch-controls" class="touch-controls">
+        <!-- Bewegungs-Controller Links -->
+        <div class="controller-left">
+            <button class="touch-btn btn-left" data-key="LEFT">
+                <img src="TheNecromancer/img/controller/arrow-left.svg" alt="Links">
+            </button>
+            <button class="touch-btn btn-right" data-key="RIGHT">
+                <img src="TheNecromancer/img/controller/arrow-right.svg" alt="Rechts">
+            </button>
+        </div>
+
+        <!-- Action-Controller Rechts -->
+        <div class="controller-right">
+            <button class="touch-btn btn-jump" data-key="UP">
+                <img src="TheNecromancer/img/controller/jump.svg" alt="Springen">
+            </button>
+            <button class="touch-btn btn-attack" data-key="D">
+                <img src="TheNecromancer/img/controller/attack.svg" alt="Angriff">
+            </button>
+        </div>
+
+        <!-- Menü-Controller Oben -->
+        <div class="controller-menu">
+            <button class="touch-btn btn-home" data-action="home">
+                <img src="TheNecromancer/img/controller/home.svg" alt="Home">
+            </button>
+            <button class="touch-btn btn-settings" data-action="settings">
+                <img src="TheNecromancer/img/controller/settings.svg" alt="Einstellungen">
+            </button>
+            <button class="touch-btn btn-sound" data-key="M">
+                <img src="TheNecromancer/img/controller/sound.svg" alt="Sound">
+            </button>
+            <button class="touch-btn btn-fullscreen" data-key="F">
+                <img src="TheNecromancer/img/controller/fullscreen.svg" alt="Vollbild">
+            </button>
+        </div>
+    </div>
+
+
     <div class="footer">
         <div class="footer-container">
             <div class="footer-text">© 2024 Kim P. Burmester. All rights reserved.</div>

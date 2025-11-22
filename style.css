@@ -143,23 +143,3 @@ a{
 a.footer-link:hover{
     text-decoration: underline;
 }
-
-/* In style.css */
-
-#canvas.fullscreen {
-    width: 100vw !important;
-    height: 100vh !important;
-    object-fit: contain;
-    background: #000;
-}
-
-/* Fullscreen-Button Hover-Effekt */
-#fullscreen:hover {
-    background-color: rgb(15, 56, 66);
-    transform: scale(1.05);
-}
-
-#fullscreen:active {
-    transform: scale(0.98);
-}
-
