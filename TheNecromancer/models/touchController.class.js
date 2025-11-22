@@ -130,7 +130,7 @@ class TouchController {
 
     checkTouchDevice() {
         const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        const isNarrowScreen = window.innerWidth < 1260; // ✅ Breakpoint auf 1260px
+        const isNarrowScreen = window.innerWidth < 1260;
         
         const touchControls = document.getElementById('touch-controls');
         const gameSidebars = document.querySelectorAll('.sidebar');
@@ -151,17 +151,27 @@ class TouchController {
     }
 
     showControlsHelp() {
-        const helpText = `🎮 STEUERUNG\n\n` +
-            `◀️ ▶️ Links/Rechts - Bewegen\n` +
-            `⬆️ Leertaste - Springen\n` +
-            `🗡️ Taste D - Angreifen\n` +
-            `🎵 Taste M - Musik An/Aus\n` +
-            `🖥️ Taste F - Vollbild\n\n` +
-            `💡 TIPPS:\n` +
-            `• Sammle Diamanten für Punkte\n` +
-            `• Besiege Gegner mit deinem Schwert\n` +
-            `• Der Endboss ist sehr stark!`;
+        const overlay = document.getElementById('help-overlay');
+        const closeBtn = document.getElementById('close-help');
         
-        alert(helpText);
+        overlay.classList.add('show');
+        
+        const closeOverlay = () => {
+            overlay.classList.remove('show');
+        };
+        
+        closeBtn.onclick = closeOverlay;
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                closeOverlay();
+            }
+        };
+        
+        document.addEventListener('keydown', function escHandler(e) {
+            if (e.key === 'Escape') {
+                closeOverlay();
+                document.removeEventListener('keydown', escHandler);
+            }
+        });
     }
 }
