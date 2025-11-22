@@ -25,14 +25,14 @@ body{
     align-items: center;
     justify-content: center;
     width: 100%;
-    width: 1150px;
+    max-width: 1150px;
 }
 
 .game-container{
     display: flex;
     align-items: flex-start;
     gap: 0;
-    position: relative; /* ✅ Für absolute Positionierung der Touch-Controls */
+    position: relative;
 }
 
 .sidebar{
@@ -178,5 +178,146 @@ a.footer-link:hover{
     .footer {
         font-size: 10px;
         gap: 6px;
+    }
+}
+
+/* ✅ NEU: Landscape-Modus für 6,9 Zoll Handys (ca. 900x400px) */
+@media (max-height: 500px) and (orientation: landscape) {
+    body {
+        overflow: hidden;
+    }
+
+    .layer {
+        width: 100vw;
+        height: 100vh;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .title {
+        display: none; /* Titel ausblenden für mehr Platz */
+    }
+
+    .game-container {
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    canvas {
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: none !important;
+        max-height: none !important;
+        border: none;
+        object-fit: contain; /* Seitenverhältnis beibehalten */
+    }
+
+    .footer {
+        display: none; /* Footer ausblenden */
+    }
+
+    /* Touch-Controls optimieren für Landscape */
+    .touch-controls {
+        height: 100vh;
+    }
+
+    .controller-left,
+    .controller-right {
+        bottom: 3%;
+    }
+
+    .touch-btn {
+        width: 55px !important;
+        height: 55px !important;
+        background: rgba(15, 56, 66, 0.9) !important;
+    }
+
+    .controller-menu {
+        top: 3%;
+        right: 2%;
+    }
+
+    .controller-menu .touch-btn {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}
+
+/* ✅ NEU: Speziell für sehr kleine Landscape-Displays (unter 450px Höhe) */
+@media (max-height: 450px) and (orientation: landscape) {
+    .touch-btn {
+        width: 48px !important;
+        height: 48px !important;
+    }
+
+    .controller-menu .touch-btn {
+        width: 35px !important;
+        height: 35px !important;
+    }
+
+    .controller-left,
+    .controller-right {
+        gap: 8px;
+        bottom: 2%;
+    }
+
+    .controller-left {
+        left: 1%;
+    }
+
+    .controller-right {
+        right: 1%;
+    }
+}
+@media (max-width: 500px) and (orientation: portrait) {
+    .layer {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .title {
+        font-size: 22px;
+        margin: 10px 0;
+    }
+
+    canvas {
+        width: 100vw !important;
+        height: auto !important;
+        max-width: 100% !important;
+        border: 2px solid rgb(50, 50, 50);
+    }
+
+    .game-container {
+        width: 100%;
+    }
+    .touch-controls {
+        height: 180px;
+    }
+
+    .controller-left,
+    .controller-right {
+        bottom: 15px;
+    }
+
+    .touch-btn {
+        width: 65px;
+        height: 65px;
+    }
+
+    .controller-menu {
+        top: -200px;
+    }
+
+    .controller-menu .touch-btn {
+        width: 45px;
+        height: 45px;
+    }
+
+    .footer {
+        font-size: 11px;
+        margin-top: 200px; /* Platz für Touch-Controls */
     }
 }
