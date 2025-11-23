@@ -327,17 +327,17 @@ animate() {
       height: this.height - 85,
     };
   }
-  hit() {
-    this.energy -= 1;
+hit(damage = 1) {
+    this.energy -= damage;
     if (this.energy < 0) {
-      this.energy = 0;
+        this.energy = 0;
     } else {
-      this.lastHit = Date.now();
-      this.isHurt = true;
-      this.currentAnimationState = "hurting";
-      this.currentImage = 0;
+        this.lastHit = Date.now();
+        this.isHurt = true;
+        this.currentAnimationState = "hurting";
+        this.currentImage = 0;
     }
-  }
+}
 
   isHurtRecently() {
     let timePassed = Date.now() - this.lastHit;

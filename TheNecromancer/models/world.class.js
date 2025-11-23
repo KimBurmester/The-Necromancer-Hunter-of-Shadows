@@ -137,9 +137,9 @@ checkDiamondCollection() {
 
 checkEnemyCollisions() {
     this.enemies.forEach((enemy) => {
-        if (this.character.isColliding(enemy) && this.character.energy > 0) {
+        if (!enemy.isDead && this.character.isColliding(enemy) && this.character.energy > 0) {
             if (!this.character.isHurtRecently()) {
-                this.character.hit();
+                this.character.hit(2);
                 this.statusbar.setEnergy(this.character.energy);
             }
         }
@@ -147,10 +147,9 @@ checkEnemyCollisions() {
 }
 
 checkEndbossCollision() {
-    if (this.endboss && this.character.isColliding(this.endboss) && this.character.energy > 0) {
+    if (this.endboss && !this.endboss.isDead && this.character.isColliding(this.endboss) && this.character.energy > 0) {
         if (!this.character.isHurtRecently()) {
-            this.character.hit();
-            this.character.hit();
+            this.character.hit(3);
             this.statusbar.setEnergy(this.character.energy);
         }
     }
