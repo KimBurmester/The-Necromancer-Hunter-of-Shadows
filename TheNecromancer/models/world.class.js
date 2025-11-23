@@ -19,21 +19,63 @@ class World {
   gameOverAlpha = 0;
   showCredits = false;
   gameOverStartTime = 0;
+  gameStarted = false;
 
 constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
-    this.setWorld();
     this.createBackgrounds();
     this.createClouds();
     this.createDiamonds();
     this.positionEndboss();
     this.level.calculateLevelEnd();
-    this.character.startAnimation();
     this.camera_x = 1100;
-    this.checkCollisions();
     this.draw();
+    this.showStartScreen();
+}
+
+showStartScreen() {
+    this.setWorld();
+    this.character.startAnimation();
+    
+    const startBtn = document.getElementById('startGame');
+    if (startBtn) {
+        startBtn.addEventListener('click', () => {
+            this.startGame();
+        });
+    }
+    
+    // ✅ NEU: Touch-Event für mobile Geräte
+    const canvas = document.getElementById('canvas');
+    if (canvas && !this.gameStarted) {
+        const handleCanvasClick = (e) => {
+            if (!this.gameStarted) {
+                this.startGame();
+                canvas.removeEventListener('click', handleCanvasClick);
+                canvas.removeEventListener('touchstart', handleCanvasClick);
+            }
+        };
+        
+        canvas.addEventListener('click', handleCanvasClick);
+        canvas.addEventListener('touchstart', handleCanvasClick);
+    }
+}
+
+startGame() {
+    if (this.gameStarted) return;
+    
+    this.gameStarted = true;
+    this.checkCollisions();
+    
+    document.querySelectorAll('.sidebar, .title, .footer').forEach(el => {
+        el.style.display = 'none';
+    });
+    
+    const touchControls = document.getElementById('touch-controls');
+    if (touchControls) {
+        touchControls.style.display = 'flex';
+    }
 }
 
 positionEndboss() {
@@ -201,9 +243,14 @@ createBackgrounds() {
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusbar);
     this.addToMap(this.diamond);
-    if (this.character.isDead) {
-      this.drawGameOverScreen();
+    if (!this.gameStarted) {
+        this.drawStartScreen();
     }
+    
+    if (this.character.isDead) {
+        this.drawGameOverScreen();
+    }
+    
     let self = this;
     requestAnimationFrame(() => self.draw());
   }
@@ -398,4 +445,34 @@ drawCredits() {
     this.ctx.fillText('Kim P. Burmester', 360, 360);
     this.ctx.restore();
 }
+
+drawStartScreen() {
+    this.ctx.save();
+    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    this.ctx.fillRect(0, 0, 720, 480);
+    this.ctx.fillStyle = '#0a8e8e';
+    this.ctx.font = 'bold 48px cinzel, Arial';
+    this.ctx.textAlign = 'center';
+    this.ctx.textBaseline = 'middle';
+    this.ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+    this.ctx.shadowBlur = 10;
+    this.ctx.shadowOffsetX = 3;
+    this.ctx.shadowOffsetY = 3;
+    this.ctx.fillText('NECROMANCER', 360, 180);
+    this.ctx.fillStyle = '#ffffff';
+    this.ctx.font = 'bold 24px cinzel, Arial';
+    this.ctx.fillText('The Hunter of The Shadows', 360, 230);
+    
+    // ✅ NEU: Unterschiedlicher Text für Desktop/Mobile
+    this.ctx.fillStyle = '#0a8e8e';
+    this.ctx.font = '20px cinzel, Arial';
+    if (window.innerWidth <= 500) {
+        this.ctx.fillText('Tippe auf den Bildschirm zum Starten', 360, 320);
+    } else {
+        this.ctx.fillText('Klicke "Spiel starten" um zu beginnen', 360, 320);
+    }
+    
+    this.ctx.restore();
+}
+
 }

@@ -55,7 +55,7 @@ class Enemy extends Model {
 
 checkCharacterDistance() {
     setInterval(() => {
-      if (this.world && this.world.character && !this.isDead && !this.isHurt && this.world.character.energy > 0) {
+      if (this.world && this.world.character && !this.isDead && !this.isHurt && this.world.character.energy > 0 && this.world.gameStarted) {
         let distance = Math.abs(this.positionX - this.world.character.positionX);
         
         if (distance < this.world.character.width / 3 && !this.isAttacking) {
@@ -74,12 +74,12 @@ checkCharacterDistance() {
     }, 100);
   }
 
-  checkSlashingDistance() {
+checkSlashingDistance() {
     setInterval(() => {
-        if (this.world && this.world.character && !this.isDead && !this.isHurt && this.hasStarted) {
+        if (this.world && this.world.character && !this.isDead && !this.isHurt && this.hasStarted && this.world.character.energy > 0 && this.world.gameStarted) {
             let distance = Math.abs(this.positionX - this.world.character.positionX);
             
-            if (distance < 1 && !this.isSlashing) {
+            if (distance < 150 && !this.isSlashing) {
                 this.isSlashing = true;
                 this.currentSlashingImage = 0;
                 

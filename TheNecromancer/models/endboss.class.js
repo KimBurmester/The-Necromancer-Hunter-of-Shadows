@@ -48,27 +48,27 @@ class Endboss extends Model{
         this.checkSlashingDistance();
     }
 
-    checkSlashingDistance() {
-        setInterval(() => {
-            if (this.world && this.world.character && !this.isDead && !this.isHurt && this.hasStarted && this.world.character.energy > 0) {
-                let distance = Math.abs(this.positionX - this.world.character.positionX);
+checkSlashingDistance() {
+    setInterval(() => {
+        if (this.world && this.world.character && !this.isDead && !this.isHurt && this.hasStarted && this.world.character.energy > 0 && this.world.gameStarted) {
+            let distance = Math.abs(this.positionX - this.world.character.positionX);
+            
+            if (distance < 150 && !this.isSlashing) {
+                this.isSlashing = true;
+                this.currentSlashingImage = 0;
                 
-                if (distance < 150 && !this.isSlashing) {
-                    this.isSlashing = true;
-                    this.currentSlashingImage = 0;
-                    
-                    if (!this.world.character.isHurtRecently()) {
-                        this.world.character.hit(3);
-                        this.world.statusbar.setEnergy(this.world.character.energy);
-                    }
-                    
-                    setTimeout(() => {
-                        this.isSlashing = false;
-                    }, 800);
+                if (!this.world.character.isHurtRecently()) {
+                    this.world.character.hit(3);
+                    this.world.statusbar.setEnergy(this.world.character.energy);
                 }
+                
+                setTimeout(() => {
+                    this.isSlashing = false;
+                }, 800);
             }
-        }, 100);
-    }
+        }
+    }, 100);
+}
 
     takeDamage(damage) {
         if (this.isDead) return;
@@ -98,102 +98,102 @@ class Endboss extends Model{
     }
 
     animate() {
-        setInterval(() => {
-            if (this.isDead) {
-                if (this.Endboss_Dying && this.Endboss_Dying.length > 0) {
-                    let i = this.currentDyingImage % this.Endboss_Dying.length;
-                    let path = this.Endboss_Dying[i];
-                    if (this.walkingImages[path]) {
-                        this.img = this.walkingImages[path];
-                    }
-                    
-                    if (this.currentDyingImage < this.Endboss_Dying.length - 1) {
-                        this.currentDyingImage++;
-                    }
-                }
-                return;
-            }
-            
-            if (this.isHurt && this.Endboss_Hurt.length > 0) {
-                let i = this.currentHurtImage % this.Endboss_Hurt.length;
-                let path = this.Endboss_Hurt[i];
+    setInterval(() => {
+        if (this.isDead) {
+            if (this.Endboss_Dying && this.Endboss_Dying.length > 0) {
+                let i = this.currentDyingImage % this.Endboss_Dying.length;
+                let path = this.Endboss_Dying[i];
                 if (this.walkingImages[path]) {
                     this.img = this.walkingImages[path];
                 }
-                this.currentHurtImage++;
                 
-                if (this.currentHurtImage >= this.Endboss_Hurt.length) {
-                    this.currentHurtImage = 0;
+                if (this.currentDyingImage < this.Endboss_Dying.length - 1) {
+                    this.currentDyingImage++;
                 }
-                return;
             }
+            return;
+        }
+        
+        if (this.isHurt && this.Endboss_Hurt.length > 0) {
+            let i = this.currentHurtImage % this.Endboss_Hurt.length;
+            let path = this.Endboss_Hurt[i];
+            if (this.walkingImages[path]) {
+                this.img = this.walkingImages[path];
+            }
+            this.currentHurtImage++;
+            
+            if (this.currentHurtImage >= this.Endboss_Hurt.length) {
+                this.currentHurtImage = 0;
+            }
+            return;
+        }
 
-            if (this.isSlashing && this.Endboss_Slashing.length > 0) {
-                let i = this.currentSlashingImage % this.Endboss_Slashing.length;
-                let path = this.Endboss_Slashing[i];
-                if (this.walkingImages[path]) {
-                    this.img = this.walkingImages[path];
-                }
-                this.currentSlashingImage++;
-                
-                if (this.currentSlashingImage >= this.Endboss_Slashing.length) {
-                    this.currentSlashingImage = 0;
-                }
-                return;
+        if (this.isSlashing && this.Endboss_Slashing.length > 0) {
+            let i = this.currentSlashingImage % this.Endboss_Slashing.length;
+            let path = this.Endboss_Slashing[i];
+            if (this.walkingImages[path]) {
+                this.img = this.walkingImages[path];
+            }
+            this.currentSlashingImage++;
+            
+            if (this.currentSlashingImage >= this.Endboss_Slashing.length) {
+                this.currentSlashingImage = 0;
+            }
+            return;
+        }
+        
+        if (this.isIdle) {
+            let path = this.Endboss_Idle[this.currentIdleImage];
+            if (this.walkingImages[path]) {
+                this.img = this.walkingImages[path];
             }
             
-            if (this.isIdle) {
-                let path = this.Endboss_Idle[this.currentIdleImage];
-                if (this.walkingImages[path]) {
-                    this.img = this.walkingImages[path];
-                }
-                
-                this.currentIdleImage += this.idleAnimationDirection;
-                
-                if (this.currentIdleImage >= this.Endboss_Idle.length - 1) {
-                    this.idleAnimationDirection = -1;
-                } else if (this.currentIdleImage <= 0) {
-                    this.idleAnimationDirection = 1;
-                }
-            } else {
-                let path = this.Endboss_Walking[this.currentWalkImage];
-                if (this.walkingImages[path]) {
-                    this.img = this.walkingImages[path];
-                }
-                
-                this.currentWalkImage += this.walkAnimationDirection;
-                
-                if (this.currentWalkImage >= this.Endboss_Walking.length - 1) {
-                    this.walkAnimationDirection = -1;
-                } else if (this.currentWalkImage <= 0) {
+            this.currentIdleImage += this.idleAnimationDirection;
+            
+            if (this.currentIdleImage >= this.Endboss_Idle.length - 1) {
+                this.idleAnimationDirection = -1;
+            } else if (this.currentIdleImage <= 0) {
+                this.idleAnimationDirection = 1;
+            }
+        } else {
+            let path = this.Endboss_Walking[this.currentWalkImage];
+            if (this.walkingImages[path]) {
+                this.img = this.walkingImages[path];
+            }
+            
+            this.currentWalkImage += this.walkAnimationDirection;
+            
+            if (this.currentWalkImage >= this.Endboss_Walking.length - 1) {
+                this.walkAnimationDirection = -1;
+            } else if (this.currentWalkImage <= 0) {
+                this.walkAnimationDirection = 1;
+            }
+        }
+    }, 150);
+
+    setInterval(() => {
+        if (!this.isIdle && !this.isDead && !this.isSlashing && this.world && this.world.gameStarted) {
+            this.positionX -= this.speed;
+        }
+    }, 1000 / 60);
+}
+
+checkCharacterDistance() {
+    setInterval(() => {
+        if (!this.hasStarted && this.world && this.world.character && this.world.gameStarted) {
+            let distanceToEndboss = this.positionX - this.world.character.positionX;
+            
+            if (distanceToEndboss <= 720) {
+                this.hasStarted = true;
+                setTimeout(() => {
+                    this.isIdle = false;
+                    this.currentWalkImage = 0;
                     this.walkAnimationDirection = 1;
-                }
+                }, this.idleTime);
             }
-        }, 150);
-
-        setInterval(() => {
-            if (!this.isIdle && !this.isDead && !this.isSlashing) {
-                this.positionX -= this.speed;
-            }
-        }, 1000 / 60);
-    }
-
-    checkCharacterDistance() {
-        setInterval(() => {
-            if (!this.hasStarted && this.world && this.world.character) {
-                let distanceToEndboss = this.positionX - this.world.character.positionX;
-                
-                if (distanceToEndboss <= 720) {
-                    this.hasStarted = true;
-                    setTimeout(() => {
-                        this.isIdle = false;
-                        this.currentWalkImage = 0;
-                        this.walkAnimationDirection = 1;
-                    }, this.idleTime);
-                }
-            }
-        }, 100);
-    }
+        }
+    }, 100);
+}
 
     getHitbox() {
         return {
