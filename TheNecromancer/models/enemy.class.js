@@ -1,13 +1,30 @@
+/**
+ * Enemy character class with AI behavior
+ * @class
+ */
 class Enemy extends Model {
+  /** @type {boolean} Hurt state flag */
   isHurt = false;
+  /** @type {number} Timestamp of last damage */
   lastHit = 0;
+  /** @type {boolean} Death state flag */
   isDead = false;
+  /** @type {number} Current health points */
   health = 30;
+  /** @type {number} Current animation frame */
   currentImage = 0;
+  /** @type {number} Floating animation offset */
   floatOffset = 0;
+  /** @type {number} Base Y position for floating */
   baseY = 0;
+  /** @type {boolean} Attack state flag */
   isAttacking = false;
 
+  /**
+   * Initializes enemy with type and animations
+   * @method
+   * @param {string} enemyType - Enemy variant (wraith_01/02/03)
+   */
   constructor(enemyType = "wraith_01") {
     super();
     this.enemyType = enemyType;
@@ -53,6 +70,10 @@ class Enemy extends Model {
     this.checkCharacterDistance();
   }
 
+/**
+ * Monitors distance to character and triggers attacks
+ * @method
+ */
 checkCharacterDistance() {
     setInterval(() => {
       if (this.world && this.world.character && !this.isDead && !this.isHurt && this.world.character.energy > 0 && this.world.gameStarted) {
@@ -77,6 +98,10 @@ checkCharacterDistance() {
     }, 100);
   }
 
+/**
+ * Monitors distance for slashing attacks (placeholder method)
+ * @method
+ */
 checkSlashingDistance() {
     setInterval(() => {
         if (this.world && this.world.character && !this.isDead && !this.isHurt && this.hasStarted && this.world.character.energy > 0 && this.world.gameStarted) {
@@ -102,6 +127,11 @@ checkSlashingDistance() {
     }, 100);
 }
 
+  /**
+   * Applies damage to enemy
+   * @method
+   * @param {number} damage - Damage amount
+   */
   takeDamage(damage) {
     if (this.isDead) return;
 
@@ -120,6 +150,11 @@ checkSlashingDistance() {
     }
   }
 
+  /**
+   * Plays animation from image array
+   * @method
+   * @param {Array<string>} images - Animation frames array
+   */
   playAnimation(images) {
     if (!images || images.length === 0) return;
 
@@ -133,6 +168,10 @@ checkSlashingDistance() {
     this.currentImage++;
   }
 
+/**
+ * Main animation loop for enemy states
+ * @method
+ */
 animate() {
     setInterval(() => {
       if (this.isDead) {
@@ -172,6 +211,11 @@ animate() {
     }, 1000 / 60);
   }
 
+  /**
+   * Returns enemy hitbox for collision detection
+   * @method
+   * @returns {Object} Hitbox with x, y, width, height
+   */
   getHitbox() {
     return {
       x: this.positionX + 90,

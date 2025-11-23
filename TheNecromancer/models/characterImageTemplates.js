@@ -1,4 +1,12 @@
+/**
+ * Character animation image path templates
+ * @class
+ */
 class CharacterImageTemplates {
+    /**
+     * Initializes character image templates with all animation paths
+     * @method
+     */
     constructor() {
         this.templates = {
             walking: [
@@ -188,14 +196,31 @@ class CharacterImageTemplates {
         };
     }
 
+    /**
+     * Retrieves image paths for specific animation type
+     * @method
+     * @param {string} animationType - Animation type name
+     * @returns {Array<string>} Image paths array
+     */
     getImages(animationType) {
         return this.templates[animationType] || [];
     }
 
+    /**
+     * Gets all available animation type names
+     * @method
+     * @returns {Array<string>} Animation type names
+     */
     getAvailableAnimations() {
         return Object.keys(this.templates);
     }
 
+    /**
+     * Adds new animation type with image paths
+     * @method
+     * @param {string} animationType - Animation type name
+     * @param {Array<string>} imageArray - Image paths array
+     */
     addAnimation(animationType, imageArray) {
         this.templates[animationType] = imageArray;
     }

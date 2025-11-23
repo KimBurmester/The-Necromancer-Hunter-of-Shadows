@@ -1,4 +1,12 @@
+/**
+ * Enemy animation image path templates for all wraith types
+ * @class
+ */
 class EnemyImageTemplates {
+    /**
+     * Initializes enemy image templates with all animation paths
+     * @method
+     */
     constructor() {
         this.templates = {
             wraith_01: {
@@ -246,6 +254,13 @@ class EnemyImageTemplates {
         };
     }
 
+    /**
+     * Retrieves image paths for specific enemy and animation type
+     * @method
+     * @param {string} enemyType - Enemy type (wraith_01/02/03)
+     * @param {string} animationType - Animation type name
+     * @returns {Array<string>} Image paths array
+     */
     getImages(enemyType, animationType) {
         if (this.templates[enemyType] && this.templates[enemyType][animationType]) {
             return this.templates[enemyType][animationType];
@@ -253,10 +268,21 @@ class EnemyImageTemplates {
         return [];
     }
 
+    /**
+     * Gets all available enemy type names
+     * @method
+     * @returns {Array<string>} Enemy type names
+     */
     getAvailableEnemyTypes() {
         return Object.keys(this.templates);
     }
 
+    /**
+     * Gets available animations for specific enemy type
+     * @method
+     * @param {string} enemyType - Enemy type name
+     * @returns {Array<string>} Animation type names
+     */
     getAvailableAnimations(enemyType) {
         if (this.templates[enemyType]) {
             return Object.keys(this.templates[enemyType]);
@@ -264,6 +290,13 @@ class EnemyImageTemplates {
         return [];
     }
 
+    /**
+     * Adds new animation for enemy type
+     * @method
+     * @param {string} enemyType - Enemy type name
+     * @param {string} animationType - Animation type name
+     * @param {Array<string>} imageArray - Image paths array
+     */
     addAnimation(enemyType, animationType, imageArray) {
         if (!this.templates[enemyType]) {
             this.templates[enemyType] = {};

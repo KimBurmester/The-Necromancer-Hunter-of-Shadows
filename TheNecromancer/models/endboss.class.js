@@ -1,25 +1,53 @@
+/**
+ * Final boss enemy with advanced AI and animations
+ * @class
+ */
 class Endboss extends Model{
+    /** @type {boolean} Hurt state flag */
     isHurt = false;
+    /** @type {number} Timestamp of last damage */
     lastHit = 0;
+    /** @type {boolean} Death state flag */
     isDead = false;
+    /** @type {number} Current health points */
     health = 100;
+    /** @type {boolean} Idle state flag */
     isIdle = true;
+    /** @type {number} Idle duration before activation */
     idleTime = 6000;
+    /** @type {number} Movement speed */
     speed = 0.5;
+    /** @type {boolean} Activation flag */
     hasStarted = false;
+    /** @type {World} Reference to game world */
     world;
+    /** @type {number} Current idle animation frame */
     currentIdleImage = 0;
+    /** @type {number} Current walk animation frame */
     currentWalkImage = 0;
+    /** @type {number} Current hurt animation frame */
     currentHurtImage = 0;
+    /** @type {number} Current dying animation frame */
     currentDyingImage = 0;
+    /** @type {number} Current slashing animation frame */
     currentSlashingImage = 0;
+    /** @type {number} Idle animation direction (1 or -1) */
     idleAnimationDirection = 1;
+    /** @type {number} Walk animation direction (1 or -1) */
     walkAnimationDirection = 1;
+    /** @type {boolean} Facing direction flag */
     otherDirection = true;
+    /** @type {boolean} Original facing direction */
     originalDirection = true;
+    /** @type {number} Timestamp of last damage for cooldown */
     lastDamageTime = 0;
+    /** @type {boolean} Slashing attack state */
     isSlashing = false;
     
+    /**
+     * Initializes endboss with animations and behavior
+     * @method
+     */
     constructor(){
         super();
         this.wasHitThisAttack = false;
@@ -48,6 +76,10 @@ class Endboss extends Model{
         this.checkSlashingDistance();
     }
 
+/**
+ * Monitors distance for slashing attacks
+ * @method
+ */
 checkSlashingDistance() {
     setInterval(() => {
         if (this.world && this.world.character && !this.isDead && !this.isHurt && this.hasStarted && this.world.character.energy > 0 && this.world.gameStarted) {
@@ -72,6 +104,11 @@ checkSlashingDistance() {
     }, 100);
 }
 
+    /**
+     * Applies damage to endboss with cooldown
+     * @method
+     * @param {number} damage - Damage amount
+     */
     takeDamage(damage) {
         if (this.isDead) return;
         const now = Date.now();
@@ -99,6 +136,10 @@ checkSlashingDistance() {
         }, 600);
     }
 
+    /**
+     * Main animation loop for endboss states
+     * @method
+     */
     animate() {
     setInterval(() => {
         if (this.isDead) {
@@ -180,6 +221,10 @@ checkSlashingDistance() {
     }, 1000 / 60);
 }
 
+/**
+ * Monitors character proximity to trigger endboss activation
+ * @method
+ */
 checkCharacterDistance() {
     setInterval(() => {
         if (!this.hasStarted && this.world && this.world.character && this.world.gameStarted) {
@@ -197,6 +242,11 @@ checkCharacterDistance() {
     }, 100);
 }
 
+    /**
+     * Returns endboss hitbox for collision detection
+     * @method
+     * @returns {Object} Hitbox with x, y, width, height
+     */
     getHitbox() {
         return {
             x: this.positionX + 180,

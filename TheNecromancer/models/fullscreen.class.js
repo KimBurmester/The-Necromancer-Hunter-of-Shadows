@@ -1,14 +1,30 @@
+/**
+ * Fullscreen mode manager with device detection
+ * @class
+ */
 class Fullscreen {
+    /** @type {HTMLCanvasElement} Canvas element for fullscreen */
     canvas;
+    /** @type {boolean} Current fullscreen state */
     isFullscreen = false;
+    /** @type {HTMLElement} Fullscreen toggle button */
     fullscreenButton;
 
+    /**
+     * Initializes fullscreen controller
+     * @method
+     * @param {HTMLCanvasElement} canvas - Canvas element to make fullscreen
+     */
     constructor(canvas) {
         this.canvas = canvas;
         this.fullscreenButton = document.getElementById('fullscreen');
         this.init();
     }
 
+    /**
+     * Sets up event listeners for fullscreen controls
+     * @method
+     */
     init() {
         this.fullscreenButton.addEventListener('click', () => {
             this.toggleFullscreen();
@@ -40,6 +56,10 @@ class Fullscreen {
         });
     }
 
+    /**
+     * Toggles fullscreen mode on/off
+     * @method
+     */
     toggleFullscreen() {
         if (!this.isFullscreen) {
             setTimeout(() => {
@@ -50,6 +70,10 @@ class Fullscreen {
         }
     }
 
+    /**
+     * Requests fullscreen mode with browser compatibility
+     * @method
+     */
     enterFullscreen() {
         const elem = this.canvas;
 
@@ -72,6 +96,10 @@ class Fullscreen {
         }
     }
 
+    /**
+     * Exits fullscreen mode with browser compatibility
+     * @method
+     */
     exitFullscreen() {
         if (document.exitFullscreen) {
             document.exitFullscreen();
@@ -84,6 +112,10 @@ class Fullscreen {
         }
     }
 
+    /**
+     * Handles fullscreen state changes and updates UI
+     * @method
+     */
     handleFullscreenChange() {
         this.isFullscreen = !!(
             document.fullscreenElement ||
@@ -100,6 +132,10 @@ class Fullscreen {
         }
     }
 
+    /**
+     * Detects mobile device and shows landscape hint if needed
+     * @method
+     */
     checkMobileDevice() {
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         const width = window.innerWidth;
@@ -117,6 +153,10 @@ class Fullscreen {
         if (isMobile && !isPortrait && !this.isFullscreen && isSmallMobileScreen) {}
     }
 
+    /**
+     * Displays hint to rotate device to landscape mode
+     * @method
+     */
     showLandscapeHint() {
         const hint = document.createElement('div');
         hint.style.cssText = `
@@ -160,6 +200,10 @@ class Fullscreen {
         }
     }
 
+    /**
+     * Shows error hint when fullscreen is blocked by browser
+     * @method
+     */
     showFullscreenHint() {
         const hint = document.createElement('div');
         hint.style.cssText = `

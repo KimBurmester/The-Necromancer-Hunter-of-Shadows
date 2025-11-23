@@ -1,13 +1,29 @@
+/**
+ * Touch control manager for mobile devices
+ * @class
+ */
 class TouchController {
+    /** @type {Keyboard} Keyboard state manager */
     keyboard;
+    /** @type {Object} Button elements collection */
     touchButtons = {};
+    /** @type {boolean} Touch controls active state */
     isActive = false;
 
+    /**
+     * Initializes touch controller with keyboard reference
+     * @method
+     * @param {Keyboard} keyboard - Keyboard state manager instance
+     */
     constructor(keyboard) {
         this.keyboard = keyboard;
         this.init();
     }
 
+    /**
+     * Sets up touch and mouse event listeners for control buttons
+     * @method
+     */
     init() {
         this.checkTouchDevice();
         const touchButtons = document.querySelectorAll('.touch-btn');
@@ -57,6 +73,12 @@ class TouchController {
         });
     }
 
+    /**
+     * Handles button press events and updates keyboard state
+     * @method
+     * @param {string} key - Key identifier (LEFT, RIGHT, UP, SPACE, D, M, F)
+     * @param {HTMLElement} button - Button element to style
+     */
     handleButtonPress(key, button) {
         switch(key) {
             case 'LEFT':
@@ -92,6 +114,12 @@ class TouchController {
         } catch (error) {}
     }
 
+    /**
+     * Handles button release events and resets keyboard state
+     * @method
+     * @param {string} key - Key identifier to release
+     * @param {HTMLElement} button - Button element to remove pressed style
+     */
     handleButtonRelease(key, button) {
         switch(key) {
             case 'LEFT':
@@ -118,6 +146,11 @@ class TouchController {
         button.classList.remove('pressed');
     }
 
+    /**
+     * Handles special action buttons (help, home, settings)
+     * @method
+     * @param {string} action - Action identifier
+     */
     handleAction(action) {
         switch(action) {
             case 'help':
@@ -140,6 +173,10 @@ class TouchController {
         } catch (error) {}
     }
 
+    /**
+     * Detects touch device or narrow screen and shows/hides controls
+     * @method
+     */
     checkTouchDevice() {
         const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
         const isNarrowScreen = window.innerWidth < 1260;
@@ -162,6 +199,10 @@ class TouchController {
         }
     }
 
+    /**
+     * Displays help overlay with control instructions
+     * @method
+     */
     showControlsHelp() {
         const overlay = document.getElementById('help-overlay');
         const closeBtn = document.getElementById('close-help');

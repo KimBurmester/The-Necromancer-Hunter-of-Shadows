@@ -1,31 +1,67 @@
+/**
+ * Main game world controller managing all game objects and rendering
+ * @class
+ */
 class World {
+  /** @type {Character} Player character instance */
   character = new Character();
+  /** @type {Level} Current level instance */
   level = level1;
+  /** @type {Array<Enemy>} Enemy instances array */
   enemies = level1.enemies;
+  /** @type {Endboss} End boss instance */
   endboss = level1.endboss;
+  /** @type {Array<Background>} Background layers */
   background = level1.background;
+  /** @type {Array<Hills>} Hill background objects */
   hill = level1.hill;
+  /** @type {Array<Grave>} Grave decoration objects */
   grave = level1.grave;
+  /** @type {Array<Fence>} Fence decoration objects */
   fence = level1.fence;
+  /** @type {Array<Street>} Street ground objects */
   street = level1.street;
+  /** @type {Array<Cloud>} Cloud objects */
   clouds = level1.clouds;
+  /** @type {Statusbar} Health status bar */
   statusbar = new Statusbar();
+  /** @type {Diamond} Diamond counter UI */
   diamond = new Diamond();
+  /** @type {HTMLCanvasElement} Main canvas element */
   canvas;
+  /** @type {CanvasRenderingContext2D} Canvas rendering context */
   ctx;
+  /** @type {Keyboard} Keyboard input state */
   keyboard;
+  /** @type {number} Camera X offset for scrolling */
   camera_x = 0;
+  /** @type {Array<Looting>} Collectible items */
   lootable = [];
+  /** @type {number} Game over screen fade alpha */
   gameOverAlpha = 0;
+  /** @type {boolean} Credits display flag */
   showCredits = false;
+  /** @type {number} Game over animation start time */
   gameOverStartTime = 0;
+  /** @type {boolean} Game started flag */
   gameStarted = false;
+  /** @type {boolean} Victory state flag */
   gameWon = false;
+  /** @type {number} Victory screen fade alpha */
   victoryScreenAlpha = 0;
+  /** @type {number} Victory animation start time */
   victoryStartTime = 0;
+  /** @type {Function} Canvas click event handler */
   canvasClickHandler = null;
+  /** @type {Array<Object>} Victory screen button hitboxes */
   victoryButtons = []; 
 
+/**
+ * Initializes world with canvas and keyboard
+ * @method
+ * @param {HTMLCanvasElement} canvas - Game canvas element
+ * @param {Keyboard} keyboard - Keyboard state manager
+ */
 constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -51,6 +87,10 @@ constructor(canvas, keyboard) {
     this.showStartScreen();
 }
 
+/**
+ * Displays start screen with event handlers
+ * @method
+ */
 showStartScreen() {
     this.setWorld();
     this.character.startAnimation();
@@ -83,6 +123,10 @@ showStartScreen() {
     }
 }
 
+/**
+ * Starts game and initializes collision detection
+ * @method
+ */
 startGame() {
     if (this.gameStarted) return;
     
@@ -99,6 +143,10 @@ startGame() {
     }
 }
 
+/**
+ * Positions endboss at level end
+ * @method
+ */
 positionEndboss() {
     if (this.endboss && this.background.length > 0) {
         let lastBg = this.background[this.background.length - 1];
@@ -107,6 +155,10 @@ positionEndboss() {
     }
 }
 
+/**
+ * Creates and positions diamond collectibles across level
+ * @method
+ */
 createDiamonds() {
     this.lootable = [];
     let numberOfDiamonds = 5;
@@ -129,6 +181,10 @@ createDiamonds() {
     }
 }
 
+/**
+ * Starts collision detection interval loop
+ * @method
+ */
 checkCollisions() {
     setInterval(() => {
       this.checkEnemyCollisions();
@@ -138,6 +194,10 @@ checkCollisions() {
     }, 1000 / 60);
 }
 
+/**
+ * Checks collisions between character and enemies
+ * @method
+ */
 checkEnemyCollisions() {
     this.enemies.forEach((enemy) => {
         if (!enemy.isDead && this.character.isColliding(enemy) && this.character.energy > 0) {
@@ -149,6 +209,10 @@ checkEnemyCollisions() {
     });
 }
 
+/**
+ * Checks collision between character and endboss
+ * @method
+ */
 checkEndbossCollision() {
     if (this.endboss && !this.endboss.isDead && this.character.isColliding(this.endboss) && this.character.energy > 0) {
         if (!this.character.isHurtRecently()) {
@@ -158,6 +222,10 @@ checkEndbossCollision() {
     }
 }
 
+/**
+ * Checks if character attacks hit enemies or endboss
+ * @method
+ */
 checkAttackHits() {
     if (this.character.isAttacking && this.character.currentImage === 6) {
         let attackHitbox = this.character.getAttackHitbox();
@@ -206,6 +274,13 @@ checkAttackHits() {
     }
 }
 
+/**
+ * Checks if two hitboxes are colliding
+ * @method
+ * @param {Object} hitbox1 - First hitbox
+ * @param {Object} hitbox2 - Second hitbox
+ * @returns {boolean} True if colliding
+ */
 isHitboxColliding(hitbox1, hitbox2) {
     return hitbox1.x < hitbox2.x + hitbox2.width &&
            hitbox1.x + hitbox1.width > hitbox2.x &&
@@ -213,6 +288,10 @@ isHitboxColliding(hitbox1, hitbox2) {
            hitbox1.y + hitbox1.height > hitbox2.y;
 }
 
+/**
+ * Checks for diamond collection by character
+ * @method
+ */
 checkDiamondCollection() {
     for (let i = this.lootable.length - 1; i >= 0; i--) {
         let diamond = this.lootable[i];
@@ -224,6 +303,10 @@ checkDiamondCollection() {
     }
 }
 
+/**
+ * Creates parallax background layers
+ * @method
+ */
 createBackgrounds() {
     let numberOfBackgrounds = 5;
     let bgWidth = 960;
@@ -257,6 +340,10 @@ createBackgrounds() {
     }
 }
 
+/**
+ * Main rendering loop for all game objects
+ * @method
+ */
 draw() {
     this.ctx.clearRect(0, 0, 720, 480);
     this.ctx.translate(this.camera_x, 0);
@@ -310,6 +397,10 @@ draw() {
     requestAnimationFrame(() => self.draw());
 }
 
+/**
+ * Sets world reference in all game entities
+ * @method
+ */
 setWorld() {
     this.character.world = this;
     this.enemies.forEach((enemy) => {
@@ -320,22 +411,50 @@ setWorld() {
     }
 }
 
+  /**
+   * Adds array of objects to map
+   * @method
+   * @param {Array<Object>} objects - Game objects array
+   */
   addObjectsToMap(objects) {
     objects.forEach((o) => this.addToMap(o));
   }
 
+  /**
+   * Checks if object is Character instance
+   * @method
+   * @param {Object} mo - Movable object
+   * @returns {boolean} True if Character
+   */
   isCharacter(mo) {
     return mo instanceof Character;
   }
 
+  /**
+   * Checks if object is Enemy instance
+   * @method
+   * @param {Object} mo - Movable object
+   * @returns {boolean} True if Enemy
+   */
   isEnemy(mo) {
     return mo instanceof Enemy;
   }
 
+  /**
+   * Checks if object is Endboss instance
+   * @method
+   * @param {Object} mo - Movable object
+   * @returns {boolean} True if Endboss
+   */
   isEndboss(mo) {
     return mo instanceof Endboss;
   }
 
+/**
+ * Adds single object to canvas with flipping logic
+ * @method
+ * @param {Object} mo - Movable object to render
+ */
 addToMap(mo) {
     if (mo instanceof Statusbar || mo instanceof Diamond) {
         mo.draw(this.ctx);
@@ -360,18 +479,36 @@ addToMap(mo) {
     }
 }
 
+  /**
+   * Sets up canvas context for hitbox drawing
+   * @method
+   */
   setupHitboxStyle() {
     this.ctx.beginPath();
     this.ctx.lineWidth = 1;
     this.ctx.strokeStyle = "red";
   }
 
+  /**
+   * Draws hitbox rectangle for debugging
+   * @method
+   * @param {number} x - X position
+   * @param {number} y - Y position
+   * @param {number} width - Hitbox width
+   * @param {number} height - Hitbox height
+   */
   drawHitbox(x, y, width, height) {
     this.setupHitboxStyle();
     this.ctx.strokeRect(x, y, width, height);
     this.ctx.stroke();
   }
 
+  /**
+   * Gets hitbox dimensions for different entity types
+   * @method
+   * @param {Object} mo - Movable object
+   * @returns {Object} Hitbox offset and size adjustments
+   */
   getHitboxDimensions(mo) {
     if (this.isCharacter(mo)) {
       return {
@@ -398,6 +535,11 @@ addToMap(mo) {
     return null;
   }
 
+  /**
+   * Flips and renders object image horizontally
+   * @method
+   * @param {Object} mo - Movable object to flip
+   */
   flipImageBack(mo) {
     this.ctx.save();
     this.ctx.translate(
@@ -416,6 +558,10 @@ addToMap(mo) {
     this.ctx.restore();
   }
 
+/**
+ * Creates cloud objects across level width
+ * @method
+ */
 createClouds() {
     let numberOfClouds = this.background.length * 2;
     let cloudWidth = 1920;
@@ -429,6 +575,11 @@ createClouds() {
     }
 }
 
+/**
+ * Draws object frame if image is loaded
+ * @method
+ * @param {Object} mo - Movable object to draw
+ */
 drawFrameModel(mo) {
     if (!mo.img || !mo.img.complete || mo.img.naturalHeight === 0) {
         return;
@@ -439,6 +590,10 @@ drawFrameModel(mo) {
     } catch (error) {}
 }
 
+/**
+ * Draws game over screen with fade-in animation
+ * @method
+ */
 drawGameOverScreen() {
     if (this.gameOverStartTime === 0) {
       this.gameOverStartTime = Date.now();
@@ -459,6 +614,10 @@ drawGameOverScreen() {
     }
 }
 
+/**
+ * Draws game over text overlay
+ * @method
+ */
 drawGameOverText() {
     this.ctx.save();
     this.ctx.globalAlpha = this.gameOverAlpha;
@@ -473,6 +632,10 @@ drawGameOverText() {
     this.ctx.restore();
 }
 
+/**
+ * Draws credits screen with attributions
+ * @method
+ */
 drawCredits() {
     this.ctx.save();
     this.ctx.globalAlpha = this.gameOverAlpha;
@@ -501,6 +664,10 @@ drawCredits() {
     this.ctx.restore();
 }
 
+/**
+ * Draws start screen overlay with instructions
+ * @method
+ */
 drawStartScreen() {
     this.ctx.save();
     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
@@ -528,6 +695,10 @@ drawStartScreen() {
     this.ctx.restore();
 }
 
+/**
+ * Draws victory screen with diamond count and buttons
+ * @method
+ */
 drawVictoryScreen() {
     if (this.victoryScreenAlpha < 1) {
         this.victoryScreenAlpha += 0.02;
@@ -566,6 +737,11 @@ drawVictoryScreen() {
     this.ctx.restore();
 }
 
+/**
+ * Draws individual victory button with hover effect
+ * @method
+ * @param {Object} btn - Button configuration object
+ */
 drawVictoryButton(btn) {
     const mouseX = this.lastMouseX || 0;
     const mouseY = this.lastMouseY || 0;
@@ -617,6 +793,10 @@ drawVictoryButton(btn) {
     }
 }
 
+/**
+ * Restarts game with fresh state
+ * @method
+ */
 restartGame() {
     if (this.victoryClickHandler) {
         this.canvas.removeEventListener('click', this.victoryClickHandler);

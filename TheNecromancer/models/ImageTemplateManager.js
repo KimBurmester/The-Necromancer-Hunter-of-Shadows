@@ -1,12 +1,28 @@
+/**
+ * Centralized image template manager for characters and enemies
+ * @class
+ */
 class ImageTemplateManager {
+    /** @type {CharacterImageTemplates} Character animation templates */
     static characterTemplates = null;
+    /** @type {EnemyImageTemplates} Enemy animation templates */
     static enemyTemplates = null;
 
+    /**
+     * Initializes template instances
+     * @method
+     */
     static initialize() {
         this.characterTemplates = new CharacterImageTemplates();
         this.enemyTemplates = new EnemyImageTemplates();
     }
 
+    /**
+     * Retrieves character animation images
+     * @method
+     * @param {string} animationType - Animation type (idle, walking, etc.)
+     * @returns {Array<string>} Image paths array
+     */
     static getCharacterImages(animationType) {
         if (!this.characterTemplates) {
             this.initialize();
@@ -14,6 +30,13 @@ class ImageTemplateManager {
         return this.characterTemplates.getImages(animationType);
     }
 
+    /**
+     * Retrieves enemy animation images
+     * @method
+     * @param {string} enemyType - Enemy type (wraith_01/02/03, endboss)
+     * @param {string} animationType - Animation type
+     * @returns {Array<string>} Image paths array
+     */
     static getEnemyImages(enemyType, animationType) {
         if (!this.enemyTemplates) {
             this.initialize();
@@ -26,6 +49,11 @@ class ImageTemplateManager {
         return this.enemyTemplates.getImages(enemyType, animationType);
     }
 
+    /**
+     * Gets available character animation types
+     * @method
+     * @returns {Array<string>} Animation type names
+     */
     static getAvailableCharacterAnimations() {
         if (!this.characterTemplates) {
             this.initialize();
@@ -33,6 +61,11 @@ class ImageTemplateManager {
         return this.characterTemplates.getAvailableAnimations();
     }
 
+    /**
+     * Gets available enemy types
+     * @method
+     * @returns {Array<string>} Enemy type names
+     */
     static getAvailableEnemyTypes() {
         if (!this.enemyTemplates) {
             this.initialize();
@@ -40,6 +73,12 @@ class ImageTemplateManager {
         return this.enemyTemplates.getAvailableEnemyTypes();
     }
 
+    /**
+     * Retrieves endboss animation images
+     * @method
+     * @param {string} animationType - Animation type
+     * @returns {Array<string>} Image paths array
+     */
     static getEndbossImages(animationType) {
         const basePath = 'TheNecromancer/img/endboss/level1/';
         const animations = {
@@ -61,6 +100,14 @@ class ImageTemplateManager {
         return [];
     }
 
+    /**
+     * Generates endboss image paths with padding
+     * @method
+     * @param {string} basePath - Base directory path
+     * @param {number} count - Number of frames
+     * @param {string} animationName - Animation name
+     * @returns {Array<string>} Generated image paths
+     */
     static generateEndbossImagePaths(basePath, count, animationName) {
         const paths = [];
         for (let i = 0; i < count; i++) {
@@ -70,6 +117,13 @@ class ImageTemplateManager {
         return paths;
     }
 
+    /**
+     * Generates sequential image paths
+     * @method
+     * @param {string} basePath - Base directory path
+     * @param {number} count - Number of images
+     * @returns {Array<string>} Generated image paths
+     */
     static generateImagePaths(basePath, count) {
         const paths = [];
         for (let i = 1; i <= count; i++) {

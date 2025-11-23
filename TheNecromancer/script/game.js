@@ -1,9 +1,22 @@
+/**
+ * @file Main game initialization and input handling
+ */
+
+/** @type {HTMLCanvasElement} Main game canvas */
 let canvas;
+/** @type {World} Game world instance */
 let world;
+/** @type {Keyboard} Keyboard input state */
 let keyboard = new Keyboard();
+/** @type {Fullscreen} Fullscreen controller */
 let fullscreen;
+/** @type {TouchController} Touch controls manager */
 let touchController;
 
+/**
+ * Initializes game components and controllers
+ * @function
+ */
 function init(){
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
@@ -13,6 +26,10 @@ function init(){
     checkLandscapeFullscreen();
 }
 
+/**
+ * Handles keyboard key press events
+ * @listens window#keydown
+ */
 window.addEventListener('keydown', (event) => {
     switch(event.code) {
         case 'ArrowLeft':
@@ -39,6 +56,10 @@ window.addEventListener('keydown', (event) => {
     }
 });
 
+/**
+ * Handles keyboard key release events
+ * @listens window#keyup
+ */
 window.addEventListener('keyup', (event) => {
     switch(event.code) {
         case 'ArrowLeft':
@@ -62,6 +83,10 @@ window.addEventListener('keyup', (event) => {
     }
 });
 
+/**
+ * Checks if fullscreen hint should be shown on mobile landscape
+ * @function
+ */
 function checkLandscapeFullscreen() {
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const isLandscape = window.matchMedia('(orientation: landscape)').matches;
