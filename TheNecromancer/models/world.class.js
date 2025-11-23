@@ -254,7 +254,7 @@ addToMap(mo) {
 
   setupHitboxStyle() {
     this.ctx.beginPath();
-    this.ctx.lineWidth = 5;
+    this.ctx.lineWidth = 1;
     this.ctx.strokeStyle = "red";
   }
 
@@ -305,19 +305,6 @@ addToMap(mo) {
       mo.height
     );
     this.ctx.scale(-1, 1);
-    let hitbox = this.getHitboxDimensions(mo);
-    if (hitbox) {
-      let hitboxX = -mo.width / 2 + hitbox.offsetX;
-      if (this.isCharacter(mo)) {
-        hitboxX += 20;
-      }
-      this.drawHitbox(
-        hitboxX,
-        -mo.height / 2 + hitbox.offsetY,
-        mo.width - hitbox.widthReduction,
-        mo.height - hitbox.heightReduction
-      );
-    }
     this.ctx.restore();
   }
 
@@ -341,15 +328,6 @@ drawFrameModel(mo) {
     
     try {
         this.ctx.drawImage(mo.img, mo.positionX, mo.positionY, mo.width, mo.height);
-        let hitbox = this.getHitboxDimensions(mo);
-        if (hitbox) {
-          this.drawHitbox(
-            mo.positionX + hitbox.offsetX,
-            mo.positionY + hitbox.offsetY,
-            mo.width - hitbox.widthReduction,
-            mo.height - hitbox.heightReduction
-          );
-        }
     } catch (error) {}
 }
 }
