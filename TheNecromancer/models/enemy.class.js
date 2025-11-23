@@ -134,7 +134,7 @@ checkSlashingDistance() {
     this.currentImage++;
   }
 
-  animate() {
+animate() {
     setInterval(() => {
       if (this.isDead) {
         if (this.Enemy_Dying && this.Enemy_Dying.length > 0) {
@@ -165,7 +165,7 @@ checkSlashingDistance() {
     }, 100);
 
     setInterval(() => {
-      if (!this.isDead && !this.isAttacking) {
+      if (!this.isDead && !this.isAttacking && this.world && this.world.gameStarted) {
         this.positionX -= this.speed;
         this.floatOffset += 0.05;
         this.positionY = this.baseY + Math.sin(this.floatOffset) * 8;
