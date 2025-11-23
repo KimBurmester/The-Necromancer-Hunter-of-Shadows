@@ -103,13 +103,7 @@ positionEndboss() {
     if (this.endboss && this.background.length > 0) {
         let lastBg = this.background[this.background.length - 1];
         let levelEnd = lastBg.positionX + lastBg.width;
-        
         this.endboss.positionX = levelEnd - 700;
-        
-        console.log('✅ Endboss positioniert:');
-        console.log('  - Level Ende:', levelEnd);
-        console.log('  - Endboss X:', this.endboss.positionX);
-        console.log('  - Character Start:', this.character.positionX);
     }
 }
 
@@ -260,11 +254,6 @@ createBackgrounds() {
         this.fence.push(fence);
         this.grave.push(grave);
         this.street.push(street);
-        
-    console.log('✅ Backgrounds erstellt:');
-    console.log('  - Start: 0');
-    console.log('  - Ende:', numberOfBackgrounds * bgWidth);
-    console.log('  - Anzahl:', numberOfBackgrounds);
     }
 }
 
