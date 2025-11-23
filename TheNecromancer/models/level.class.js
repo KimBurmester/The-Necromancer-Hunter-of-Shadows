@@ -19,25 +19,27 @@ class Level {
         this.street = street;
         this.clouds = clouds;
         this.endboss = endboss;
-        
-        this.levelStartX = -820;
     }
 
 calculateLevelEnd() {
     let maxX = 0;
     
     if (this.background.length > 0) {
-        this.background.forEach((bg) => {
-            let bgEndX = bg.positionX + bg.width;
-            if (bgEndX > maxX) {
-                maxX = bgEndX;
-            }
-        });
+        let lastBg = this.background[this.background.length - 1];
+        maxX = lastBg.positionX + lastBg.width; // = 2880
     }
+    
+    // ✅ Level endet am Endboss
     if (this.endboss) {
-        this.levelEndX = this.endboss.positionX - 225;
+        this.levelEndX = this.endboss.positionX + 200; // Etwas nach dem Endboss
     } else {
-        this.levelEndX = maxX - 720;
+        this.levelEndX = maxX;
     }
+    
+    this.levelStartX = -200; // Etwas links vom ersten Background
+    
+    console.log('✅ Level berechnet:');
+    console.log('  - Start X:', this.levelStartX);
+    console.log('  - Ende X:', this.levelEndX);
 }
 }

@@ -31,11 +31,9 @@ constructor(canvas, keyboard) {
     this.canvas = canvas;
     this.keyboard = keyboard;
     
-    // ✅ FIX: Erst Backgrounds erstellen
     this.createBackgrounds();
     this.createClouds();
     
-    // ✅ DANN die Arrays ins Level übertragen
     this.level.background = this.background;
     this.level.hill = this.hill;
     this.level.grave = this.grave;
@@ -43,15 +41,20 @@ constructor(canvas, keyboard) {
     this.level.street = this.street;
     this.level.clouds = this.clouds;
     
-    // ✅ JETZT kann der Endboss richtig positioniert werden
     this.createDiamonds();
     this.positionEndboss();
     this.level.calculateLevelEnd();
     
-    console.log('Background length:', this.background.length); // Debug
-    console.log('Endboss Position:', this.endboss ? this.endboss.positionX : 'undefined'); // Debug
+    this.camera_x = 0; // ✅ Kamera startet bei 0 (Level-Anfang)
     
-    this.camera_x = 1100;
+    console.log('✅ Level Setup:');
+    console.log('  - Background Count:', this.background.length);
+    console.log('  - Level Start:', 0);
+    console.log('  - Level Ende:', this.level.levelEndX);
+    console.log('  - Endboss Position:', this.endboss.positionX);
+    console.log('  - Character Start:', this.character.positionX);
+    console.log('  - Camera Start:', this.camera_x);
+    
     this.draw();
     this.showStartScreen();
 }
@@ -109,31 +112,40 @@ startGame() {
 positionEndboss() {
     if (this.endboss && this.background.length > 0) {
         let lastBg = this.background[this.background.length - 1];
-        let levelEnd = lastBg.positionX + lastBg.width; // = 2880
-        this.endboss.positionX = levelEnd - 700; // ✅ War 300, jetzt 700
-        console.log('✅ Endboss bei X:', this.endboss.positionX, 'Level Ende:', levelEnd);
-        console.log('Character startet bei:', this.character.positionX);
-        console.log('Abstand:', this.endboss.positionX - this.character.positionX, 'px');
+        let levelEnd = lastBg.positionX + lastBg.width; // = 0 + (3 * 960) = 2880
+        
+        // ✅ Endboss 700px vor Level-Ende positionieren
+        this.endboss.positionX = levelEnd - 700; // = 2880 - 700 = 2180
+        
+        console.log('✅ Endboss positioniert:');
+        console.log('  - Level Ende:', levelEnd);
+        console.log('  - Endboss X:', this.endboss.positionX);
+        console.log('  - Character Start:', this.character.positionX);
     }
 }
 
 createDiamonds() {
     this.lootable = [];
     let numberOfDiamonds = 5;
-    let levelStartX = -820;
+    let levelStartX = -100; // ✅ Character-Startposition
     let levelEndX = 0;
+    
     if (this.background.length > 0) {
         let lastBg = this.background[this.background.length - 1];
-        levelEndX = lastBg.positionX + lastBg.width - 200;
+        levelEndX = lastBg.positionX + lastBg.width - 400; // Vor dem Endboss
     }
+    
     let levelLength = levelEndX - levelStartX;
     let spacing = levelLength / (numberOfDiamonds + 1);
+    
     for (let i = 0; i < numberOfDiamonds; i++) {
         let diamond = new Looting();
-        diamond.positionX = levelStartX + 400 + (i * spacing) + (Math.random() * 50 - 25);
+        diamond.positionX = levelStartX + 200 + (i * spacing) + (Math.random() * 50 - 25);
         diamond.positionY = 280;       
         this.lootable.push(diamond);
     }
+    
+    console.log('✅ Diamanten platziert von X:', levelStartX, 'bis X:', levelEndX);
 }
 
 checkCollisions() {
@@ -232,9 +244,15 @@ checkDiamondCollection() {
 }
 
 createBackgrounds() {
-    let numberOfBackgrounds = 3;
+    let numberOfBackgrounds = 5;
     let bgWidth = 960;
-    let startX = -960;
+    let startX = 0;
+
+    this.background = [];
+    this.hill = [];
+    this.fence = [];
+    this.grave = [];
+    this.street = [];
     
     for (let i = 0; i < numberOfBackgrounds; i++) {
         let bg = new Background();
@@ -255,9 +273,11 @@ createBackgrounds() {
         this.fence.push(fence);
         this.grave.push(grave);
         this.street.push(street);
-
-            console.log('Backgrounds erstellt von', startX, 'bis', startX + (numberOfBackgrounds * bgWidth));
-
+        
+    console.log('✅ Backgrounds erstellt:');
+    console.log('  - Start: 0');
+    console.log('  - Ende:', numberOfBackgrounds * bgWidth);
+    console.log('  - Anzahl:', numberOfBackgrounds);
     }
 }
 

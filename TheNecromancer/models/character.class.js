@@ -78,14 +78,14 @@ getAttackHitbox() {
     }
 }
 
-
-  setInitialPosition() {
+setInitialPosition() {
     if (this.Character_Idle.length > 0) {
       this.loadImage(this.Character_Idle[0]);
-      this.positionX = -820;
+      this.positionX = -60; // ✅ Character startet bei X = -100 (sichtbar am linken Rand)
       this.positionY = 250;
+      this.jumpStartHeight = this.positionY;
     }
-  }
+}
 
   startAnimation() {
     this.animate();
@@ -121,8 +121,9 @@ getAttackHitbox() {
   }
 
 handleMovement() {
-    if (this.isHurt || this.isDead) return;
-        if (this.isAttacking) {
+    if (this.isHurt || this.isDead || !this.world.gameStarted) return;
+    
+    if (this.isAttacking) {
         if (this.world.keyboard.LEFT) {
             this.otherDirection = true;
         }
@@ -136,8 +137,11 @@ handleMovement() {
     }
     
     this.isMoving = false;
-    let levelEndX = this.world.level.levelEndX - 225;
-    let levelStartX = -1520;
+    
+    // ✅ Level-Grenzen angepasst
+    let levelEndX = this.world.level.levelEndX - 100; // Endboss-Position - Puffer
+    let levelStartX = -200; // Etwas links vom Level-Start
+    
     if (this.world.keyboard.RIGHT && this.positionX < levelEndX) {
         this.moveRight();
     }
@@ -233,17 +237,19 @@ handleAttackAnimation() {
     }
   }
 
-  updateCamera() {
+updateCamera() {
     let canvasWidth = 720;
-    let newCameraX = -this.positionX + 60;
-    let maxCameraX = -this.world.level.levelStartX;
-    let minCameraX = -(this.world.level.levelEndX - canvasWidth + 60);
-
-    this.world.camera_x = Math.max(
-      minCameraX,
-      Math.min(maxCameraX, newCameraX)
-    );
-  }
+    
+    // ✅ Kamera folgt dem Character
+    let targetCameraX = -this.positionX + 360; // Character in der Mitte des Screens
+    
+    // ✅ Kamera-Grenzen
+    let maxCameraX = 0; // Linke Grenze (Level-Start bei 0)
+    let minCameraX = -(this.world.level.levelEndX - canvasWidth); // Rechte Grenze
+    
+    // ✅ Kamera mit Begrenzungen setzen
+    this.world.camera_x = Math.max(minCameraX, Math.min(maxCameraX, targetCameraX));
+}
 
 
 animate() {
