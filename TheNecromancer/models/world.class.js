@@ -20,16 +20,37 @@ class World {
   showCredits = false;
   gameOverStartTime = 0;
   gameStarted = false;
+  gameWon = false;
+  victoryScreenAlpha = 0;
+  victoryStartTime = 0;
+  canvasClickHandler = null;
+  victoryButtons = []; 
 
 constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+    
+    // ✅ FIX: Erst Backgrounds erstellen
     this.createBackgrounds();
     this.createClouds();
+    
+    // ✅ DANN die Arrays ins Level übertragen
+    this.level.background = this.background;
+    this.level.hill = this.hill;
+    this.level.grave = this.grave;
+    this.level.fence = this.fence;
+    this.level.street = this.street;
+    this.level.clouds = this.clouds;
+    
+    // ✅ JETZT kann der Endboss richtig positioniert werden
     this.createDiamonds();
     this.positionEndboss();
     this.level.calculateLevelEnd();
+    
+    console.log('Background length:', this.background.length); // Debug
+    console.log('Endboss Position:', this.endboss ? this.endboss.positionX : 'undefined'); // Debug
+    
     this.camera_x = 1100;
     this.draw();
     this.showStartScreen();
@@ -41,24 +62,31 @@ showStartScreen() {
     
     const startBtn = document.getElementById('startGame');
     if (startBtn) {
-        startBtn.addEventListener('click', () => {
+        // ✅ Alten Event-Listener entfernen
+        const newStartBtn = startBtn.cloneNode(true);
+        startBtn.parentNode.replaceChild(newStartBtn, startBtn);
+        
+        newStartBtn.addEventListener('click', () => {
             this.startGame();
         });
     }
     
-    // ✅ NEU: Touch-Event für mobile Geräte
+    // ✅ Canvas-Click-Handler entfernen und neu setzen
     const canvas = document.getElementById('canvas');
-    if (canvas && !this.gameStarted) {
-        const handleCanvasClick = (e) => {
+    if (canvas) {
+        if (this.canvasClickHandler) {
+            canvas.removeEventListener('click', this.canvasClickHandler);
+            canvas.removeEventListener('touchstart', this.canvasClickHandler);
+        }
+        
+        this.canvasClickHandler = (e) => {
             if (!this.gameStarted) {
                 this.startGame();
-                canvas.removeEventListener('click', handleCanvasClick);
-                canvas.removeEventListener('touchstart', handleCanvasClick);
             }
         };
         
-        canvas.addEventListener('click', handleCanvasClick);
-        canvas.addEventListener('touchstart', handleCanvasClick);
+        canvas.addEventListener('click', this.canvasClickHandler);
+        canvas.addEventListener('touchstart', this.canvasClickHandler, { passive: true }); // ✅ passive: true
     }
 }
 
@@ -81,8 +109,11 @@ startGame() {
 positionEndboss() {
     if (this.endboss && this.background.length > 0) {
         let lastBg = this.background[this.background.length - 1];
-        let levelEnd = lastBg.positionX + lastBg.width;
-        this.endboss.positionX = levelEnd - 300;
+        let levelEnd = lastBg.positionX + lastBg.width; // = 2880
+        this.endboss.positionX = levelEnd - 700; // ✅ War 300, jetzt 700
+        console.log('✅ Endboss bei X:', this.endboss.positionX, 'Level Ende:', levelEnd);
+        console.log('Character startet bei:', this.character.positionX);
+        console.log('Abstand:', this.endboss.positionX - this.character.positionX, 'px');
     }
 }
 
@@ -201,9 +232,9 @@ checkDiamondCollection() {
 }
 
 createBackgrounds() {
-    let numberOfBackgrounds = 5;
+    let numberOfBackgrounds = 3;
     let bgWidth = 960;
-    let startX = -1920;
+    let startX = -960;
     
     for (let i = 0; i < numberOfBackgrounds; i++) {
         let bg = new Background();
@@ -224,12 +255,16 @@ createBackgrounds() {
         this.fence.push(fence);
         this.grave.push(grave);
         this.street.push(street);
+
+            console.log('Backgrounds erstellt von', startX, 'bis', startX + (numberOfBackgrounds * bgWidth));
+
     }
 }
 
-  draw() {
+draw() {
     this.ctx.clearRect(0, 0, 720, 480);
     this.ctx.translate(this.camera_x, 0);
+    
     this.addObjectsToMap(this.background);
     this.addObjectsToMap(this.hill);
     this.addObjectsToMap(this.fence);
@@ -239,10 +274,31 @@ createBackgrounds() {
     this.addToMap(this.character);
     this.addObjectsToMap(this.enemies);
     this.addObjectsToMap(this.lootable);
-    this.addToMap(this.endboss);
+    
+    if (this.endboss) {
+        const screenX = this.endboss.positionX + this.camera_x;
+        const isVisible = screenX > -this.endboss.width && screenX < 720;
+        
+        if (isVisible) {
+            this.addToMap(this.endboss);
+        }
+        
+        // Check for victory
+        if (this.endboss.isDead && !this.character.isDead && !this.gameWon && this.gameStarted) {
+            if (this.victoryStartTime === 0) {
+                this.victoryStartTime = Date.now();
+            }
+            
+            if (Date.now() - this.victoryStartTime > 1000) {
+                this.gameWon = true;
+            }
+        }
+    }
+    
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusbar);
     this.addToMap(this.diamond);
+    
     if (!this.gameStarted) {
         this.drawStartScreen();
     }
@@ -251,9 +307,13 @@ createBackgrounds() {
         this.drawGameOverScreen();
     }
     
+    if (this.gameWon) {
+        this.drawVictoryScreen();
+    }
+    
     let self = this;
     requestAnimationFrame(() => self.draw());
-  }
+}
 
 setWorld() {
     this.character.world = this;
@@ -475,4 +535,164 @@ drawStartScreen() {
     this.ctx.restore();
 }
 
+drawVictoryScreen() {
+    if (this.victoryScreenAlpha < 1) {
+        this.victoryScreenAlpha += 0.02;
+    }
+    
+    this.ctx.save();
+    this.ctx.fillStyle = `rgba(0, 0, 0, ${this.victoryScreenAlpha * 0.85})`;
+    this.ctx.fillRect(0, 0, 720, 480);
+    
+    if (this.victoryScreenAlpha >= 1) {
+        // Titel
+        this.ctx.fillStyle = '#FFD700';
+        this.ctx.font = 'bold 48px cinzel, Arial';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+        this.ctx.shadowBlur = 10;
+        this.ctx.shadowOffsetX = 3;
+        this.ctx.shadowOffsetY = 3;
+        this.ctx.fillText('Du hast Gewonnen!', 360, 150);
+        
+        // ✅ FIX: Diamond-Count korrekt anzeigen
+        this.ctx.fillStyle = 'white';
+        this.ctx.font = '28px cinzel, Arial';
+        this.ctx.shadowBlur = 5;
+        this.ctx.fillText(`Gesammelte Diamanten: ${this.diamond.diamonds}`, 360, 220);
+        
+        // ✅ Buttons zeichnen und Bereiche speichern
+        this.victoryButtons = [
+            { text: 'Neues Spiel', x: 160, y: 300, width: 200, height: 50, action: 'restart' },
+            { text: 'Beenden', x: 360, y: 300, width: 200, height: 50, action: 'quit' }
+        ];
+        
+        this.victoryButtons.forEach(btn => {
+            this.drawVictoryButton(btn);
+        });
+    }
+    
+    this.ctx.restore();
+}
+
+drawVictoryButton(btn) {
+    const mouseX = this.lastMouseX || 0;
+    const mouseY = this.lastMouseY || 0;
+    
+    const isHover = mouseX >= btn.x && mouseX <= btn.x + btn.width && 
+                    mouseY >= btn.y && mouseY <= btn.y + btn.height;
+    
+    this.ctx.fillStyle = isHover ? 'rgba(10, 142, 142, 0.9)' : 'rgba(10, 142, 142, 0.6)';
+    this.ctx.fillRect(btn.x, btn.y, btn.width, btn.height);
+    
+    this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeRect(btn.x, btn.y, btn.width, btn.height);
+    
+    this.ctx.fillStyle = 'white';
+    this.ctx.font = 'bold 22px cinzel, Arial';
+    this.ctx.textAlign = 'center';
+    this.ctx.textBaseline = 'middle';
+    this.ctx.fillText(btn.text, btn.x + btn.width / 2, btn.y + btn.height / 2);
+    
+    // ✅ FIX: Event-Handler nur einmal registrieren
+    if (!this.victoryClickHandler) {
+        this.victoryClickHandler = (e) => {
+            if (!this.gameWon) return;
+            
+            const rect = this.canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+            
+            this.victoryButtons.forEach(button => {
+                if (clickX >= button.x && clickX <= button.x + button.width && 
+                    clickY >= button.y && clickY <= button.y + button.height) {
+                    
+                    if (button.action === 'restart') {
+                        this.restartGame();
+                    } else if (button.action === 'quit') {
+                        location.reload();
+                    }
+                }
+            });
+        };
+        
+        this.canvas.addEventListener('click', this.victoryClickHandler);
+        
+        // Mouse-Move-Handler
+        this.canvas.addEventListener('mousemove', (e) => {
+            const rect = this.canvas.getBoundingClientRect();
+            this.lastMouseX = e.clientX - rect.left;
+            this.lastMouseY = e.clientY - rect.top;
+        });
+    }
+}
+
+restartGame() {
+    // ✅ FIX: Alle Event-Listener entfernen
+    if (this.victoryClickHandler) {
+        this.canvas.removeEventListener('click', this.victoryClickHandler);
+        this.victoryClickHandler = null;
+    }
+    
+    if (this.canvasClickHandler) {
+        this.canvas.removeEventListener('click', this.canvasClickHandler);
+        this.canvas.removeEventListener('touchstart', this.canvasClickHandler);
+        this.canvasClickHandler = null;
+    }
+    
+    // Reset Victory Screen
+    this.gameWon = false;
+    this.victoryScreenAlpha = 0;
+    this.victoryStartTime = 0;
+    this.victoryButtons = [];
+    
+    // Reset Game Over Screen
+    this.gameOverAlpha = 0;
+    this.gameOverStartTime = 0;
+    this.showCredits = false;
+    
+    // ✅ NEU: Neues Level erstellen
+    this.enemies = [];
+    for (let i = 0; i < 3; i++) {
+        this.enemies.push(new Enemy());
+    }
+    
+    this.endboss = new Endboss();
+    this.character = new Character();
+    this.statusbar = new Statusbar();
+    this.diamond = new Diamond();
+    
+    // Level neu initialisieren
+    this.level.enemies = this.enemies;
+    this.level.endboss = this.endboss;
+    
+    // World-Referenzen setzen
+    this.setWorld();
+    
+    // Diamonds und Endboss-Position
+    this.createDiamonds();
+    this.positionEndboss();
+    this.level.calculateLevelEnd();
+    
+    // Camera zurücksetzen
+    this.camera_x = 1100;
+    
+    // ✅ DIREKT starten ohne Start-Screen
+    this.gameStarted = true;
+    this.checkCollisions();
+    
+    // Touch-Controls anzeigen, UI ausblenden
+    document.querySelectorAll('.sidebar, .title, .footer').forEach(el => {
+        el.style.display = 'none';
+    });
+    
+    const touchControls = document.getElementById('touch-controls');
+    if (touchControls) {
+        touchControls.style.display = 'flex';
+    }
+    
+    console.log('✅ Spiel neu gestartet!');
+}
 }
