@@ -321,3 +321,8 @@ a.footer-link:hover{
         margin-top: 200px; /* Platz für Touch-Controls */
     }
 }
+@media only screen and (max-height: 480px){
+    canvas{
+        height: 100vh;
+    }
+}

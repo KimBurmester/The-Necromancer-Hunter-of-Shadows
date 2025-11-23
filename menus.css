@@ -260,35 +260,23 @@
 
 /* Spezielle Button-Stile */
 .btn-jump {
-    background: rgba(76, 175, 80, 0.8);
+    background: rgba(48, 175, 207, 0.8);
 }
 
 .btn-attack {
-    background: rgba(244, 67, 54, 0.8);
+    background: rgba(15, 56, 66, 0.8);
 }
 
 .btn-jump:active,
 .btn-jump.pressed {
-    background: rgba(76, 175, 80, 1);
-    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.7);
+    background: rgba(48, 175, 207, 0.8);
+    box-shadow: 0 2px 10px rgba(15, 56, 66, 0.8);
 }
 
 .btn-attack:active,
 .btn-attack.pressed {
-    background: rgba(244, 67, 54, 1);
-    box-shadow: 0 2px 10px rgba(244, 67, 54, 0.7);
-}
-
-/* ✅ NEU: Pulse-Animation für Vollbild-Button in Landscape */
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    }
-    50% {
-        transform: scale(1.1);
-        box-shadow: 0 4px 20px rgba(10, 142, 142, 0.8);
-    }
+    background: rgba(48, 175, 207, 0.8);
+    box-shadow: 0 2px 10px rgba(15, 56, 66, 0.8);
 }
 
 @media (max-width: 1260px) {
