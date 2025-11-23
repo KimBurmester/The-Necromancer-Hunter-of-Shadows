@@ -61,10 +61,14 @@ checkCharacterDistance() {
         if (distance < this.world.character.width / 3 && !this.isAttacking) {
           this.isAttacking = true;
           this.currentImage = 0;
-          if (!this.world.character.isHurtRecently()) {
-            this.world.character.hit(2);
-            this.world.statusbar.setEnergy(this.world.character.energy);
-          }
+          
+          // ✅ NEU: Damage erst nach 300ms (wenn Attack-Animation läuft)
+          setTimeout(() => {
+            if (!this.world.character.isHurtRecently() && this.isAttacking) {
+              this.world.character.hit(2);
+              this.world.statusbar.setEnergy(this.world.character.energy);
+            }
+          }, 300);
           
           setTimeout(() => {
             this.isAttacking = false;
@@ -83,10 +87,13 @@ checkSlashingDistance() {
                 this.isSlashing = true;
                 this.currentSlashingImage = 0;
                 
-                if (!this.world.character.isHurtRecently()) {
-                    this.world.character.hit(3);
-                    this.world.statusbar.setEnergy(this.world.character.energy);
-                }
+                // ✅ NEU: Damage erst nach 400ms (wenn Slashing-Animation läuft)
+                setTimeout(() => {
+                    if (!this.world.character.isHurtRecently() && this.isSlashing) {
+                        this.world.character.hit(3);
+                        this.world.statusbar.setEnergy(this.world.character.energy);
+                    }
+                }, 400);
                 
                 setTimeout(() => {
                     this.isSlashing = false;

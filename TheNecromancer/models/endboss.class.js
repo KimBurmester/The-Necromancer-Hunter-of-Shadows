@@ -57,10 +57,13 @@ checkSlashingDistance() {
                 this.isSlashing = true;
                 this.currentSlashingImage = 0;
                 
-                if (!this.world.character.isHurtRecently()) {
-                    this.world.character.hit(3);
-                    this.world.statusbar.setEnergy(this.world.character.energy);
-                }
+                // ✅ NEU: Damage erst nach 400ms (wenn Slashing-Animation läuft)
+                setTimeout(() => {
+                    if (!this.world.character.isHurtRecently() && this.isSlashing) {
+                        this.world.character.hit(3);
+                        this.world.statusbar.setEnergy(this.world.character.energy);
+                    }
+                }, 400);
                 
                 setTimeout(() => {
                     this.isSlashing = false;
@@ -180,20 +183,28 @@ checkSlashingDistance() {
 
 checkCharacterDistance() {
     setInterval(() => {
-        if (!this.hasStarted && this.world && this.world.character && this.world.gameStarted) {
-            let distanceToEndboss = this.positionX - this.world.character.positionX;
-            
-            if (distanceToEndboss <= 720) {
-                this.hasStarted = true;
-                setTimeout(() => {
-                    this.isIdle = false;
-                    this.currentWalkImage = 0;
-                    this.walkAnimationDirection = 1;
-                }, this.idleTime);
+      if (this.world && this.world.character && !this.isDead && !this.isHurt && this.world.character.energy > 0 && this.world.gameStarted) {
+        let distance = Math.abs(this.positionX - this.world.character.positionX);
+        
+        if (distance < this.world.character.width / 3 && !this.isAttacking) {
+          this.isAttacking = true;
+          this.currentImage = 0;
+          
+          // ✅ NEU: Damage erst nach 300ms (wenn Attack-Animation läuft)
+          setTimeout(() => {
+            if (!this.world.character.isHurtRecently() && this.isAttacking) {
+              this.world.character.hit(2);
+              this.world.statusbar.setEnergy(this.world.character.energy);
             }
+          }, 300);
+          
+          setTimeout(() => {
+            this.isAttacking = false;
+          }, 600);
         }
+      }
     }, 100);
-}
+  }
 
     getHitbox() {
         return {
