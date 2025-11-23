@@ -181,8 +181,9 @@ a.footer-link:hover{
     }
 }
 
-/* ✅ NEU: Landscape-Modus für 6,9 Zoll Handys (ca. 900x400px) */
-@media (max-height: 500px) and (orientation: landscape) {
+/* ✅ EINHEITLICHER QUERFORMAT-MODUS (unter 1260px Breite oder unter 1150px Höhe) */
+@media (max-width: 1260px) and (orientation: landscape),
+       (max-height: 1150px) and (orientation: landscape) {
     body {
         overflow: hidden;
     }
@@ -196,7 +197,11 @@ a.footer-link:hover{
     }
 
     .title {
-        display: none; /* Titel ausblenden für mehr Platz */
+        display: none;
+    }
+
+    .sidebar {
+        display: none;
     }
 
     .game-container {
@@ -212,66 +217,96 @@ a.footer-link:hover{
         max-width: none !important;
         max-height: none !important;
         border: none;
-        object-fit: contain; /* Seitenverhältnis beibehalten */
+        object-fit: contain;
     }
 
     .footer {
-        display: none; /* Footer ausblenden */
+        display: none;
     }
 
-    /* Touch-Controls optimieren für Landscape */
+    /* ✅ Touch-Controls IMMER innerhalb Canvas - einheitliche Position */
     .touch-controls {
-        height: 100vh;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        pointer-events: none !important;
+        display: flex !important;
     }
 
     .controller-left,
     .controller-right {
-        bottom: 3%;
+        position: absolute !important;
+        bottom: 3% !important;
+        pointer-events: all !important;
+        display: flex !important;
+        gap: 12px !important;
+    }
+
+    .controller-left {
+        left: 2% !important;
+    }
+
+    .controller-right {
+        right: 2% !important;
     }
 
     .touch-btn {
-        width: 55px !important;
-        height: 55px !important;
-        background: rgba(15, 56, 66, 0.9) !important;
+        width: 60px !important;
+        height: 60px !important;
+        background: rgba(15, 56, 66, 0.8) !important;
+        border: 2px solid rgba(255, 255, 255, 0.3) !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+        backdrop-filter: blur(10px) !important;
+    }
+
+    .touch-btn img,
+    .touch-btn svg {
+        width: 30px !important;
+        height: 30px !important;
+        fill: #e3e3e3 !important;
+        opacity: 0.8 !important;
+        pointer-events: none !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .touch-btn:active,
+    .touch-btn.pressed {
+        transform: scale(0.9) !important;
+        background: rgba(10, 142, 142, 0.9) !important;
+        border-color: rgba(255, 255, 255, 0.6) !important;
+        box-shadow: 0 2px 10px rgba(10, 142, 142, 0.7) !important;
     }
 
     .controller-menu {
-        top: 3%;
-        right: 2%;
+        position: absolute !important;
+        top: 2% !important;
+        right: 2% !important;
+        pointer-events: all !important;
+        display: flex !important;
+        gap: 8px !important;
     }
 
     .controller-menu .touch-btn {
         width: 40px !important;
         height: 40px !important;
     }
-}
 
-/* ✅ NEU: Speziell für sehr kleine Landscape-Displays (unter 450px Höhe) */
-@media (max-height: 450px) and (orientation: landscape) {
-    .touch-btn {
-        width: 48px !important;
-        height: 48px !important;
-    }
-
-    .controller-menu .touch-btn {
-        width: 35px !important;
-        height: 35px !important;
-    }
-
-    .controller-left,
-    .controller-right {
-        gap: 8px;
-        bottom: 2%;
-    }
-
-    .controller-left {
-        left: 1%;
-    }
-
-    .controller-right {
-        right: 1%;
+    .controller-menu .touch-btn img,
+    .controller-menu .touch-btn svg {
+        width: 20px !important;
+        height: 20px !important;
     }
 }
+
+/* ✅ Portrait-Modus unter 500px */
 @media (max-width: 500px) and (orientation: portrait) {
     .layer {
         width: 100%;
@@ -293,36 +328,69 @@ a.footer-link:hover{
     .game-container {
         width: 100%;
     }
+    
+    /* Touch-Controls für Portrait */
     .touch-controls {
-        height: 180px;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        pointer-events: none !important;
+        display: flex !important;
     }
 
     .controller-left,
     .controller-right {
-        bottom: 15px;
+        position: absolute !important;
+        bottom: 3% !important;
+        pointer-events: all !important;
+        display: flex !important;
+        gap: 12px !important;
+    }
+
+    .controller-left {
+        left: 2% !important;
+    }
+
+    .controller-right {
+        right: 2% !important;
     }
 
     .touch-btn {
-        width: 65px;
-        height: 65px;
+        width: 60px !important;
+        height: 60px !important;
+        background: rgba(15, 56, 66, 0.8) !important;
+    }
+
+    .touch-btn img,
+    .touch-btn svg {
+        width: 30px !important;
+        height: 30px !important;
     }
 
     .controller-menu {
-        top: -200px;
+        position: absolute !important;
+        top: 2% !important;
+        right: 2% !important;
+        pointer-events: all !important;
+        display: flex !important;
+        gap: 8px !important;
     }
 
     .controller-menu .touch-btn {
-        width: 45px;
-        height: 45px;
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .controller-menu .touch-btn img,
+    .controller-menu .touch-btn svg {
+        width: 20px !important;
+        height: 20px !important;
     }
 
     .footer {
         font-size: 11px;
-        margin-top: 200px; /* Platz für Touch-Controls */
-    }
-}
-@media only screen and (max-height: 480px){
-    canvas{
-        height: 100vh;
+        margin-top: 20px;
     }
 }
