@@ -62,12 +62,32 @@ createDiamonds() {
 
 checkCollisions() {
     setInterval(() => {
-      this.checkEnemyCollisions();
-      this.checkEndbossCollision();
+      this.checkEnemyCollisions();  // Diese Zeile fehlt!
+      this.checkEndbossCollision(); // Diese Zeile fehlt!
       this.checkDiamondCollection();
       this.checkAttackHits();
     }, 1000 / 60);
-  }
+}
+
+checkEnemyCollisions() {
+    this.enemies.forEach((enemy) => {
+        if (!enemy.isDead && this.character.isColliding(enemy) && this.character.energy > 0) {
+            if (!this.character.isHurtRecently()) {
+                this.character.hit(2);
+                this.statusbar.setEnergy(this.character.energy);
+            }
+        }
+    });
+}
+
+checkEndbossCollision() {
+    if (this.endboss && !this.endboss.isDead && this.character.isColliding(this.endboss) && this.character.energy > 0) {
+        if (!this.character.isHurtRecently()) {
+            this.character.hit(3);
+            this.statusbar.setEnergy(this.character.energy);
+        }
+    }
+}
 
 checkAttackHits() {
     if (this.character.isAttacking && this.character.currentImage === 6) {
@@ -135,26 +155,6 @@ checkDiamondCollection() {
     }
 }
 
-checkEnemyCollisions() {
-    this.enemies.forEach((enemy) => {
-        if (!enemy.isDead && this.character.isColliding(enemy) && this.character.energy > 0) {
-            if (!this.character.isHurtRecently()) {
-                this.character.hit(2);
-                this.statusbar.setEnergy(this.character.energy);
-            }
-        }
-    });
-}
-
-checkEndbossCollision() {
-    if (this.endboss && !this.endboss.isDead && this.character.isColliding(this.endboss) && this.character.energy > 0) {
-        if (!this.character.isHurtRecently()) {
-            this.character.hit(3);
-            this.statusbar.setEnergy(this.character.energy);
-        }
-    }
-}
-
 createBackgrounds() {
     let numberOfBackgrounds = 5;
     let bgWidth = 960;
@@ -202,7 +202,7 @@ createBackgrounds() {
     requestAnimationFrame(() => self.draw());
   }
 
-  setWorld() {
+setWorld() {
     this.character.world = this;
     this.enemies.forEach((enemy) => {
       enemy.world = this;
@@ -210,7 +210,7 @@ createBackgrounds() {
     if (this.endboss) {
       this.endboss.world = this;
     }
-  }
+}
 
   addObjectsToMap(objects) {
     objects.forEach((o) => this.addToMap(o));

@@ -12,11 +12,13 @@ class Endboss extends Model{
     currentWalkImage = 0;
     currentHurtImage = 0;
     currentDyingImage = 0;
+    currentSlashingImage = 0;
     idleAnimationDirection = 1;
     walkAnimationDirection = 1;
     otherDirection = true;
     originalDirection = true;
     lastDamageTime = 0;
+    isSlashing = false;
     
     constructor(){
         super();
@@ -25,22 +27,47 @@ class Endboss extends Model{
         this.Endboss_Walking = ImageTemplateManager.getEnemyImages('endboss', 'walking');
         this.Endboss_Hurt = ImageTemplateManager.getEnemyImages('endboss', 'hurt');
         this.Endboss_Dying = ImageTemplateManager.getEnemyImages('endboss', 'dying');
+        this.Endboss_Slashing = ImageTemplateManager.getEnemyImages('endboss', 'slashing');
         this.loadImages(this.Endboss_Idle);
         this.loadImages(this.Endboss_Walking);
         this.loadImages(this.Endboss_Hurt);
         this.loadImages(this.Endboss_Dying);
+        this.loadImages(this.Endboss_Slashing);
         
         if (this.Endboss_Idle && this.Endboss_Idle.length > 0) {
             this.img = new Image();
             this.img.src = this.Endboss_Idle[0];
         }
-        this.positionX = 400;
+        this.positionX = 300;
         this.positionY = 100;
         this.width = 525;
         this.height = 400;
         this.originalDirection = this.otherDirection;
         this.animate();
         this.checkCharacterDistance();
+        this.checkSlashingDistance();
+    }
+
+    checkSlashingDistance() {
+        setInterval(() => {
+            if (this.world && this.world.character && !this.isDead && !this.isHurt && this.hasStarted && this.world.character.energy > 0) {
+                let distance = Math.abs(this.positionX - this.world.character.positionX);
+                
+                if (distance < 150 && !this.isSlashing) {
+                    this.isSlashing = true;
+                    this.currentSlashingImage = 0;
+                    
+                    if (!this.world.character.isHurtRecently()) {
+                        this.world.character.hit(3);
+                        this.world.statusbar.setEnergy(this.world.character.energy);
+                    }
+                    
+                    setTimeout(() => {
+                        this.isSlashing = false;
+                    }, 800);
+                }
+            }
+        }, 100);
     }
 
     takeDamage(damage) {
@@ -100,6 +127,20 @@ class Endboss extends Model{
                 }
                 return;
             }
+
+            if (this.isSlashing && this.Endboss_Slashing.length > 0) {
+                let i = this.currentSlashingImage % this.Endboss_Slashing.length;
+                let path = this.Endboss_Slashing[i];
+                if (this.walkingImages[path]) {
+                    this.img = this.walkingImages[path];
+                }
+                this.currentSlashingImage++;
+                
+                if (this.currentSlashingImage >= this.Endboss_Slashing.length) {
+                    this.currentSlashingImage = 0;
+                }
+                return;
+            }
             
             if (this.isIdle) {
                 let path = this.Endboss_Idle[this.currentIdleImage];
@@ -131,7 +172,7 @@ class Endboss extends Model{
         }, 150);
 
         setInterval(() => {
-            if (!this.isIdle && !this.isDead) {
+            if (!this.isIdle && !this.isDead && !this.isSlashing) {
                 this.positionX -= this.speed;
             }
         }, 1000 / 60);

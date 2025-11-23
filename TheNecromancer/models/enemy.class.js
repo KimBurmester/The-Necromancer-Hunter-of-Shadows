@@ -6,6 +6,7 @@ class Enemy extends Model {
   currentImage = 0;
   floatOffset = 0;
   baseY = 0;
+  isAttacking = false;
 
   constructor(enemyType = "wraith_01") {
     super();
@@ -28,11 +29,16 @@ class Enemy extends Model {
       this.enemyType,
       "dying"
     );
+    this.Enemy_Attacking = ImageTemplateManager.getEnemyImages(
+      this.enemyType,
+      "attacking"
+    );
 
     this.loadImages(this.Enemy_Idle);
     this.loadImages(this.Enemy_Walking);
     this.loadImages(this.Enemy_Hurt);
     this.loadImages(this.Enemy_Dying);
+    this.loadImages(this.Enemy_Attacking);
 
     if (this.Enemy_Idle && this.Enemy_Idle.length > 0) {
       this.img = new Image();
@@ -44,7 +50,51 @@ class Enemy extends Model {
     this.width = 260;
     this.height = 260;
     this.animate();
+    this.checkCharacterDistance();
   }
+
+checkCharacterDistance() {
+    setInterval(() => {
+      if (this.world && this.world.character && !this.isDead && !this.isHurt && this.world.character.energy > 0) {
+        let distance = Math.abs(this.positionX - this.world.character.positionX);
+        
+        if (distance < this.world.character.width / 3 && !this.isAttacking) {
+          this.isAttacking = true;
+          this.currentImage = 0;
+          if (!this.world.character.isHurtRecently()) {
+            this.world.character.hit(2);
+            this.world.statusbar.setEnergy(this.world.character.energy);
+          }
+          
+          setTimeout(() => {
+            this.isAttacking = false;
+          }, 600);
+        }
+      }
+    }, 100);
+  }
+
+  checkSlashingDistance() {
+    setInterval(() => {
+        if (this.world && this.world.character && !this.isDead && !this.isHurt && this.hasStarted) {
+            let distance = Math.abs(this.positionX - this.world.character.positionX);
+            
+            if (distance < 1 && !this.isSlashing) {
+                this.isSlashing = true;
+                this.currentSlashingImage = 0;
+                
+                if (!this.world.character.isHurtRecently()) {
+                    this.world.character.hit(3);
+                    this.world.statusbar.setEnergy(this.world.character.energy);
+                }
+                
+                setTimeout(() => {
+                    this.isSlashing = false;
+                }, 800);
+            }
+        }
+    }, 100);
+}
 
   takeDamage(damage) {
     if (this.isDead) return;
@@ -93,6 +143,13 @@ class Enemy extends Model {
         return;
       }
 
+      if (this.isAttacking) {
+        if (this.Enemy_Attacking && this.Enemy_Attacking.length > 0) {
+          this.playAnimation(this.Enemy_Attacking);
+        }
+        return;
+      }
+
       if (this.Enemy_Walking && this.Enemy_Walking.length > 0) {
         this.playAnimation(this.Enemy_Walking);
       } else {
@@ -101,7 +158,7 @@ class Enemy extends Model {
     }, 100);
 
     setInterval(() => {
-      if (!this.isDead) {
+      if (!this.isDead && !this.isAttacking) {
         this.positionX -= this.speed;
         this.floatOffset += 0.05;
         this.positionY = this.baseY + Math.sin(this.floatOffset) * 8;
