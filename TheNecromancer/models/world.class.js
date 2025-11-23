@@ -45,15 +45,7 @@ constructor(canvas, keyboard) {
     this.positionEndboss();
     this.level.calculateLevelEnd();
     
-    this.camera_x = 0; // ✅ Kamera startet bei 0 (Level-Anfang)
-    
-    console.log('✅ Level Setup:');
-    console.log('  - Background Count:', this.background.length);
-    console.log('  - Level Start:', 0);
-    console.log('  - Level Ende:', this.level.levelEndX);
-    console.log('  - Endboss Position:', this.endboss.positionX);
-    console.log('  - Character Start:', this.character.positionX);
-    console.log('  - Camera Start:', this.camera_x);
+    this.camera_x = 0;
     
     this.draw();
     this.showStartScreen();
@@ -65,7 +57,6 @@ showStartScreen() {
     
     const startBtn = document.getElementById('startGame');
     if (startBtn) {
-        // ✅ Alten Event-Listener entfernen
         const newStartBtn = startBtn.cloneNode(true);
         startBtn.parentNode.replaceChild(newStartBtn, startBtn);
         
@@ -74,7 +65,6 @@ showStartScreen() {
         });
     }
     
-    // ✅ Canvas-Click-Handler entfernen und neu setzen
     const canvas = document.getElementById('canvas');
     if (canvas) {
         if (this.canvasClickHandler) {
@@ -89,7 +79,7 @@ showStartScreen() {
         };
         
         canvas.addEventListener('click', this.canvasClickHandler);
-        canvas.addEventListener('touchstart', this.canvasClickHandler, { passive: true }); // ✅ passive: true
+        canvas.addEventListener('touchstart', this.canvasClickHandler, { passive: true });
     }
 }
 
@@ -112,10 +102,9 @@ startGame() {
 positionEndboss() {
     if (this.endboss && this.background.length > 0) {
         let lastBg = this.background[this.background.length - 1];
-        let levelEnd = lastBg.positionX + lastBg.width; // = 0 + (3 * 960) = 2880
+        let levelEnd = lastBg.positionX + lastBg.width;
         
-        // ✅ Endboss 700px vor Level-Ende positionieren
-        this.endboss.positionX = levelEnd - 700; // = 2880 - 700 = 2180
+        this.endboss.positionX = levelEnd - 700;
         
         console.log('✅ Endboss positioniert:');
         console.log('  - Level Ende:', levelEnd);
@@ -127,12 +116,12 @@ positionEndboss() {
 createDiamonds() {
     this.lootable = [];
     let numberOfDiamonds = 5;
-    let levelStartX = -100; // ✅ Character-Startposition
+    let levelStartX = -100;
     let levelEndX = 0;
     
     if (this.background.length > 0) {
         let lastBg = this.background[this.background.length - 1];
-        levelEndX = lastBg.positionX + lastBg.width - 400; // Vor dem Endboss
+        levelEndX = lastBg.positionX + lastBg.width - 400;
     }
     
     let levelLength = levelEndX - levelStartX;
@@ -144,14 +133,12 @@ createDiamonds() {
         diamond.positionY = 280;       
         this.lootable.push(diamond);
     }
-    
-    console.log('✅ Diamanten platziert von X:', levelStartX, 'bis X:', levelEndX);
 }
 
 checkCollisions() {
     setInterval(() => {
-      this.checkEnemyCollisions();  // Diese Zeile fehlt!
-      this.checkEndbossCollision(); // Diese Zeile fehlt!
+      this.checkEnemyCollisions();
+      this.checkEndbossCollision();
       this.checkDiamondCollection();
       this.checkAttackHits();
     }, 1000 / 60);
@@ -303,7 +290,6 @@ draw() {
             this.addToMap(this.endboss);
         }
         
-        // Check for victory
         if (this.endboss.isDead && !this.character.isDead && !this.gameWon && this.gameStarted) {
             if (this.victoryStartTime === 0) {
                 this.victoryStartTime = Date.now();
@@ -542,8 +528,6 @@ drawStartScreen() {
     this.ctx.fillStyle = '#ffffff';
     this.ctx.font = 'bold 24px cinzel, Arial';
     this.ctx.fillText('The Hunter of The Shadows', 360, 230);
-    
-    // ✅ NEU: Unterschiedlicher Text für Desktop/Mobile
     this.ctx.fillStyle = '#0a8e8e';
     this.ctx.font = '20px cinzel, Arial';
     if (window.innerWidth <= 500) {
@@ -565,7 +549,6 @@ drawVictoryScreen() {
     this.ctx.fillRect(0, 0, 720, 480);
     
     if (this.victoryScreenAlpha >= 1) {
-        // Titel
         this.ctx.fillStyle = '#FFD700';
         this.ctx.font = 'bold 48px cinzel, Arial';
         this.ctx.textAlign = 'center';
@@ -576,13 +559,11 @@ drawVictoryScreen() {
         this.ctx.shadowOffsetY = 3;
         this.ctx.fillText('Du hast Gewonnen!', 360, 150);
         
-        // ✅ FIX: Diamond-Count korrekt anzeigen
         this.ctx.fillStyle = 'white';
         this.ctx.font = '28px cinzel, Arial';
         this.ctx.shadowBlur = 5;
         this.ctx.fillText(`Gesammelte Diamanten: ${this.diamond.diamonds}`, 360, 220);
         
-        // ✅ Buttons zeichnen und Bereiche speichern
         this.victoryButtons = [
             { text: 'Neues Spiel', x: 160, y: 300, width: 200, height: 50, action: 'restart' },
             { text: 'Beenden', x: 360, y: 300, width: 200, height: 50, action: 'quit' }
@@ -616,7 +597,6 @@ drawVictoryButton(btn) {
     this.ctx.textBaseline = 'middle';
     this.ctx.fillText(btn.text, btn.x + btn.width / 2, btn.y + btn.height / 2);
     
-    // ✅ FIX: Event-Handler nur einmal registrieren
     if (!this.victoryClickHandler) {
         this.victoryClickHandler = (e) => {
             if (!this.gameWon) return;
@@ -640,7 +620,6 @@ drawVictoryButton(btn) {
         
         this.canvas.addEventListener('click', this.victoryClickHandler);
         
-        // Mouse-Move-Handler
         this.canvas.addEventListener('mousemove', (e) => {
             const rect = this.canvas.getBoundingClientRect();
             this.lastMouseX = e.clientX - rect.left;
@@ -650,7 +629,6 @@ drawVictoryButton(btn) {
 }
 
 restartGame() {
-    // ✅ FIX: Alle Event-Listener entfernen
     if (this.victoryClickHandler) {
         this.canvas.removeEventListener('click', this.victoryClickHandler);
         this.victoryClickHandler = null;
@@ -662,18 +640,15 @@ restartGame() {
         this.canvasClickHandler = null;
     }
     
-    // Reset Victory Screen
     this.gameWon = false;
     this.victoryScreenAlpha = 0;
     this.victoryStartTime = 0;
     this.victoryButtons = [];
     
-    // Reset Game Over Screen
     this.gameOverAlpha = 0;
     this.gameOverStartTime = 0;
     this.showCredits = false;
     
-    // ✅ NEU: Neues Level erstellen
     this.enemies = [];
     for (let i = 0; i < 3; i++) {
         this.enemies.push(new Enemy());
@@ -684,26 +659,20 @@ restartGame() {
     this.statusbar = new Statusbar();
     this.diamond = new Diamond();
     
-    // Level neu initialisieren
     this.level.enemies = this.enemies;
     this.level.endboss = this.endboss;
     
-    // World-Referenzen setzen
     this.setWorld();
     
-    // Diamonds und Endboss-Position
     this.createDiamonds();
     this.positionEndboss();
     this.level.calculateLevelEnd();
     
-    // Camera zurücksetzen
     this.camera_x = 1100;
     
-    // ✅ DIREKT starten ohne Start-Screen
     this.gameStarted = true;
     this.checkCollisions();
     
-    // Touch-Controls anzeigen, UI ausblenden
     document.querySelectorAll('.sidebar, .title, .footer').forEach(el => {
         el.style.display = 'none';
     });
@@ -712,7 +681,5 @@ restartGame() {
     if (touchControls) {
         touchControls.style.display = 'flex';
     }
-    
-    console.log('✅ Spiel neu gestartet!');
 }
 }

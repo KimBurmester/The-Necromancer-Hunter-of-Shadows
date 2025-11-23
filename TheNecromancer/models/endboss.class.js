@@ -57,7 +57,6 @@ checkSlashingDistance() {
                 this.isSlashing = true;
                 this.currentSlashingImage = 0;
                 
-                // ✅ NEU: Damage erst nach 400ms (wenn Slashing-Animation läuft)
                 setTimeout(() => {
                     if (!this.world.character.isHurtRecently() && this.isSlashing) {
                         this.world.character.hit(3);
@@ -183,12 +182,9 @@ checkSlashingDistance() {
 
 checkCharacterDistance() {
     setInterval(() => {
-        // ✅ FIX: Das ist die FALSCHE Methode - das ist Enemy-Code!
-        // Diese Methode sollte prüfen, wann der Endboss startet!
         if (!this.hasStarted && this.world && this.world.character && this.world.gameStarted) {
             let distanceToEndboss = this.positionX - this.world.character.positionX;
             
-            // ✅ Endboss startet, wenn Character in 720px Reichweite ist
             if (distanceToEndboss <= 720) {
                 this.hasStarted = true;
                 setTimeout(() => {

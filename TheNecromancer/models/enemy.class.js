@@ -62,7 +62,6 @@ checkCharacterDistance() {
           this.isAttacking = true;
           this.currentImage = 0;
           
-          // ✅ NEU: Damage erst nach 300ms (wenn Attack-Animation läuft)
           setTimeout(() => {
             if (!this.world.character.isHurtRecently() && this.isAttacking) {
               this.world.character.hit(2);

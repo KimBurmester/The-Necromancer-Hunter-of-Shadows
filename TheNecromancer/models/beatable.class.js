@@ -1,3 +1,0 @@
-class Beatable extends Model{
-
-}

@@ -138,9 +138,8 @@ handleMovement() {
     
     this.isMoving = false;
     
-    // ✅ Level-Grenzen angepasst
-    let levelEndX = this.world.level.levelEndX - 100; // Endboss-Position - Puffer
-    let levelStartX = -200; // Etwas links vom Level-Start
+    let levelEndX = this.world.level.levelEndX - 100;
+    let levelStartX = -200;
     
     if (this.world.keyboard.RIGHT && this.positionX < levelEndX) {
         this.moveRight();
@@ -240,14 +239,11 @@ handleAttackAnimation() {
 updateCamera() {
     let canvasWidth = 720;
     
-    // ✅ Kamera folgt dem Character
-    let targetCameraX = -this.positionX + 360; // Character in der Mitte des Screens
+    let targetCameraX = -this.positionX + 360;
     
-    // ✅ Kamera-Grenzen
-    let maxCameraX = 0; // Linke Grenze (Level-Start bei 0)
-    let minCameraX = -(this.world.level.levelEndX - canvasWidth); // Rechte Grenze
+    let maxCameraX = 0;
+    let minCameraX = -(this.world.level.levelEndX - canvasWidth);
     
-    // ✅ Kamera mit Begrenzungen setzen
     this.world.camera_x = Math.max(minCameraX, Math.min(maxCameraX, targetCameraX));
 }
 

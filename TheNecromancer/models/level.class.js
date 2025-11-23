@@ -26,20 +26,15 @@ calculateLevelEnd() {
     
     if (this.background.length > 0) {
         let lastBg = this.background[this.background.length - 1];
-        maxX = lastBg.positionX + lastBg.width; // = 2880
+        maxX = lastBg.positionX + lastBg.width;
     }
     
-    // ✅ Level endet am Endboss
     if (this.endboss) {
-        this.levelEndX = this.endboss.positionX + 200; // Etwas nach dem Endboss
+        this.levelEndX = this.endboss.positionX + 200;
     } else {
         this.levelEndX = maxX;
     }
     
-    this.levelStartX = -200; // Etwas links vom ersten Background
-    
-    console.log('✅ Level berechnet:');
-    console.log('  - Start X:', this.levelStartX);
-    console.log('  - Ende X:', this.levelEndX);
+    this.levelStartX = -200;
 }
 }
