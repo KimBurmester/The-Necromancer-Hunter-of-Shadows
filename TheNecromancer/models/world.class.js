@@ -16,6 +16,9 @@ class World {
   keyboard;
   camera_x = 0;
   lootable = [];
+  gameOverAlpha = 0;
+  showCredits = false;
+  gameOverStartTime = 0;
 
 constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -198,6 +201,9 @@ createBackgrounds() {
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusbar);
     this.addToMap(this.diamond);
+    if (this.character.isDead) {
+      this.drawGameOverScreen();
+    }
     let self = this;
     requestAnimationFrame(() => self.draw());
   }
@@ -329,5 +335,67 @@ drawFrameModel(mo) {
     try {
         this.ctx.drawImage(mo.img, mo.positionX, mo.positionY, mo.width, mo.height);
     } catch (error) {}
+}
+
+drawGameOverScreen() {
+    if (this.gameOverStartTime === 0) {
+      this.gameOverStartTime = Date.now();
+    }
+    
+    const elapsed = Date.now() - this.gameOverStartTime;
+    if (elapsed < 3000) {
+      this.gameOverAlpha = Math.min(elapsed / 1000, 1);
+      this.drawGameOverText();
+    }
+    else {
+      if (!this.showCredits) {
+        this.showCredits = true;
+        this.gameOverAlpha = 0;
+      }
+      this.gameOverAlpha = Math.min((elapsed - 3000) / 1000, 1);
+      this.drawCredits();
+    }
+}
+
+drawGameOverText() {
+    this.ctx.save();
+    this.ctx.globalAlpha = this.gameOverAlpha;
+    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    this.ctx.fillRect(0, 0, 720, 480);
+    this.ctx.fillStyle = '#0a8e8e';
+    this.ctx.font = 'bold 72px cinzel, Arial';
+    this.ctx.textAlign = 'center';
+    this.ctx.textBaseline = 'middle';
+    this.ctx.fillText('GAME OVER', 360, 240);
+    
+    this.ctx.restore();
+}
+
+drawCredits() {
+    this.ctx.save();
+    this.ctx.globalAlpha = this.gameOverAlpha;
+    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+    this.ctx.fillRect(0, 0, 720, 480);
+    this.ctx.textAlign = 'center';
+    this.ctx.textBaseline = 'middle';
+    this.ctx.fillStyle = '#ffffff';
+    this.ctx.font = '20px cinzel, Arial';
+    this.ctx.fillText('All graphics from', 360, 180);
+    this.ctx.fillStyle = '#0a8e8e';
+    this.ctx.font = 'bold 22px cinzel, Arial';
+    this.ctx.fillText('www.craftpix.net', 360, 210);
+    this.ctx.fillStyle = '#ffffff';
+    this.ctx.font = '20px cinzel, Arial';
+    this.ctx.fillText('and All sounds from', 360, 250);
+    this.ctx.fillStyle = '#0a8e8e';
+    this.ctx.font = 'bold 22px cinzel, Arial';
+    this.ctx.fillText('www.mixkit.co', 360, 280);
+    this.ctx.fillStyle = '#ffffff';
+    this.ctx.font = '20px cinzel, Arial';
+    this.ctx.fillText('Developed by', 360, 330);
+    this.ctx.fillStyle = '#0a8e8e';
+    this.ctx.font = 'bold 24px cinzel, Arial';
+    this.ctx.fillText('Kim P. Burmester', 360, 360);
+    this.ctx.restore();
 }
 }
