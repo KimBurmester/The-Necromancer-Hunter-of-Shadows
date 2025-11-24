@@ -14,10 +14,12 @@ class Fence extends Model {
         positionX = 0;
 
     /**
-     * Creates a fence instance with default image
+     * Creates a fence instance with image from template
      * @constructor
      */
     constructor(){
-        super().loadImage('TheNecromancer\\img\\background-fence\\5.png');
+        super();
+        const imagePath = ImageTemplateManager.getBackgroundLayer('fence');
+        this.loadImage(imagePath);
     }
 }

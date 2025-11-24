@@ -5,20 +5,22 @@
  * @extends Model
  */
 class Background extends Model {
-        /** @type {number} Height of background (540px) */
-        height = 1080/2;
-        /** @type {number} Width of background (960px) */
-        width = 1920/2;
-        /** @type {number} Vertical position */
-        positionY = 0;
-        /** @type {number} Horizontal position */
-        positionX = 0;
+    /** @type {number} Height of background (540px) */
+    height = 1080/2;
+    /** @type {number} Width of background (960px) */
+    width = 1920/2;
+    /** @type {number} Vertical position */
+    positionY = 0;
+    /** @type {number} Horizontal position */
+    positionX = 0;
 
     /**
-     * Creates a background instance with default image
+     * Creates a background instance with image from template
      * @constructor
      */
     constructor(){
-        super().loadImage('TheNecromancer\\img\\background\\1.png', 0);
+        super();
+        const imagePath = ImageTemplateManager.getBackgroundLayer('background');
+        this.loadImage(imagePath);
     }
 }

@@ -18,7 +18,9 @@ class Cloud extends Model {
      * @constructor
      */
     constructor(){
-        super().loadImage('TheNecromancer\\img\\clouds\\2.png', 0);
+        super();
+        const imagePath = ImageTemplateManager.getBackgroundLayer('clouds');
+        this.loadImage(imagePath);
         this.animate();
     }
     

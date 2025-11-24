@@ -13,10 +13,12 @@ class Grave extends Model {
         /** @type {number} Horizontal position */
         positionX = 0;
     /**
-     * Creates a grave instance with default image
+     * Creates a grave instance with image from template
      * @constructor
      */
     constructor(){
-        super().loadImage('TheNecromancer\\img\\background-graves\\6.png', 0);
+        super();
+        const imagePath = ImageTemplateManager.getBackgroundLayer('graves');
+        this.loadImage(imagePath);
     }
 }

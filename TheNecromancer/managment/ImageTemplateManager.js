@@ -9,6 +9,8 @@ class ImageTemplateManager {
     static enemyTemplates = null;
     /** @type {EndbossImageTemplates} Endboss animation templates */
     static endbossTemplates = null;
+    /** @type {BackgroundImageTemplates} Background layer templates */
+    static backgroundTemplates = null;
 
     /**
      * Initializes template instances
@@ -18,6 +20,7 @@ class ImageTemplateManager {
         this.characterTemplates = new CharacterImageTemplates();
         this.enemyTemplates = new EnemyImageTemplates();
         this.endbossTemplates = new EndbossImageTemplates();
+        this.backgroundTemplates = new BackgroundImageTemplates();
     }
 
     /**
@@ -99,6 +102,31 @@ class ImageTemplateManager {
             this.initialize();
         }
         return this.endbossTemplates.getAvailableAnimations();
+    }
+
+    /**
+     * Retrieves background layer image path
+     * @method
+     * @param {string} layerType - Layer type (background, hills, fence, etc.)
+     * @returns {string} Image path
+     */
+    static getBackgroundLayer(layerType) {
+        if (!this.backgroundTemplates) {
+            this.initialize();
+        }
+        return this.backgroundTemplates.getLayerPath(layerType);
+    }
+
+    /**
+     * Gets available background layer types
+     * @method
+     * @returns {Array<string>} Layer type names
+     */
+    static getAvailableBackgroundLayers() {
+        if (!this.backgroundTemplates) {
+            this.initialize();
+        }
+        return this.backgroundTemplates.getAvailableLayers();
     }
 
     /**

@@ -14,10 +14,12 @@ class Hills extends Model {
         positionX = 0;
 
     /**
-     * Creates a hills instance with default image
+     * Creates a hills instance with image from template
      * @constructor
      */
     constructor(){
-        super().loadImage('TheNecromancer\\img\\background-hill\\4.png', 0);
+        super();
+        const imagePath = ImageTemplateManager.getBackgroundLayer('hills');
+        this.loadImage(imagePath);
     }
 }

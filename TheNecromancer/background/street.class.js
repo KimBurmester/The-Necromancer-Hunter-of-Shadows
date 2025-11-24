@@ -13,10 +13,12 @@ class Street extends Model {
         /** @type {number} Horizontal position */
         positionX = 0;
     /**
-     * Creates a street instance with default image
+     * Creates a street instance with image from template
      * @constructor
      */
     constructor(){
-        super().loadImage('TheNecromancer\\img\\street\\9.png', 0);
+        super();
+        const imagePath = ImageTemplateManager.getBackgroundLayer('street');
+        this.loadImage(imagePath);
     }
 }
