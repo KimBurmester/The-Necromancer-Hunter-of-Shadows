@@ -147,23 +147,13 @@ class TouchController {
     }
 
     /**
-     * Handles special action buttons (help, home, settings)
+     * Handles special action buttons (help)
      * @method
      * @param {string} action - Action identifier
      */
     handleAction(action) {
-        switch(action) {
-            case 'help':
-                this.showControlsHelp();
-                break;
-            case 'home':
-                if (confirm('Zurück zum Hauptmenü?')) {
-                    location.reload();
-                }
-                break;
-            case 'settings':
-                alert('Einstellungen werden geöffnet...');
-                break;
+        if (action === 'help') {
+            this.showControlsHelp();
         }
         
         try {
