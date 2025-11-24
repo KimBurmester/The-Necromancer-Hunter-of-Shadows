@@ -126,11 +126,12 @@
  * 
  * Adjusts touch controls for landscape orientation with height below 500px.
  * Reduces button sizes and gaps to fit more content vertically.
+ * Bottom position increased to avoid address bar overlap.
  */
 @media (max-height: 500px) and (orientation: landscape) {
     .controller-left,
     .controller-right {
-        bottom: 5px;
+        bottom: 50px;
         gap: 8px;
     }
 
@@ -222,11 +223,12 @@
 
     .controller-left,
     .controller-right {
-        position: absolute !important;
-        bottom: 3% !important;
+        position: fixed !important;
+        bottom: 60px !important;
         pointer-events: all !important;
         display: flex !important;
         gap: 12px !important;
+        z-index: 10001 !important;
     }
 
     .controller-left {
@@ -272,12 +274,13 @@
     }
 
     .controller-menu {
-        position: absolute !important;
-        top: 2% !important;
-        right: 2% !important;
+        position: fixed !important;
+        top: 10px !important;
+        right: 10px !important;
         pointer-events: all !important;
         display: flex !important;
         gap: 8px !important;
+        z-index: 10001 !important;
     }
 
     .controller-menu .touch-btn {
@@ -289,6 +292,27 @@
     .controller-menu .touch-btn svg {
         width: 20px !important;
         height: 20px !important;
+    }
+
+    .btn-left,
+    .btn-right,
+    .btn-jump,
+    .btn-attack {
+        background: transparent !important;
+    }
+
+    .btn-left:active,
+    .btn-left.pressed,
+    .btn-right:active,
+    .btn-right.pressed {
+        background: rgba(10, 142, 142, 0.9) !important;
+    }
+
+    .btn-jump:active,
+    .btn-jump.pressed,
+    .btn-attack:active,
+    .btn-attack.pressed {
+        background: rgba(48, 175, 207, 0.8) !important;
     }
 }
 
@@ -328,11 +352,12 @@
 
     .controller-left,
     .controller-right {
-        position: absolute !important;
-        bottom: 3% !important;
+        position: fixed !important;
+        bottom: 50px !important;
         pointer-events: all !important;
         display: flex !important;
         gap: 12px !important;
+        z-index: 10001 !important;
     }
 
     .controller-left {
@@ -357,12 +382,13 @@
     }
 
     .controller-menu {
-        position: absolute !important;
-        top: 2% !important;
-        right: 2% !important;
+        position: fixed !important;
+        top: 10px !important;
+        right: 10px !important;
         pointer-events: all !important;
         display: flex !important;
         gap: 8px !important;
+        z-index: 10001 !important;
     }
 
     .controller-menu .touch-btn {
@@ -374,6 +400,27 @@
     .controller-menu .touch-btn svg {
         width: 20px !important;
         height: 20px !important;
+    }
+
+    .btn-left,
+    .btn-right,
+    .btn-jump,
+    .btn-attack {
+        background: transparent !important;
+    }
+
+    .btn-left:active,
+    .btn-left.pressed,
+    .btn-right:active,
+    .btn-right.pressed {
+        background: rgba(10, 142, 142, 0.9) !important;
+    }
+
+    .btn-jump:active,
+    .btn-jump.pressed,
+    .btn-attack:active,
+    .btn-attack.pressed {
+        background: rgba(48, 175, 207, 0.8) !important;
     }
 
     .footer {
@@ -424,5 +471,39 @@
         display: flex !important;
         width: 100vw;
         height: 100vh;
+    }
+
+    .controller-left,
+    .controller-right {
+        position: fixed !important;
+        bottom: 50px !important;
+        z-index: 10001 !important;
+    }
+
+    .controller-menu {
+        position: fixed !important;
+        top: 10px !important;
+        z-index: 10001 !important;
+    }
+
+    .btn-left,
+    .btn-right,
+    .btn-jump,
+    .btn-attack {
+        background: transparent !important;
+    }
+
+    .btn-left:active,
+    .btn-left.pressed,
+    .btn-right:active,
+    .btn-right.pressed {
+        background: rgba(10, 142, 142, 0.9) !important;
+    }
+
+    .btn-jump:active,
+    .btn-jump.pressed,
+    .btn-attack:active,
+    .btn-attack.pressed {
+        background: rgba(48, 175, 207, 0.8) !important;
     }
 }

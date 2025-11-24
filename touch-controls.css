@@ -160,42 +160,73 @@
 }
 
 /**
+ * Left and Right Movement Buttons
+ * 
+ * Transparent background for directional movement buttons.
+ */
+.btn-left,
+.btn-right {
+    background: transparent;
+}
+
+/**
  * Jump Button Special Style
  * 
- * Custom background color (light teal) to visually distinguish
- * the jump action button from other controls.
+ * Transparent background for jump action button.
  */
 .btn-jump {
-    background: rgba(48, 175, 207, 0.8);
+    background: transparent;
 }
 
 /**
  * Attack Button Special Style
  * 
- * Uses standard dark blue background to differentiate from jump button.
+ * Transparent background for attack action button.
  */
 .btn-attack {
-    background: rgba(15, 56, 66, 0.8);
+    background: transparent;
 }
 
 /**
  * Jump Button Active State
  * 
- * Maintains light teal background when pressed with enhanced shadow.
+ * Teal background when pressed with enhanced shadow.
  */
 .btn-jump:active,
 .btn-jump.pressed {
     background: rgba(48, 175, 207, 0.8);
-    box-shadow: 0 2px 10px rgba(15, 56, 66, 0.8);
+    box-shadow: 0 2px 10px rgba(10, 142, 142, 0.7);
 }
 
 /**
  * Attack Button Active State
  * 
- * Changes to light teal background when pressed to match jump button interaction.
+ * Teal background when pressed for visual feedback.
  */
 .btn-attack:active,
 .btn-attack.pressed {
     background: rgba(48, 175, 207, 0.8);
-    box-shadow: 0 2px 10px rgba(15, 56, 66, 0.8);
+    box-shadow: 0 2px 10px rgba(10, 142, 142, 0.7);
+}
+
+/**
+ * Left Button Active State
+ * 
+ * Teal background when pressed for visual feedback.
+ */
+.btn-left:active,
+.btn-left.pressed {
+    background: rgba(10, 142, 142, 0.9);
+    box-shadow: 0 2px 10px rgba(10, 142, 142, 0.7);
+}
+
+/**
+ * Right Button Active State
+ * 
+ * Teal background when pressed for visual feedback.
+ */
+.btn-right:active,
+.btn-right.pressed {
+    background: rgba(10, 142, 142, 0.9);
+    box-shadow: 0 2px 10px rgba(10, 142, 142, 0.7);
 }

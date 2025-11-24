@@ -18,13 +18,13 @@ canvas{
  * Fullscreen Canvas Mode
  * 
  * When canvas enters fullscreen mode, it takes up the entire viewport
- * with black background and proper aspect ratio scaling.
+ * with transparent background and proper aspect ratio scaling.
  */
 #canvas.fullscreen {
     width: 100vw !important;
     height: 100vh !important;
     object-fit: contain;
-    background: #000;
+    background: transparent;
 }
 
 /**
