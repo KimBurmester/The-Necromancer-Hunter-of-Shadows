@@ -36,6 +36,7 @@
     
     <!-- Helpers & Managers -->
     <script src="TheNecromancer/UIHelpers/UIHelpers.class.js"></script>
+    <script src="TheNecromancer/managment/AudioManager.class.js"></script>
     <script src="TheNecromancer/managment/CollisionManager.class.js"></script>
     <script src="TheNecromancer/managment/RenderManager.class.js"></script>
     <script src="TheNecromancer/managment/StartScreenManager.class.js"></script>
@@ -59,7 +60,6 @@
 </head>
 <body onload="init()">
     <div class="layer">
-    <h1 class="title">Nekromant<br>Jäger der Schatten</h1>
 
     <div class="game-container">
         <div class="sidebar left-sidebar">
@@ -79,7 +79,7 @@
             <div class="control">Pfeil Rechts - Vorwärts</div>
             <div class="control">Space - Springen</div>
             <div class="control">Taste D - Kämpfen</div>
-            <div class="control">Ton ein/aus (Taste M)</div>
+            <button class="sidebar-btn" id="toggleSound">Ton ein/aus (Taste M)</button>
         </div>
 
         <!-- ✅ Touch-Controller für Mobile/Tablet -->
@@ -173,7 +173,7 @@
             </div>
         </div>
 
-        <div class="footer-text">All graphics from <a class="footer-link" href="https://craftpix.net/">www.craftpix.net</a> and All sounds from <a class="footer-link" href="https://mixkit.co/">www.mixkit.co</a></div>
+        <div class="footer-text">All graphics from <a class="footer-link" href="https://craftpix.net/">www.craftpix.net</a><br>All sounds from <a class="footer-link" href="https://mixkit.co/">www.mixkit.co</a><br>Soundtrack The Necromancer - Hunter of The Shadow - created with suno<a class="footer-link" href="https://suno.com/">www.suno.com</a></div>
     </div>
     
 </div>

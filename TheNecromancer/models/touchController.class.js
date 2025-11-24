@@ -5,6 +5,8 @@
 class TouchController {
     /** @type {Keyboard} Keyboard state manager */
     keyboard;
+    /** @type {World} World reference */
+    world;
     /** @type {Object} Button elements collection */
     touchButtons = {};
     /** @type {boolean} Touch controls active state */
@@ -14,9 +16,11 @@ class TouchController {
      * Initializes touch controller with keyboard reference
      * @method
      * @param {Keyboard} keyboard - Keyboard state manager instance
+     * @param {World} world - World instance
      */
-    constructor(keyboard) {
+    constructor(keyboard, world) {
         this.keyboard = keyboard;
+        this.world = world;
         this.init();
     }
 
@@ -138,12 +142,39 @@ class TouchController {
                 this.keyboard.D = false;
                 break;
             case 'M':
-                this.keyboard.M = false;
+                this.keyboard.M = true;
+                this.toggleSound(button);
                 break;
             case 'F':
                 break;
         }
-        button.classList.remove('pressed');
+        button.classList.add('pressed');
+    }
+
+    /**
+     * Toggles sound on/off
+     * @method
+     * @param {HTMLElement} button - Sound button element
+     */
+    toggleSound(button) {
+        if (this.world && this.world.audioManager) {
+            const isMuted = this.world.audioManager.toggleMute();
+            this.updateSoundButton(button, isMuted);
+        }
+    }
+
+    /**
+     * Updates sound button appearance
+     * @method
+     * @param {HTMLElement} button - Sound button element
+     * @param {boolean} isMuted - Mute state
+     */
+    updateSoundButton(button, isMuted) {
+        if (isMuted) {
+            button.style.opacity = '0.5';
+        } else {
+            button.style.opacity = '1';
+        }
     }
 
     /**

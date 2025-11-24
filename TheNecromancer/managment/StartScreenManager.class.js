@@ -18,6 +18,16 @@ class StartScreenManager {
         this.setupStartButton();
         this.setupCanvasClick();
         this.setupSpaceKeyListener();
+        this.playStartMusic();
+    }
+
+    /**
+     * Plays start screen music
+     */
+    playStartMusic() {
+        if (this.world.audioManager) {
+            this.world.audioManager.playMusic('menu');
+        }
     }
 
     /**
@@ -48,8 +58,21 @@ class StartScreenManager {
      */
     attachStartListener(button) {
         button.addEventListener('click', () => {
-            this.world.gameStateManager.initializeGame();
+            this.unlockAudioAndStart();
         });
+    }
+
+    /**
+     * Unlocks audio context and starts game
+     */
+    unlockAudioAndStart() {
+        if (this.world.audioManager) {
+            this.world.audioManager.unlockAudio();
+            setTimeout(() => {
+                this.world.audioManager.playMusic('menu');
+            }, 100);
+        }
+        this.world.gameStateManager.initializeGame();
     }
 
     /**
@@ -81,7 +104,7 @@ class StartScreenManager {
     createNewClickHandler(canvas) {
         this.world.canvasClickHandler = (e) => {
             if (!this.world.gameStarted) {
-                this.world.gameStateManager.initializeGame();
+                this.unlockAudioAndStart();
             }
         };
         
@@ -113,7 +136,7 @@ class StartScreenManager {
         this.world.spaceKeyHandler = (e) => {
             if (e.code === 'Space' && !this.world.gameStarted) {
                 e.preventDefault();
-                this.world.gameStateManager.initializeGame();
+                this.unlockAudioAndStart();
             }
         };
         document.addEventListener('keydown', this.world.spaceKeyHandler);
