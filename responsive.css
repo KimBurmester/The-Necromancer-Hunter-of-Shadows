@@ -59,6 +59,10 @@
 }
 
 @media (max-width: 1260px) {
+    body {
+        overflow-x: hidden;
+    }
+
     .sidebar{
         display: none !important;
     }

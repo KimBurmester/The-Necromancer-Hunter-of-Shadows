@@ -19,6 +19,7 @@ class GameStateManager {
         
         this.world.setWorld();
         this.setGameStarted();
+        this.removeSpaceKeyListener();
         this.startCharacterAnimation();
         this.startCollisionDetection();
         this.hideMenuElements();
@@ -82,6 +83,7 @@ class GameStateManager {
     cleanupEventListeners() {
         this.removeVictoryListener();
         this.removeCanvasListener();
+        this.removeSpaceKeyListener();
     }
 
     /**
@@ -102,6 +104,16 @@ class GameStateManager {
             this.world.canvas.removeEventListener('click', this.world.canvasClickHandler);
             this.world.canvas.removeEventListener('touchstart', this.world.canvasClickHandler);
             this.world.canvasClickHandler = null;
+        }
+    }
+
+    /**
+     * Removes space key listener
+     */
+    removeSpaceKeyListener() {
+        if (this.world.spaceKeyHandler) {
+            document.removeEventListener('keydown', this.world.spaceKeyHandler);
+            this.world.spaceKeyHandler = null;
         }
     }
 

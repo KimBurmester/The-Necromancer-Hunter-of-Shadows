@@ -53,6 +53,8 @@ class World {
   victoryStartTime = 0;
   /** @type {Function} Canvas click event handler */
   canvasClickHandler = null;
+  /** @type {Function} Space key event handler */
+  spaceKeyHandler = null;
   /** @type {Array<Object>} Victory screen button hitboxes */
   victoryButtons = [];
   /** @type {CollisionManager} Collision detection manager */

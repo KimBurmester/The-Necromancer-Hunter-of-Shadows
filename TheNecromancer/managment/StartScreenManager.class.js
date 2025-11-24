@@ -17,6 +17,7 @@ class StartScreenManager {
     displayStartScreen() {
         this.setupStartButton();
         this.setupCanvasClick();
+        this.setupSpaceKeyListener();
     }
 
     /**
@@ -89,6 +90,36 @@ class StartScreenManager {
     }
 
     /**
+     * Sets up space key listener for starting game
+     */
+    setupSpaceKeyListener() {
+        this.removeOldSpaceListener();
+        this.createSpaceKeyHandler();
+    }
+
+    /**
+     * Removes old space key listener
+     */
+    removeOldSpaceListener() {
+        if (this.world.spaceKeyHandler) {
+            document.removeEventListener('keydown', this.world.spaceKeyHandler);
+        }
+    }
+
+    /**
+     * Creates space key handler for game start
+     */
+    createSpaceKeyHandler() {
+        this.world.spaceKeyHandler = (e) => {
+            if (e.code === 'Space' && !this.world.gameStarted) {
+                e.preventDefault();
+                this.world.gameStateManager.initializeGame();
+            }
+        };
+        document.addEventListener('keydown', this.world.spaceKeyHandler);
+    }
+
+    /**
      * Renders start screen overlay
      */
     renderStartOverlay() {
@@ -138,15 +169,41 @@ class StartScreenManager {
      * Draws start instructions based on device
      */
     drawStartInstructions() {
+        const isMobile = window.innerWidth <= 500;
+        
+        if (isMobile) {
+            this.drawMobileInstructions();
+        } else {
+            this.drawDesktopInstructions();
+        }
+        
+        this.world.ctx.restore();
+    }
+
+    /**
+     * Draws mobile start instructions
+     */
+    drawMobileInstructions() {
         this.world.ctx.fillStyle = '#0a8e8e';
         this.world.ctx.font = '20px cinzel, Arial';
+        this.world.ctx.fillText('Tippe auf den Bildschirm zum Starten', 360, 320);
+    }
+
+    /**
+     * Draws desktop start instructions
+     */
+    drawDesktopInstructions() {
+        this.world.ctx.fillStyle = '#ffffff';
+        this.world.ctx.font = '18px cinzel, Arial';
+        this.world.ctx.fillText('Klicke "Spiel starten" oder drücke', 360, 300);
         
-        const text = window.innerWidth <= 500 ? 
-            'Tippe auf den Bildschirm zum Starten' : 
-            'Klicke "Spiel starten" um zu beginnen';
+        this.world.ctx.fillStyle = '#0a8e8e';
+        this.world.ctx.font = 'bold 24px cinzel, Arial';
+        this.world.ctx.fillText('SPACE', 360, 330);
         
-        this.world.ctx.fillText(text, 360, 320);
-        this.world.ctx.restore();
+        this.world.ctx.fillStyle = '#ffffff';
+        this.world.ctx.font = '18px cinzel, Arial';
+        this.world.ctx.fillText('um das Spiel zu starten', 360, 360);
     }
 
     /**
