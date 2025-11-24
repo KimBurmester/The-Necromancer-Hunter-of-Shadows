@@ -7,6 +7,8 @@ class ImageTemplateManager {
     static characterTemplates = null;
     /** @type {EnemyImageTemplates} Enemy animation templates */
     static enemyTemplates = null;
+    /** @type {EndbossImageTemplates} Endboss animation templates */
+    static endbossTemplates = null;
 
     /**
      * Initializes template instances
@@ -15,6 +17,7 @@ class ImageTemplateManager {
     static initialize() {
         this.characterTemplates = new CharacterImageTemplates();
         this.enemyTemplates = new EnemyImageTemplates();
+        this.endbossTemplates = new EndbossImageTemplates();
     }
 
     /**
@@ -38,12 +41,12 @@ class ImageTemplateManager {
      * @returns {Array<string>} Image paths array
      */
     static getEnemyImages(enemyType, animationType) {
-        if (!this.enemyTemplates) {
-            this.initialize();
-        }
-        
         if (enemyType === 'endboss') {
             return this.getEndbossImages(animationType);
+        }
+        
+        if (!this.enemyTemplates) {
+            this.initialize();
         }
         
         return this.enemyTemplates.getImages(enemyType, animationType);
@@ -80,41 +83,22 @@ class ImageTemplateManager {
      * @returns {Array<string>} Image paths array
      */
     static getEndbossImages(animationType) {
-        const basePath = 'TheNecromancer/img/endboss/level1/';
-        const animations = {
-            'idle': { folder: 'Idle/', count: 6, name: 'Idle' },
-            'idle_blinking': { folder: 'Idle Blinking/', count: 9, name: 'Idle Blinking' },
-            'walking': { folder: 'Walking/', count: 12, name: 'Walking' },
-            'hurt': { folder: 'Hurt/', count: 3, name: 'Hurt' },
-            'dying': { folder: 'Dying/', count: 15, name: 'Dying' },
-            'slashing': { folder: 'Slashing/', count: 12, name: 'Slashing' }
-        };
-        
-        if (animations[animationType]) {
-            return this.generateEndbossImagePaths(
-                basePath + animations[animationType].folder,
-                animations[animationType].count,
-                animations[animationType].name
-            );
+        if (!this.endbossTemplates) {
+            this.initialize();
         }
-        return [];
+        return this.endbossTemplates.getImages(animationType);
     }
 
     /**
-     * Generates endboss image paths with padding
+     * Gets available endboss animation types
      * @method
-     * @param {string} basePath - Base directory path
-     * @param {number} count - Number of frames
-     * @param {string} animationName - Animation name
-     * @returns {Array<string>} Generated image paths
+     * @returns {Array<string>} Animation type names
      */
-    static generateEndbossImagePaths(basePath, count, animationName) {
-        const paths = [];
-        for (let i = 0; i < count; i++) {
-            const paddedNumber = i.toString().padStart(3, '0');
-            paths.push(`${basePath}0_Golem_${animationName}_${paddedNumber}.png`);
+    static getAvailableEndbossAnimations() {
+        if (!this.endbossTemplates) {
+            this.initialize();
         }
-        return paths;
+        return this.endbossTemplates.getAvailableAnimations();
     }
 
     /**
