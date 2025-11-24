@@ -15,7 +15,11 @@ body{
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    background-color: rgb(8, 31, 37);
+    background-image: url('TheNecromancer/img/background-background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     font-family: 'cinzel', Arial, Helvetica, sans-serif;
 }
 

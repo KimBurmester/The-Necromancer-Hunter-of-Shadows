@@ -1,7 +1,7 @@
 /* Canvas and Sidebar Styles */
 
 canvas{
-    background-color: black;
+    background-color: transparent;
     border: 2px solid rgb(50, 50, 50);
     border-left: none;
     border-right: none;

@@ -157,10 +157,7 @@ class TouchController {
      * @param {HTMLElement} button - Sound button element
      */
     toggleSound(button) {
-        if (this.world && this.world.audioManager) {
-            const isMuted = this.world.audioManager.toggleMute();
-            this.updateSoundButton(button, isMuted);
-        }
+        // Audio functionality removed
     }
 
     /**

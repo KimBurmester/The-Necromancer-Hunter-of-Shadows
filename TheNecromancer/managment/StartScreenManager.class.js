@@ -18,16 +18,6 @@ class StartScreenManager {
         this.setupStartButton();
         this.setupCanvasClick();
         this.setupSpaceKeyListener();
-        this.playStartMusic();
-    }
-
-    /**
-     * Plays start screen music
-     */
-    playStartMusic() {
-        if (this.world.audioManager) {
-            this.world.audioManager.playMusic('menu');
-        }
     }
 
     /**
@@ -66,12 +56,6 @@ class StartScreenManager {
      * Unlocks audio context and starts game
      */
     unlockAudioAndStart() {
-        if (this.world.audioManager) {
-            this.world.audioManager.unlockAudio();
-            setTimeout(() => {
-                this.world.audioManager.playMusic('menu');
-            }, 100);
-        }
         this.world.gameStateManager.initializeGame();
     }
 

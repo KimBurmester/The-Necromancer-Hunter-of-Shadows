@@ -67,8 +67,6 @@ class World {
   gameStateManager;
   /** @type {LevelBuilder} Level builder */
   levelBuilder;
-  /** @type {AudioManager} Audio manager */
-  audioManager;
 
   /**
    * Initializes world with canvas and keyboard
@@ -103,15 +101,6 @@ class World {
     this.screenManager = new ScreenManager(this);
     this.gameStateManager = new GameStateManager(this);
     this.levelBuilder = new LevelBuilder(this);
-    this.audioManager = new AudioManager();
-    this.loadAudioFiles();
-  }
-
-  /**
-   * Loads all audio files
-   */
-  loadAudioFiles() {
-    this.audioManager.loadSound('menu', 'TheNecromancer/audio/The Necromancer - Hunter of The Shadow.mp3');
   }
 
   /**

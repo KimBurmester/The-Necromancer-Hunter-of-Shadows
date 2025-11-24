@@ -34,10 +34,7 @@ function setupSoundButton() {
     const soundBtn = document.getElementById('toggleSound');
     if (soundBtn) {
         soundBtn.addEventListener('click', () => {
-            if (world && world.audioManager) {
-                const isMuted = world.audioManager.toggleMute();
-                updateSoundButtonState(isMuted);
-            }
+            // Audio functionality removed
         });
     }
 }
@@ -67,27 +64,13 @@ window.addEventListener('keydown', (event) => {
             keyboard.D = true;
             break;
         case 'KeyM':
-            if (world && world.audioManager) {
-                const isMuted = world.audioManager.toggleMute();
-                updateSoundButtonState(isMuted);
-            }
+            // Audio functionality removed
             break;
         case 'KeyF':
             fullscreen.toggleFullscreen();
             break;
     }
 });
-
-/**
- * Updates sound button visual state
- * @param {boolean} isMuted - Current mute state
- */
-function updateSoundButtonState(isMuted) {
-    const soundBtn = document.querySelector('.btn-sound');
-    if (soundBtn) {
-        soundBtn.style.opacity = isMuted ? '0.5' : '1';
-    }
-}
 
 /**
  * Handles keyboard key release events
