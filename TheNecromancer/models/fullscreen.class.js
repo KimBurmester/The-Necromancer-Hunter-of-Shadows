@@ -158,8 +158,31 @@ class Fullscreen {
      * @method
      */
     showLandscapeHint() {
+        const hint = this.createLandscapeHintElement();
+        document.body.appendChild(hint);
+        this.setupHintRemovalTimer(hint);
+        this.addLandscapeHintStyles();
+    }
+
+    /**
+     * Creates landscape hint DOM element
+     * @method
+     * @returns {HTMLElement} Hint element
+     */
+    createLandscapeHintElement() {
         const hint = document.createElement('div');
-        hint.style.cssText = `
+        hint.style.cssText = this.getLandscapeHintStyles();
+        hint.innerHTML = '🔄 Drehe dein Gerät für besseres Spielerlebnis';
+        return hint;
+    }
+
+    /**
+     * Returns CSS styles for landscape hint
+     * @method
+     * @returns {string} CSS text
+     */
+    getLandscapeHintStyles() {
+        return `
             position: fixed;
             bottom: 20px;
             left: 50%;
@@ -174,30 +197,49 @@ class Fullscreen {
             animation: slideUp 0.5s ease;
             font-family: 'cinzel', Arial, sans-serif;
         `;
-        hint.innerHTML = '🔄 Drehe dein Gerät für besseres Spielerlebnis';
-        
-        document.body.appendChild(hint);
-        
+    }
+
+    /**
+     * Sets up timer to remove hint after 5 seconds
+     * @method
+     * @param {HTMLElement} hint - Hint element
+     */
+    setupHintRemovalTimer(hint) {
         setTimeout(() => {
             hint.style.animation = 'slideDown 0.5s ease';
             setTimeout(() => hint.remove(), 500);
         }, 5000);
+    }
+
+    /**
+     * Adds keyframe animation styles for hint
+     * @method
+     */
+    addLandscapeHintStyles() {
+        if (document.getElementById('landscape-hint-styles')) return;
         
-        if (!document.getElementById('landscape-hint-styles')) {
-            const style = document.createElement('style');
-            style.id = 'landscape-hint-styles';
-            style.textContent = `
-                @keyframes slideUp {
-                    from { bottom: -100px; opacity: 0; }
-                    to { bottom: 20px; opacity: 1; }
-                }
-                @keyframes slideDown {
-                    from { bottom: 20px; opacity: 1; }
-                    to { bottom: -100px; opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
+        const style = document.createElement('style');
+        style.id = 'landscape-hint-styles';
+        style.textContent = this.getKeyframeStyles();
+        document.head.appendChild(style);
+    }
+
+    /**
+     * Returns keyframe animation CSS
+     * @method
+     * @returns {string} Keyframe CSS
+     */
+    getKeyframeStyles() {
+        return `
+            @keyframes slideUp {
+                from { bottom: -100px; opacity: 0; }
+                to { bottom: 20px; opacity: 1; }
+            }
+            @keyframes slideDown {
+                from { bottom: 20px; opacity: 1; }
+                to { bottom: -100px; opacity: 0; }
+            }
+        `;
     }
 
     /**

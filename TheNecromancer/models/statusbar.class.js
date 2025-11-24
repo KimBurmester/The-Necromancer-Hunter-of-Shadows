@@ -29,56 +29,16 @@ class Statusbar extends Model {
     }
 
     /**
-     * Draws rounded rectangle path on canvas
-     * @method
-     * @param {CanvasRenderingContext2D} ctx - Canvas rendering context
-     * @param {number} x - X coordinate
-     * @param {number} y - Y coordinate
-     * @param {number} width - Rectangle width
-     * @param {number} height - Rectangle height
-     * @param {number} radius - Corner radius
-     */
-    drawRoundedRect(ctx, x, y, width, height, radius) {
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + width - radius, y);
-        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-        ctx.lineTo(x + width, y + height - radius);
-        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-        ctx.lineTo(x + radius, y + height);
-        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-        ctx.lineTo(x, y + radius);
-        ctx.quadraticCurveTo(x, y, x + radius, y);
-        ctx.closePath();
-    }
-
-    /**
-     * Sets shadow properties for canvas context
-     * @method
-     * @param {CanvasRenderingContext2D} ctx - Canvas rendering context
-     * @param {string} color - Shadow color
-     * @param {number} blur - Shadow blur radius
-     * @param {number} offsetX - Horizontal shadow offset
-     * @param {number} offsetY - Vertical shadow offset
-     */
-    setShadow(ctx, color, blur, offsetX, offsetY) {
-        ctx.shadowColor = color;
-        ctx.shadowBlur = blur;
-        ctx.shadowOffsetX = offsetX;
-        ctx.shadowOffsetY = offsetY;
-    }
-
-    /**
      * Draws dark background with shadow
      * @method
      * @param {CanvasRenderingContext2D} ctx - Canvas rendering context
      */
     drawBackground(ctx) {
-        this.setShadow(ctx, 'rgba(0, 0, 0, 0.5)', 8, 3, 3);
-        this.drawRoundedRect(ctx, this.positionX, this.positionY, this.width, this.height, this.borderRadius);
+        UIHelpers.setShadow(ctx, 'rgba(0, 0, 0, 0.5)', 8, 3, 3);
+        UIHelpers.drawRoundedRect(ctx, this.positionX, this.positionY, this.width, this.height, this.borderRadius);
         ctx.fillStyle = '#2a0a0a';
         ctx.fill();
-        this.setShadow(ctx, 'transparent', 0, 0, 0);
+        UIHelpers.clearShadow(ctx);
     }
 
     /**
@@ -87,7 +47,7 @@ class Statusbar extends Model {
      * @param {CanvasRenderingContext2D} ctx - Canvas rendering context
      */
     drawInnerShadow(ctx) {
-        this.drawRoundedRect(ctx, this.positionX + 2, this.positionY + 2, this.width - 4, this.height - 4, this.borderRadius - 2);
+        UIHelpers.drawRoundedRect(ctx, this.positionX + 2, this.positionY + 2, this.width - 4, this.height - 4, this.borderRadius - 2);
         ctx.fillStyle = '#4a1a1a';
         ctx.fill();
     }
@@ -134,7 +94,7 @@ class Statusbar extends Model {
      */
     drawHealthBar(ctx, fillWidth) {
         ctx.save();
-        this.drawRoundedRect(ctx, this.positionX + 4, this.positionY + 4, this.width - 8, this.height - 8, this.borderRadius - 4);
+        UIHelpers.drawRoundedRect(ctx, this.positionX + 4, this.positionY + 4, this.width - 8, this.height - 8, this.borderRadius - 4);
         ctx.clip();
         ctx.fillStyle = this.createHealthGradient(ctx);
         ctx.fillRect(this.positionX + 4, this.positionY + 4, fillWidth, this.height - 8);
@@ -149,7 +109,7 @@ class Statusbar extends Model {
      * @param {CanvasRenderingContext2D} ctx - Canvas rendering context
      */
     drawBorder(ctx) {
-        this.drawRoundedRect(ctx, this.positionX, this.positionY, this.width, this.height, this.borderRadius);
+        UIHelpers.drawRoundedRect(ctx, this.positionX, this.positionY, this.width, this.height, this.borderRadius);
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 3;
         ctx.stroke();
@@ -161,13 +121,13 @@ class Statusbar extends Model {
      * @param {CanvasRenderingContext2D} ctx - Canvas rendering context
      */
     drawText(ctx) {
-        this.setShadow(ctx, 'rgba(0, 0, 0, 0.8)', 4, 2, 2);
+        UIHelpers.setShadow(ctx, 'rgba(0, 0, 0, 0.8)', 4, 2, 2);
         ctx.fillStyle = 'white';
         ctx.font = 'bold 18px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(`HP: ${Math.round(this.energy)}%`, this.positionX + this.width / 2, this.positionY + this.height / 2);
-        this.setShadow(ctx, 'transparent', 0, 0, 0);
+        UIHelpers.clearShadow(ctx);
     }
 
     /**

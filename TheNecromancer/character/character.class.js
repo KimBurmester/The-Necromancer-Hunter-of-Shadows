@@ -39,18 +39,35 @@ class Character extends Model {
     this.loadAllCharacterImages();
     this.setInitialPosition();
     this.applyGravity();
+    this.initializeCharacterStates();
+}  
+
+  /**
+   * Initializes character state flags
+   * @method
+   */
+  initializeCharacterStates() {
     this.isHurt = false;
     this.isDead = false;
     this.lastHit = 0;
     this.isAttacking = false;
     this.attackCooldown = false;
-}  
+  }
 
   /**
    * Loads all character animation image sequences
    * @method
    */
   loadAllCharacterImages() {
+    this.loadCharacterImagePaths();
+    this.cacheCharacterImages();
+  }
+
+  /**
+   * Retrieves all character animation paths
+   * @method
+   */
+  loadCharacterImagePaths() {
     this.Character_Walking = ImageTemplateManager.getCharacterImages("walking");
     this.Character_Idle = ImageTemplateManager.getCharacterImages("idle");
     this.Character_Idle_Blinking = ImageTemplateManager.getCharacterImages("idle_blinking");
@@ -59,6 +76,13 @@ class Character extends Model {
     this.Character_Hurt = ImageTemplateManager.getCharacterImages("hurting");
     this.Character_Dead = ImageTemplateManager.getCharacterImages("dying");
     this.Character_Slashing = ImageTemplateManager.getCharacterImages("slashing");
+  }
+
+  /**
+   * Caches all character images for rendering
+   * @method
+   */
+  cacheCharacterImages() {
     this.loadImages(this.Character_Walking);
     this.loadImages(this.Character_Idle);
     this.loadImages(this.Character_Idle_Blinking);
@@ -277,20 +301,41 @@ handleAttackAnimation() {
    * @method
    */
   handleJumpAnimation() {
+    this.updateFallingState();
+    this.playJumpStartAnimation();
+    this.playJumpEndAnimation();
+    this.checkLanding();
+  }
+
+  /**
+   * Updates falling state when character descends
+   * @method
+   */
+  updateFallingState() {
     if (this.speedY < 0 && !this.isFalling) {
       this.isFalling = true;
       this.currentAnimationState = "jumping_end";
     }
+  }
 
+  /**
+   * Plays jump start animation if active
+   * @method
+   */
+  playJumpStartAnimation() {
     if (this.currentAnimationState === "jumping_start") {
       this.playAnimation(this.Character_Jump_Start, this.getJumpStartFrame());
     }
+  }
 
+  /**
+   * Plays jump end animation if active
+   * @method
+   */
+  playJumpEndAnimation() {
     if (this.currentAnimationState === "jumping_end") {
       this.playAnimation(this.Character_Jump_End, this.getJumpEndFrame());
     }
-
-    this.checkLanding();
   }
 
   /**
