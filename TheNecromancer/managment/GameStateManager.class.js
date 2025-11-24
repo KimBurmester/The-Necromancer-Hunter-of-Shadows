@@ -17,10 +17,19 @@ class GameStateManager {
     initializeGame() {
         if (this.world.gameStarted) return;
         
+        this.world.setWorld();
         this.setGameStarted();
+        this.startCharacterAnimation();
         this.startCollisionDetection();
         this.hideMenuElements();
         this.showTouchControls();
+    }
+
+    /**
+     * Starts character animation loop
+     */
+    startCharacterAnimation() {
+        this.world.character.startAnimation();
     }
 
     /**
