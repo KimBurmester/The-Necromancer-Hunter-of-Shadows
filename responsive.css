@@ -1,6 +1,8 @@
-/* Responsive Media Queries */
-
-/* Footer Responsive */
+/**
+ * Footer Responsive - Tablet Breakpoint
+ * 
+ * At 750px and below, reduces footer font size and stacks footer elements vertically.
+ */
 @media (max-width: 750px) {
     .footer {
         font-size: 16px;
@@ -12,6 +14,12 @@
     }
 }
 
+/**
+ * Mobile Breakpoint - 480px
+ * 
+ * Optimizes layout and touch controls for mobile devices.
+ * Adjusts button sizes and footer typography.
+ */
 @media (max-width: 480px) {
     .footer {
         font-size: 14px;
@@ -41,6 +49,11 @@
     }
 }
 
+/**
+ * Small Mobile Breakpoint - 380px
+ * 
+ * Further reduces font sizes and centers footer text for very small screens.
+ */
 @media (max-width: 380px) {
     .footer {
         font-size: 12px;
@@ -51,6 +64,11 @@
     }
 }
 
+/**
+ * Extra Small Mobile Breakpoint - 320px
+ * 
+ * Minimum supported screen width. Minimizes footer size.
+ */
 @media (max-width: 320px) {
     .footer {
         font-size: 10px;
@@ -58,6 +76,12 @@
     }
 }
 
+/**
+ * Tablet/Small Desktop Breakpoint - 1260px
+ * 
+ * Primary responsive breakpoint where sidebars are hidden and touch controls appear.
+ * Canvas expands to full width and layout switches to vertical stacking.
+ */
 @media (max-width: 1260px) {
     body {
         overflow-x: hidden;
@@ -97,7 +121,12 @@
     }
 }
 
-/* Landscape Mode */
+/**
+ * Landscape Mode - Low Height
+ * 
+ * Adjusts touch controls for landscape orientation with height below 500px.
+ * Reduces button sizes and gaps to fit more content vertically.
+ */
 @media (max-height: 500px) and (orientation: landscape) {
     .controller-left,
     .controller-right {
@@ -131,7 +160,13 @@
     }
 }
 
-/* Unified Landscape Mode (under 1260px width or under 1150px height) */
+/**
+ * Unified Landscape Mode - Fullscreen Game
+ * 
+ * When in landscape with width < 1260px or height < 1150px, enters fullscreen mode.
+ * Hides all UI elements except canvas and touch controls. Canvas fills entire viewport.
+ * Touch controls are positioned absolutely within viewport.
+ */
 @media (max-width: 1260px) and (orientation: landscape),
        (max-height: 1150px) and (orientation: landscape) {
     body {
@@ -257,7 +292,13 @@
     }
 }
 
-/* Portrait Mode under 500px */
+/**
+ * Portrait Mode - Mobile Devices
+ * 
+ * Optimizes layout for portrait orientation on mobile devices below 500px width.
+ * Touch controls are displayed and positioned relative to canvas.
+ * Canvas takes full width with auto height.
+ */
 @media (max-width: 500px) and (orientation: portrait) {
     .layer {
         width: 100%;
@@ -341,6 +382,12 @@
     }
 }
 
+/**
+ * Small Landscape Mode - Very Small Screens
+ * 
+ * Special handling for very small landscape screens (width < 650px, height < 400px).
+ * Enters full viewport mode similar to unified landscape but with stricter constraints.
+ */
 @media (max-width: 650px) and (max-height: 400px) and (orientation: landscape) {
     body {
         overflow: hidden;

@@ -1,5 +1,11 @@
-/* Canvas and Sidebar Styles */
-
+/**
+ * Game Canvas Element
+ * 
+ * Main canvas element for the game rendering. Features:
+ * - Transparent background to show browser background through
+ * - Top and bottom borders only (left/right seamlessly connect with sidebars)
+ * - Drop shadow for depth effect
+ */
 canvas{
     background-color: transparent;
     border: 2px solid rgb(50, 50, 50);
@@ -8,6 +14,12 @@ canvas{
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
+/**
+ * Fullscreen Canvas Mode
+ * 
+ * When canvas enters fullscreen mode, it takes up the entire viewport
+ * with black background and proper aspect ratio scaling.
+ */
 #canvas.fullscreen {
     width: 100vw !important;
     height: 100vh !important;
@@ -15,6 +27,16 @@ canvas{
     background: #000;
 }
 
+/**
+ * Sidebar Container
+ * 
+ * Vertical sidebar panel displayed on left and right of the canvas.
+ * Contains game controls and information. Features:
+ * - Fixed dimensions (250x484px) to match canvas height
+ * - Dark blue background matching game theme
+ * - Flexbox column layout with 10px gaps
+ * - Rounded corners and shadow for depth
+ */
 .sidebar{
     width: 250px;
     height: 484px;
@@ -29,16 +51,34 @@ canvas{
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
+/**
+ * Left Sidebar Variant
+ * 
+ * Specific styling for left sidebar - rounded corners on left side only,
+ * no right border to seamlessly connect with canvas.
+ */
 .left-sidebar{
     border-radius: 8px 0 0 8px;
     border-right: none;
 }
 
+/**
+ * Right Sidebar Variant
+ * 
+ * Specific styling for right sidebar - rounded corners on right side only,
+ * no left border to seamlessly connect with canvas.
+ */
 .right-sidebar{
     border-radius: 0 8px 8px 0;
     border-left: none;
 }
 
+/**
+ * Sidebar Headings
+ * 
+ * Section headings within sidebars. Small, centered, gray text with
+ * normal font weight for subtle section separation.
+ */
 .sidebar h3{
     margin: 0 0 10px 0;
     font-size: 14px;
@@ -47,6 +87,15 @@ canvas{
     font-weight: normal;
 }
 
+/**
+ * Sidebar Button
+ * 
+ * Interactive buttons within sidebars for game actions. Features:
+ * - Semi-transparent teal background
+ * - White text with subtle border
+ * - Word wrapping for longer button labels
+ * - Hover and active states for interaction feedback
+ */
 .sidebar-btn{
     background-color: rgba(10, 142, 142, 0.3);
     color: white;
@@ -60,6 +109,13 @@ canvas{
     line-height: 1.2;
 }
 
+/**
+ * Control Display Element
+ * 
+ * Non-interactive display element showing current control mappings.
+ * Similar styling to sidebar-btn but with different background color
+ * and transition effect.
+ */
 .control{
     background-color: rgba(9, 148, 170, 0.48);
     color: white;
@@ -73,14 +129,31 @@ canvas{
     line-height: 1.2;
 }
 
+/**
+ * Sidebar Button Hover State
+ * 
+ * Visual feedback when hovering over sidebar buttons.
+ * Lightens the background with white overlay.
+ */
 .sidebar-btn:hover{
     background-color: rgba(255, 255, 255, 0.2);
 }
 
+/**
+ * Sidebar Button Active State
+ * 
+ * Visual feedback when clicking/pressing sidebar buttons.
+ * Slightly more opaque than hover state.
+ */
 .sidebar-btn:active{
     background-color: rgba(255, 255, 255, 0.3);
 }
 
+/**
+ * Global Button Cursor
+ * 
+ * Ensures all button elements display pointer cursor on hover.
+ */
 button{
     cursor:pointer;
 }

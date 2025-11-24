@@ -1,4 +1,14 @@
-/* Main Stylesheet - Imports all modular CSS files */
+/**
+ * Main Stylesheet - Module Imports
+ * 
+ * Central stylesheet that imports all modular CSS files for the game.
+ * Files are imported in order of specificity:
+ * 1. layout.css - Base layout, fonts, body, and container styles
+ * 2. game-canvas.css - Canvas element and sidebar components
+ * 3. touch-controls.css - Mobile/tablet touch control interface
+ * 4. overlay-popup.css - Popup overlays and help content
+ * 5. responsive.css - Media queries for responsive design
+ */
 
 @import url(./layout.css);
 @import url(./game-canvas.css);

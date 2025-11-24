@@ -1,10 +1,24 @@
-/* Layout Base Styles */
-
+/**
+ * Custom Font - Cinzel
+ * 
+ * Loads the Cinzel font family for gothic/medieval aesthetic.
+ * Used throughout the game interface for thematic consistency.
+ */
 @font-face{
     font-family: 'cinzel';
     src:url('/TheNecromancer/fonts/Cinzel/static/Cinzel-Regular.ttf') format('truetype');
 }
 
+/**
+ * Body Element
+ * 
+ * Root layout container for the entire page. Features:
+ * - Flexbox centering for all content
+ * - Full viewport height with centered alignment
+ * - Fixed background image covering entire browser
+ * - Cinzel font family for gothic theme
+ * - White text color as default
+ */
 body{
     display: flex;
     color: white;
@@ -23,6 +37,13 @@ body{
     font-family: 'cinzel', Arial, Helvetica, sans-serif;
 }
 
+/**
+ * Main Layout Layer
+ * 
+ * Primary content container that holds all game elements.
+ * Constrains maximum width to 1150px and centers all child elements
+ * in a vertical column layout.
+ */
 .layer{
     display: flex;
     flex-direction: column;
@@ -32,6 +53,13 @@ body{
     max-width: 1150px;
 }
 
+/**
+ * Game Container
+ * 
+ * Horizontal container for the canvas and sidebars.
+ * Uses flexbox with no gap to create seamless borders between elements.
+ * Positioned relatively to allow absolute positioning of child elements.
+ */
 .game-container{
     display: flex;
     align-items: flex-start;
@@ -39,18 +67,36 @@ body{
     position: relative;
 }
 
+/**
+ * Game Title
+ * 
+ * Main heading/title element displayed above the game canvas.
+ * Center-aligned with compact line spacing and bottom margin.
+ */
 .title{
     text-align: center;
     line-height: 1.2;
     margin: 0 0 20px 0;
 }
 
+/**
+ * Global Link Styling
+ * 
+ * Default styling for all links throughout the page.
+ * Gray color with no underline by default, small margin for spacing.
+ */
 a{
     color: grey;
     text-decoration: none;
     margin: 5px;
 }
 
+/**
+ * Footer Container
+ * 
+ * Bottom section of the page containing copyright and links.
+ * Full width with vertical flex layout and spacing between elements.
+ */
 .footer{
     width: 100%;
     font-size: 18px;
@@ -60,6 +106,12 @@ a{
     margin-top: 20px;
 }
 
+/**
+ * Footer Content Container
+ * 
+ * Inner container for footer elements with space-between layout
+ * to separate copyright text from links.
+ */
 .footer-container{
     display: flex;
     justify-content: space-between;
@@ -67,6 +119,11 @@ a{
     width: 100%;
 }
 
+/**
+ * Footer Link Hover State
+ * 
+ * Adds underline to footer links on hover for visual feedback.
+ */
 .footer-link a:hover,
 a.footer-link:hover{
     text-decoration: underline;

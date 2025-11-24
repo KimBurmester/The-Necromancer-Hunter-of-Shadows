@@ -1,14 +1,30 @@
+/**
+ * Custom Font - Cinzel
+ * 
+ * Loads the Cinzel font for the impressum page to match the main game theme.
+ */
 @font-face{
     font-family: 'cinzel';
     src:url('/TheNecromancer/fonts/Cinzel/static/Cinzel-Regular.ttf') format('truetype');
 }
 
+/**
+ * Global Reset
+ * 
+ * Resets all default margins, paddings, and applies border-box sizing.
+ */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/**
+ * Body Element - Impressum Page
+ * 
+ * Full-page layout with centered content and game-matching background.
+ * Uses flexbox for perfect centering and includes padding for mobile spacing.
+ */
 body {
     display: flex;
     justify-content: center;
@@ -24,6 +40,12 @@ body {
     padding: 20px;
 }
 
+/**
+ * Impressum Container
+ * 
+ * Outer wrapper that constrains the impressum box to maximum width
+ * and ensures proper centering on larger screens.
+ */
 .impressum-container {
     width: 100%;
     max-width: 800px;
@@ -32,6 +54,15 @@ body {
     align-items: center;
 }
 
+/**
+ * Impressum Content Box
+ * 
+ * Main content container with sidebar-matching design. Features:
+ * - Dark blue background matching game sidebars
+ * - Rounded corners and shadow for depth
+ * - Scrollable content when exceeding 90% viewport height
+ * - Styled scrollbar for visual consistency
+ */
 .impressum-box {
     width: 100%;
     background-color: rgb(15, 56, 66);
@@ -43,6 +74,12 @@ body {
     overflow-y: auto;
 }
 
+/**
+ * Main Heading
+ * 
+ * Large, centered title for the impressum page with teal color
+ * and text shadow for emphasis.
+ */
 .impressum-box h1 {
     font-size: 36px;
     text-align: center;
@@ -51,10 +88,21 @@ body {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
+/**
+ * Content Container
+ * 
+ * Wrapper for all impressum text content with comfortable line-height.
+ */
 .impressum-content {
     line-height: 1.6;
 }
 
+/**
+ * Section Headings (h2)
+ * 
+ * Primary section headings within impressum content. Teal color
+ * matching the main heading with spacing above and below.
+ */
 .impressum-content h2 {
     font-size: 24px;
     margin-top: 25px;
@@ -62,6 +110,11 @@ body {
     color: #0a8e8e;
 }
 
+/**
+ * Subsection Headings (h3)
+ * 
+ * Secondary headings in lighter teal shade for visual hierarchy.
+ */
 .impressum-content h3 {
     font-size: 18px;
     margin-top: 20px;
@@ -69,21 +122,43 @@ body {
     color: #48afc7;
 }
 
+/**
+ * Paragraph Text
+ * 
+ * Body text for impressum content in light gray with bottom margin
+ * for spacing between paragraphs.
+ */
 .impressum-content p {
     margin-bottom: 15px;
     font-size: 16px;
     color: #e3e3e3;
 }
 
+/**
+ * Content Links
+ * 
+ * Links within impressum content styled in light teal.
+ */
 .impressum-content a {
     color: #48afc7;
     text-decoration: none;
 }
 
+/**
+ * Content Links Hover State
+ * 
+ * Adds underline on hover for interactive feedback.
+ */
 .impressum-content a:hover {
     text-decoration: underline;
 }
 
+/**
+ * Impressum Footer Section
+ * 
+ * Bottom section containing the back button. Separated from content
+ * with border and spacing.
+ */
 .impressum-footer {
     margin-top: 30px;
     text-align: center;
@@ -91,6 +166,11 @@ body {
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/**
+ * Back to Game Button
+ * 
+ * Navigation button matching sidebar button styling. Returns user to main game page.
+ */
 .back-btn {
     display: inline-block;
     background-color: rgba(10, 142, 142, 0.3);
@@ -104,15 +184,29 @@ body {
     transition: background-color 0.3s;
 }
 
+/**
+ * Back Button Hover State
+ * 
+ * Lightens background on hover for visual feedback.
+ */
 .back-btn:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
+/**
+ * Back Button Active State
+ * 
+ * Slightly more opaque when clicked/pressed.
+ */
 .back-btn:active {
     background-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Scrollbar Styling */
+/**
+ * Scrollbar Track
+ * 
+ * Dark semi-transparent background for scrollbar track.
+ */
 .impressum-box::-webkit-scrollbar {
     width: 10px;
 }
@@ -122,16 +216,30 @@ body {
     border-radius: 5px;
 }
 
+/**
+ * Scrollbar Thumb
+ * 
+ * Teal-colored scrollbar handle matching game theme.
+ */
 .impressum-box::-webkit-scrollbar-thumb {
     background: rgba(10, 142, 142, 0.5);
     border-radius: 5px;
 }
 
+/**
+ * Scrollbar Thumb Hover State
+ * 
+ * Brightens scrollbar handle on hover.
+ */
 .impressum-box::-webkit-scrollbar-thumb:hover {
     background: rgba(10, 142, 142, 0.7);
 }
 
-/* Responsive */
+/**
+ * Tablet/Mobile Responsive - 768px
+ * 
+ * Reduces padding and font sizes for impressum page on smaller screens.
+ */
 @media (max-width: 768px) {
     .impressum-box {
         padding: 20px;

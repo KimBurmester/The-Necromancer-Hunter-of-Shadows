@@ -1,5 +1,10 @@
-/* Touch Controls for Mobile/Tablet */
-
+/**
+ * Touch Controls Container
+ * 
+ * Main container for all touch control elements. Hidden by default and displayed
+ * via media queries when screen size is below 1260px. Covers the entire canvas
+ * area with pointer-events disabled on the container itself to allow canvas interaction.
+ */
 .touch-controls {
     display: none;
     position: absolute;
@@ -11,6 +16,13 @@
     z-index: 1000;
 }
 
+/**
+ * Controller Containers (Left & Right)
+ * 
+ * Container elements for grouping touch buttons. Positioned at the bottom of the screen.
+ * - controller-left: Left side movement buttons (bottom-left, 2% from edges)
+ * - controller-right: Right side action buttons (bottom-right, column-reverse layout)
+ */
 .controller-left,
 .controller-right {
     position: absolute;
@@ -20,15 +32,32 @@
     pointer-events: all;
 }
 
+/**
+ * Left Controller Position
+ * 
+ * Positions the left controller (movement buttons) at the bottom-left corner.
+ */
 .controller-left {
     left: 2%;
 }
 
+/**
+ * Right Controller Position
+ * 
+ * Positions the right controller (action buttons) at the bottom-right corner.
+ * Uses column-reverse to stack buttons vertically with jump on top.
+ */
 .controller-right {
     right: 2%;
     flex-direction: column-reverse;
 }
 
+/**
+ * Menu Controller
+ * 
+ * Container for utility buttons (help, sound, fullscreen) positioned at the top-right
+ * corner of the screen. Smaller button size compared to main controls.
+ */
 .controller-menu {
     position: absolute;
     top: 2%;
@@ -38,6 +67,15 @@
     pointer-events: all;
 }
 
+/**
+ * Touch Button Base Styles
+ * 
+ * Standard styling for all touch control buttons. Features:
+ * - 60x60px circular buttons
+ * - Semi-transparent dark blue background with backdrop blur
+ * - White border with 30% opacity
+ * - Smooth transitions and shadow effects
+ */
 .touch-btn {
     width: 60px;
     height: 60px;
@@ -53,6 +91,12 @@
     backdrop-filter: blur(10px);
 }
 
+/**
+ * Touch Button Icon Styles
+ * 
+ * Styling for SVG and image icons within touch buttons.
+ * Icons are 30x30px with light gray fill and reduced opacity.
+ */
 .touch-btn img,
 .touch-btn svg {
     width: 30px;
@@ -63,6 +107,15 @@
     transition: all 0.2s ease;
 }
 
+/**
+ * Touch Button Active State
+ * 
+ * Visual feedback when button is pressed or active. Features:
+ * - Scale down animation (0.9)
+ * - Teal background highlight
+ * - Brighter border
+ * - Enhanced glow shadow
+ */
 .touch-btn:active,
 .touch-btn.pressed {
     transform: scale(0.9);
@@ -71,6 +124,12 @@
     box-shadow: 0 2px 10px rgba(10, 142, 142, 0.7);
 }
 
+/**
+ * Touch Button Icon Active State
+ * 
+ * Icon transformation when button is pressed - scales up slightly and
+ * becomes fully opaque for better visibility.
+ */
 .touch-btn:active img,
 .touch-btn:active svg,
 .touch-btn.pressed img,
@@ -79,33 +138,62 @@
     opacity: 1;
 }
 
-/* Menu Buttons smaller */
+/**
+ * Menu Button Size Override
+ * 
+ * Smaller button size (40x40px) for menu/utility buttons at the top.
+ */
 .controller-menu .touch-btn {
     width: 40px;
     height: 40px;
 }
 
+/**
+ * Menu Button Icon Size Override
+ * 
+ * Proportionally smaller icons (20x20px) for menu buttons.
+ */
 .controller-menu .touch-btn img,
 .controller-menu .touch-btn svg {
     width: 20px;
     height: 20px;
 }
 
-/* Special Button Styles */
+/**
+ * Jump Button Special Style
+ * 
+ * Custom background color (light teal) to visually distinguish
+ * the jump action button from other controls.
+ */
 .btn-jump {
     background: rgba(48, 175, 207, 0.8);
 }
 
+/**
+ * Attack Button Special Style
+ * 
+ * Uses standard dark blue background to differentiate from jump button.
+ */
 .btn-attack {
     background: rgba(15, 56, 66, 0.8);
 }
 
+/**
+ * Jump Button Active State
+ * 
+ * Maintains light teal background when pressed with enhanced shadow.
+ */
 .btn-jump:active,
 .btn-jump.pressed {
     background: rgba(48, 175, 207, 0.8);
     box-shadow: 0 2px 10px rgba(15, 56, 66, 0.8);
 }
 
+/**
+ * Attack Button Active State
+ * 
+ * Changes to light teal background when pressed to match jump button interaction.
+ */
 .btn-attack:active,
 .btn-attack.pressed {
     background: rgba(48, 175, 207, 0.8);

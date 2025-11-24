@@ -1,5 +1,13 @@
-/* Overlay Popup and Help Content */
-
+/**
+ * Overlay Popup Container
+ * 
+ * Full-screen overlay that darkens the background and displays popup content.
+ * Hidden by default, shown with .show class. Features:
+ * - Fixed position covering entire viewport
+ * - Dark semi-transparent background with blur effect
+ * - Highest z-index (10000) to appear above all content
+ * - Fade-in animation on appearance
+ */
 .overlay-popup {
     display: none;
     position: fixed;
@@ -15,10 +23,20 @@
     animation: fadeIn 0.3s ease;
 }
 
+/**
+ * Overlay Popup Visible State
+ * 
+ * When active, displays the overlay as a flex container for centering content.
+ */
 .overlay-popup.show {
     display: flex;
 }
 
+/**
+ * Fade In Animation
+ * 
+ * Smooth opacity transition for overlay appearance.
+ */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -28,6 +46,16 @@
     }
 }
 
+/**
+ * Popup Content Box
+ * 
+ * Main content container within the overlay. Features:
+ * - Gradient background matching game theme
+ * - Teal border with rounded corners
+ * - Scrollable when content exceeds max-height (80vh)
+ * - Slide-in animation from top
+ * - Large shadow for depth
+ */
 .popup-content {
     background: linear-gradient(135deg, rgb(15, 56, 66) 0%, rgb(8, 31, 37) 100%);
     border: 3px solid rgba(10, 142, 142, 0.6);
@@ -42,6 +70,11 @@
     animation: slideIn 0.3s ease;
 }
 
+/**
+ * Slide In Animation
+ * 
+ * Content slides down from above while fading in.
+ */
 @keyframes slideIn {
     from {
         transform: translateY(-50px);
@@ -53,6 +86,15 @@
     }
 }
 
+/**
+ * Popup Close Button
+ * 
+ * Circular close button positioned in top-right corner. Features:
+ * - Red background (danger color)
+ * - Rotates 90 degrees on hover
+ * - Fixed dimensions (35x35px)
+ * - Smooth transitions
+ */
 .popup-close {
     position: absolute;
     top: 15px;
@@ -70,11 +112,22 @@
     color: white;
 }
 
+/**
+ * Close Button Hover State
+ * 
+ * Brightens background and rotates button for interactive feedback.
+ */
 .popup-close:hover {
     background: rgba(244, 67, 54, 1);
     transform: rotate(90deg);
 }
 
+/**
+ * Popup Heading
+ * 
+ * Main title within popup content. Large, centered, teal-colored text
+ * using the Cinzel font for thematic consistency.
+ */
 .popup-content h2 {
     margin: 0 0 20px 0;
     font-size: 28px;
@@ -83,12 +136,23 @@
     font-family: 'cinzel', Arial, sans-serif;
 }
 
+/**
+ * Help Content Container
+ * 
+ * Vertical flex container for help sections with spacing between elements.
+ */
 .help-content {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
+/**
+ * Help Section
+ * 
+ * Individual help topic container with dark background and teal border.
+ * Rounded corners and padding for visual separation.
+ */
 .help-section {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
@@ -96,6 +160,11 @@
     border: 1px solid rgba(10, 142, 142, 0.3);
 }
 
+/**
+ * Help Section Heading
+ * 
+ * Section title within help content. Teal color with normal font weight.
+ */
 .help-section h3 {
     margin: 0 0 10px 0;
     font-size: 18px;
@@ -103,6 +172,12 @@
     font-weight: normal;
 }
 
+/**
+ * Help Item
+ * 
+ * Individual help entry with icon and text. Horizontal flex layout
+ * with gap between icon and description.
+ */
 .help-item {
     display: flex;
     align-items: center;
@@ -112,22 +187,43 @@
     color: #e3e3e3;
 }
 
+/**
+ * Help Icon
+ * 
+ * Icon/emoji element within help items. Fixed width for alignment
+ * and centered text.
+ */
 .help-icon {
     font-size: 24px;
     min-width: 35px;
     text-align: center;
 }
 
+/**
+ * Help Tips Container
+ * 
+ * Container for tip/hint text with increased line-height for readability.
+ */
 .help-tips {
     font-size: 14px;
     color: #e3e3e3;
     line-height: 1.8;
 }
 
+/**
+ * Help Tips Paragraphs
+ * 
+ * Individual tip paragraphs with minimal vertical spacing.
+ */
 .help-tips p {
     margin: 5px 0;
 }
 
+/**
+ * Popup Mobile Responsive
+ * 
+ * Adjusts popup sizing and typography for smaller screens (below 480px).
+ */
 @media (max-width: 480px) {
     .popup-content {
         padding: 20px;
