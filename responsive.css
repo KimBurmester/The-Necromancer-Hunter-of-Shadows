@@ -94,7 +94,6 @@
 
     .footer {
         font-size: 12px;
-        margin-top: 220px; /* Space for Controller */
     }
 }
 
@@ -201,6 +200,7 @@
 
     .controller-right {
         right: 2% !important;
+        flex-direction: column-reverse !important;
     }
 
     .touch-btn {
@@ -282,12 +282,6 @@
     
     /* Touch-Controls for Portrait */
     .touch-controls {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        pointer-events: none !important;
         display: flex !important;
     }
 
@@ -306,6 +300,7 @@
 
     .controller-right {
         right: 2% !important;
+        flex-direction: column-reverse !important;
     }
 
     .touch-btn {
