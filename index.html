@@ -5,36 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="TheNecromancer/img/favicon/necromancerFavicon.png">
     <link rel="stylesheet" href="style.css"> 
-    <!-- Core Models -->
     <script src="TheNecromancer/models/models.class.js"></script>
     <script src="TheNecromancer/models/keyboard.class.js"></script>
     <script src="TheNecromancer/models/touchController.class.js"></script>
-    
-    <!-- Image Templates -->
     <script src="TheNecromancer/character/characterImageTemplates.js"></script>
     <script src="TheNecromancer/enemy/enemyImageTemplates.js"></script>
     <script src="TheNecromancer/endboss/endbossImageTemplates.js"></script>
     <script src="TheNecromancer/background/backgroundImageTemplates.js"></script>
     <script src="TheNecromancer/managment/ImageTemplateManager.js"></script>
-    
-    <!-- UI Components -->
     <script src="TheNecromancer/models/statusbar.class.js"></script>
     <script src="TheNecromancer/models/diamond.class.js"></script>
-    
-    <!-- Background Classes -->
     <script src="TheNecromancer/background/backgroundLayers.class.js"></script>
-    
-    <!-- Game Entities -->
     <script src="TheNecromancer/character/character.class.js"></script>
     <script src="TheNecromancer/enemy/enemy.class.js"></script>
     <script src="TheNecromancer/endboss/endboss.class.js"></script>
     <script src="TheNecromancer/models/looting.class.js"></script>
-    
-    <!-- Level System -->
     <script src="TheNecromancer/models/level.class.js"></script>
     <script src="TheNecromancer/level/level_1.js"></script>
-    
-    <!-- Helpers & Managers -->
     <script src="TheNecromancer/UIHelpers/UIHelpers.class.js"></script>
     <script src="TheNecromancer/managment/CollisionManager.class.js"></script>
     <script src="TheNecromancer/managment/RenderManager.class.js"></script>
@@ -45,16 +32,11 @@
     <script src="TheNecromancer/managment/GameStateManager.class.js"></script>
     <script src="TheNecromancer/managment/LevelBuilder.class.js"></script>
     <script src="TheNecromancer/managment/CharacterStateManager.class.js"></script>
-    
-    <!-- Animation Classes -->
     <script src="TheNecromancer/animation/CharacterAnimation.class.js"></script>
     <script src="TheNecromancer/animation/EndbossAnimation.class.js"></script>
-    
-    <!-- World & Game Controller -->
     <script src="TheNecromancer/models/world.class.js"></script>
     <script src="TheNecromancer/script/game.js"></script>
     <script src="TheNecromancer/models/fullscreen.class.js"></script>
-    
     <title>Nekromant: Jäger der Schatten</title>
 </head>
 <body onload="init()">
@@ -72,16 +54,13 @@
         </canvas>
         
         <div class="sidebar right-sidebar">
-            <h3>Optionen</h3>
+            <h3>Steuerung</h3>
             <div class="control">Pfeil Links - Zurück</div>
             <div class="control">Pfeil Rechts - Vorwärts</div>
             <div class="control">Space - Springen</div>
             <div class="control">Taste D - Kämpfen</div>
         </div>
-
-        <!-- ✅ Touch-Controller für Mobile/Tablet -->
         <div id="touch-controls" class="touch-controls">
-            <!-- Bewegungs-Controller Links -->
             <div class="controller-left">
                 <button class="touch-btn btn-left" data-key="LEFT">
                     <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e3e3e3"><path d="M400-80 0-480l400-400 61 61.67L122.67-480 461-141.67 400-80Z"/></svg>
@@ -90,8 +69,6 @@
                     <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e3e3e3"><path d="m309.67-81.33-61-61.67L587-481.33 248.67-819.67l61-61.66 400 400-400 400Z"/></svg>
                 </button>
             </div>
-
-            <!-- Action-Controller Rechts -->
             <div class="controller-right">
                 <button class="touch-btn btn-jump" data-key="SPACE">
                     <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e3e3e3"><path d="M446.67-160v-513l-240 240L160-480l320-320 320 320-46.67 47-240-240v513h-66.66Z"/></svg>
@@ -100,8 +77,6 @@
                     <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e3e3e3"><path d="M480-329.33 630.67-480 480-630.67 433.33-584 504-513.33H326.67v66.66H504L433.33-376 480-329.33ZM480-80q-82.33 0-155.33-31.5-73-31.5-127.34-85.83Q143-251.67 111.5-324.67T80-480q0-83 31.5-156t85.83-127q54.34-54 127.34-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 82.33-31.5 155.33-31.5 73-85.5 127.34Q709-143 636-111.5T480-80Zm0-66.67q139.33 0 236.33-97.33t97-236q0-139.33-97-236.33t-236.33-97q-138.67 0-236 97-97.33 97-97.33 236.33 0 138.67 97.33 236 97.33 97.33 236 97.33ZM480-480Z"/></svg>
                 </button>
             </div>
-
-            <!-- Menü-Controller Oben -->
             <div class="controller-menu">
                 <button class="touch-btn btn-help" data-action="help">
                     <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e3e3e3"><path d="M448.67-280h66.66v-240h-66.66v240Zm31.32-316q15.01 0 25.18-9.97 10.16-9.96 10.16-24.7 0-15.3-10.15-25.65-10.16-10.35-25.17-10.35-15.01 0-25.18 10.35-10.16 10.35-10.16 25.65 0 14.74 10.15 24.7 10.16 9.97 25.17 9.97Zm.19 516q-82.83 0-155.67-31.5-72.84-31.5-127.18-85.83Q143-251.67 111.5-324.56T80-480.33q0-82.88 31.5-155.78Q143-709 197.33-763q54.34-54 127.23-85.5T480.33-880q82.88 0 155.78 31.5Q709-817 763-763t85.5 127Q880-563 880-480.18q0 82.83-31.5 155.67Q817-251.67 763-197.46q-54 54.21-127 85.84Q563-80 480.18-80Zm.15-66.67q139 0 236-97.33t97-236.33q0-139-96.87-236-96.88-97-236.46-97-138.67 0-236 96.87-97.33 96.88-97.33 236.46 0 138.67 97.33 236 97.33 97.33 236.33 97.33ZM480-480Z"/></svg>
@@ -115,8 +90,6 @@
             </div>
         </div>
     </div>
-
-    <!-- ✅ Overlay-Popup für Hilfe -->
     <div id="help-overlay" class="overlay-popup">
         <div class="popup-content">
             <button class="popup-close" id="close-help">
@@ -160,7 +133,6 @@
             </div>
         </div>
     </div>
-
     <div class="footer">
         <div class="footer-container">
             <div class="footer-text">© 2024 Kim P. Burmester. All rights reserved.</div>
@@ -169,10 +141,8 @@
                 <a href="impressum.html">Impressum</a>
             </div>
         </div>
-
         <div class="footer-text">All graphics from <a class="footer-link" href="https://craftpix.net/">www.craftpix.net</a><br>All sounds from <a class="footer-link" href="https://mixkit.co/">www.mixkit.co</a></div>
     </div>
-    
 </div>
 </body>
 </html>
