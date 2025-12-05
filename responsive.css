@@ -170,8 +170,13 @@
  */
 @media (max-width: 1260px) and (orientation: landscape),
        (max-height: 1150px) and (orientation: landscape) {
-    body {
+    body, canvas, .touch-btn {
         overflow: hidden;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
 
     .layer {

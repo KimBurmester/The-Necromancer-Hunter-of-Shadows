@@ -25,6 +25,7 @@ function init(){
     touchController = new TouchController(keyboard, world);
     setupSoundButton();
     checkLandscapeFullscreen();
+    disableContextMenuInLandscape();
 }
 
 /**
@@ -36,6 +37,23 @@ function setupSoundButton() {
         soundBtn.addEventListener('click', () => {
             // Audio functionality removed
         });
+    }
+}
+
+/**
+ * Checks if fullscreen hint should be shown on mobile landscape
+ * @function
+ */
+function checkLandscapeFullscreen() {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isLandscape = window.matchMedia('(orientation: landscape)').matches;
+    const isSmallScreen = window.innerWidth <= 900 && window.innerHeight <= 500;
+    
+    if (isMobile && isLandscape && isSmallScreen) {
+        const fullscreenBtn = document.querySelector('.btn-fullscreen');
+        if (fullscreenBtn && !fullscreen.isFullscreen) {
+            fullscreenBtn.style.animation = 'pulse 2s infinite';
+        }
     }
 }
 
@@ -100,22 +118,69 @@ window.addEventListener('keyup', (event) => {
 });
 
 /**
- * Checks if fullscreen hint should be shown on mobile landscape
+ * Disables context menu in landscape mode
  * @function
  */
-function checkLandscapeFullscreen() {
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const isLandscape = window.matchMedia('(orientation: landscape)').matches;
-    const isSmallScreen = window.innerWidth <= 900 && window.innerHeight <= 500;
-    
-    if (isMobile && isLandscape && isSmallScreen) {
-        const fullscreenBtn = document.querySelector('.btn-fullscreen');
-        if (fullscreenBtn && !fullscreen.isFullscreen) {
-            fullscreenBtn.style.animation = 'pulse 2s infinite';
+function disableContextMenuInLandscape() {
+    document.addEventListener('contextmenu', (e) => {
+        if (shouldDisableContextMenu()) {
+            e.preventDefault();
+            return false;
         }
+    }, false);
+    document.addEventListener('touchstart', preventLongPress, { passive: false });
+    document.addEventListener('touchend', preventLongPress, { passive: false });
+    window.addEventListener('orientationchange', updateContextMenuState);
+    window.addEventListener('resize', updateContextMenuState);
+}
+
+/**
+ * Checks if context menu should be disabled
+ * @function
+ * @returns {boolean} True if context menu should be blocked
+ */
+function shouldDisableContextMenu() {
+    const isLandscape = window.matchMedia('(orientation: landscape)').matches;
+    const isNarrowScreen = window.innerWidth <= 1260;
+    return isLandscape && isNarrowScreen;
+}
+
+/**
+ * Checks if device is in landscape orientation
+ * @function
+ * @returns {boolean} True if landscape mode
+ */
+function isLandscapeMode() {
+    return window.matchMedia('(orientation: landscape)').matches;
+}
+
+/**
+ * Prevents long press context menu on touch devices
+ * @function
+ * @param {TouchEvent} e - Touch event
+ */
+function preventLongPress(e) {
+    if (shouldDisableContextMenu()) {
+        e.preventDefault();
     }
 }
 
+/**
+ * Updates context menu state on orientation/resize change
+ * @function
+ */
+function updateContextMenuState() {
+    const body = document.body;
+    if (shouldDisableContextMenu()) {
+        body.style.webkitTouchCallout = 'none';
+        body.style.webkitUserSelect = 'none';
+        body.style.userSelect = 'none';
+    } else {
+        body.style.webkitTouchCallout = '';
+        body.style.webkitUserSelect = '';
+        body.style.userSelect = '';
+    }
+}
 window.addEventListener('resize', checkLandscapeFullscreen);
 window.addEventListener('orientationchange', () => {
     setTimeout(checkLandscapeFullscreen, 300);
