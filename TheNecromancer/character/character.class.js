@@ -5,6 +5,8 @@
 class Character extends Model {
   /** @type {World} Reference to game world */
   world;
+  /** @type {CharacterStateManager} Animation state manager */
+  stateManager;
   /** @type {number} Character movement speed */
   speed = 5;
   /** @type {boolean} Movement state flag */
@@ -40,7 +42,8 @@ class Character extends Model {
     this.setInitialPosition();
     this.applyGravity();
     this.initializeCharacterStates();
-}  
+    this.stateManager = new CharacterStateManager(this);
+  }
 
   /**
    * Initializes character state flags
@@ -70,12 +73,16 @@ class Character extends Model {
   loadCharacterImagePaths() {
     this.Character_Walking = ImageTemplateManager.getCharacterImages("walking");
     this.Character_Idle = ImageTemplateManager.getCharacterImages("idle");
-    this.Character_Idle_Blinking = ImageTemplateManager.getCharacterImages("idle_blinking");
-    this.Character_Jump_Start = ImageTemplateManager.getCharacterImages("jumping_start");
-    this.Character_Jump_End = ImageTemplateManager.getCharacterImages("jumping_end");
+    this.Character_Idle_Blinking =
+      ImageTemplateManager.getCharacterImages("idle_blinking");
+    this.Character_Jump_Start =
+      ImageTemplateManager.getCharacterImages("jumping_start");
+    this.Character_Jump_End =
+      ImageTemplateManager.getCharacterImages("jumping_end");
     this.Character_Hurt = ImageTemplateManager.getCharacterImages("hurting");
     this.Character_Dead = ImageTemplateManager.getCharacterImages("dying");
-    this.Character_Slashing = ImageTemplateManager.getCharacterImages("slashing");
+    this.Character_Slashing =
+      ImageTemplateManager.getCharacterImages("slashing");
   }
 
   /**
@@ -93,62 +100,62 @@ class Character extends Model {
     this.loadImages(this.Character_Slashing);
   }
 
-/**
- * Triggers attack animation and state
- * @method
- */
-attack() {
+  /**
+   * Triggers attack animation and state
+   * @method
+   */
+  attack() {
     if (!this.isAttacking && !this.isDead) {
-        this.isAttacking = true;
-        this.currentAnimationState = 'slashing';
-        this.currentImage = 0;
-        
-        setTimeout(() => {
-            this.isAttacking = false;
-            this.currentAnimationState = 'idle';
-            this.currentImage = 0;
-        }, 400);
-    }
-}
+      this.isAttacking = true;
+      this.currentAnimationState = "slashing";
+      this.currentImage = 0;
 
-/**
- * Returns attack hitbox for collision detection
- * @method
- * @returns {Object} Hitbox with x, y, width, height
- */
-getAttackHitbox() {
+      setTimeout(() => {
+        this.isAttacking = false;
+        this.currentAnimationState = "idle";
+        this.currentImage = 0;
+      }, 400);
+    }
+  }
+
+  /**
+   * Returns attack hitbox for collision detection
+   * @method
+   * @returns {Object} Hitbox with x, y, width, height
+   */
+  getAttackHitbox() {
     let attackRange = 100;
     let hitboxWidth = 120;
-    
-    if (this.otherDirection) {
-        return {
-            x: this.positionX - attackRange + 30,
-            y: this.positionY + 80,
-            width: hitboxWidth,
-            height: 100
-        };
-    } else {
-        return {
-            x: this.positionX + this.width - 50,
-            y: this.positionY + 80,
-            width: hitboxWidth,
-            height: 100
-        };
-    }
-}
 
-/**
- * Sets initial character position on game start
- * @method
- */
-setInitialPosition() {
+    if (this.otherDirection) {
+      return {
+        x: this.positionX - attackRange + 30,
+        y: this.positionY + 80,
+        width: hitboxWidth,
+        height: 100,
+      };
+    } else {
+      return {
+        x: this.positionX + this.width - 50,
+        y: this.positionY + 80,
+        width: hitboxWidth,
+        height: 100,
+      };
+    }
+  }
+
+  /**
+   * Sets initial character position on game start
+   * @method
+   */
+  setInitialPosition() {
     if (this.Character_Idle.length > 0) {
       this.loadImage(this.Character_Idle[0]);
-      this.positionX = -60; // ✅ Character startet bei X = -100 (sichtbar am linken Rand)
+      this.positionX = -60;
       this.positionY = 250;
       this.jumpStartHeight = this.positionY;
     }
-}
+  }
 
   /**
    * Starts animation loops for character
@@ -174,88 +181,120 @@ setInitialPosition() {
   }
 
   /**
-   * Calculates current frame for jump start animation
+   * Handles keyboard input for character movement and actions
    * @method
-   * @returns {number} Frame index for jump start
    */
-  getJumpStartFrame() {
-    let totalFrames = this.Character_Jump_Start.length;
-    let jumpRange = this.jumpStartHeight - this.maxJumpHeight;
-    let currentHeight = this.jumpStartHeight - this.positionY;
-    let frame = Math.floor((currentHeight / jumpRange) * totalFrames);
-    return Math.max(0, Math.min(frame, totalFrames - 1));
+  handleMovement() {
+    if (this.shouldSkipMovement()) return;
+    if (this.handleAttackingState()) return;
+
+    this.isMoving = false;
+    this.processMovementInput();
+    this.processActionInput();
   }
 
   /**
-   * Calculates current frame for jump end animation
+   * Checks if movement should be skipped
    * @method
-   * @returns {number} Frame index for jump end
+   * @returns {boolean} True if movement should be skipped
    */
-  getJumpEndFrame() {
-    let totalFrames = this.Character_Jump_End.length;
-    let jumpRange = this.jumpStartHeight - this.maxJumpHeight;
-    let currentHeight = this.jumpStartHeight - this.positionY;
-    let frame = Math.floor(
-      ((jumpRange - currentHeight) / jumpRange) * totalFrames
-    );
-    return Math.max(0, Math.min(frame, totalFrames - 1));
+  shouldSkipMovement() {
+    return this.isHurt || this.isDead || !this.world.gameStarted;
   }
 
-/**
- * Handles keyboard input for character movement and actions
- * @method
- */
-handleMovement() {
-    if (this.isHurt || this.isDead || !this.world.gameStarted) return;
-    
-    if (this.isAttacking) {
-        if (this.world.keyboard.LEFT) {
-            this.otherDirection = true;
-        }
-        if (this.world.keyboard.RIGHT) {
-            this.otherDirection = false;
-        }
-        if (this.world.keyboard.D) {
-            this.attack();
-        }
-        return;
-    }
-    
-    this.isMoving = false;
-    
+  /**
+   * Handles character state during attack
+   * @method
+   * @returns {boolean} True if currently attacking
+   */
+  handleAttackingState() {
+    if (!this.isAttacking) return false;
+
+    if (this.world.keyboard.LEFT) this.otherDirection = true;
+    if (this.world.keyboard.RIGHT) this.otherDirection = false;
+    if (this.world.keyboard.D) this.attack();
+    return true;
+  }
+
+  /**
+   * Processes directional movement input
+   * @method
+   */
+  processMovementInput() {
     let levelEndX = this.world.level.levelEndX - 100;
     let levelStartX = -200;
-    
+
     if (this.world.keyboard.RIGHT && this.positionX < levelEndX) {
-        this.moveRight();
+      this.moveRight();
     }
     if (this.world.keyboard.LEFT && this.positionX > levelStartX) {
-        this.moveLeft();
+      this.moveLeft();
     }
+  }
+
+  /**
+   * Processes action input (jump and attack)
+   * @method
+   */
+  processActionInput() {
     if (this.world.keyboard.SPACE) {
-        this.jump();
+      this.jump();
     }
     if (this.world.keyboard.D) {
-        this.attack();
+      this.attack();
     }
-}
+  }
 
-/**
- * Handles attack animation playback
- * @method
- */
-handleAttackAnimation() {
-    if (this.isAttacking && this.Character_Slashing.length > 0) {
-        let i = this.currentImage % this.Character_Slashing.length;
-        this.playAnimation(this.Character_Slashing, i);
-        this.currentImage++;
+  /**
+   * Main animation loop for character updates
+   * @method
+   */
+  animate() {
+    setInterval(() => {
+      if (this.world && this.world.keyboard) {
+        this.updateDeathState();
+        if (this.handlePriorityAnimations()) return;
         
-        if (this.currentImage >= this.Character_Slashing.length) {
-            this.currentImage = 0;
-        }
-    }
-}
+        this.handleMovement();
+        this.handleJumpingAndWalking();
+        this.stateManager.updateCamera();
+      }
+    }, 1000 / 30);
+  }
 
+  /**
+   * Updates character death state
+   * @method
+   */
+  updateDeathState() {
+    if (this.isDeadCheck() && !this.isDead) {
+      this.isDead = true;
+      this.currentAnimationState = "dead";
+      this.currentImage = 0;
+    }
+  }
+
+  /**
+   * Handles priority animation states
+   * @method
+   * @returns {boolean} True if priority animation is active
+   */
+  handlePriorityAnimations() {
+    if (this.isDead) {
+      this.stateManager.handleDeadAnimation();
+      return true;
+    }
+    if (this.isHurt) {
+      this.stateManager.handleHurtAnimation();
+      return true;
+    }
+    if (this.isAttacking) {
+      this.stateManager.handleAttackAnimation();
+      this.handleMovement();
+      return true;
+    }
+    return false;
+  }
 
   /**
    * Moves character to the right
@@ -297,184 +336,6 @@ handleAttackAnimation() {
   }
 
   /**
-   * Handles jump animation state transitions
-   * @method
-   */
-  handleJumpAnimation() {
-    this.updateFallingState();
-    this.playJumpStartAnimation();
-    this.playJumpEndAnimation();
-    this.checkLanding();
-  }
-
-  /**
-   * Updates falling state when character descends
-   * @method
-   */
-  updateFallingState() {
-    if (this.speedY < 0 && !this.isFalling) {
-      this.isFalling = true;
-      this.currentAnimationState = "jumping_end";
-    }
-  }
-
-  /**
-   * Plays jump start animation if active
-   * @method
-   */
-  playJumpStartAnimation() {
-    if (this.currentAnimationState === "jumping_start") {
-      this.playAnimation(this.Character_Jump_Start, this.getJumpStartFrame());
-    }
-  }
-
-  /**
-   * Plays jump end animation if active
-   * @method
-   */
-  playJumpEndAnimation() {
-    if (this.currentAnimationState === "jumping_end") {
-      this.playAnimation(this.Character_Jump_End, this.getJumpEndFrame());
-    }
-  }
-
-  /**
-   * Checks if character has landed on ground
-   * @method
-   */
-  checkLanding() {
-    if (this.positionY >= 250 && this.speedY <= 0) {
-      this.isJumping = false;
-      this.isFalling = false;
-      this.currentAnimationState = this.isMoving ? "walking" : "idle";
-      this.currentImage = 0;
-      this.idleTime = 0;
-    }
-  }
-
-  /**
-   * Handles walking animation playback
-   * @method
-   */
-  handleWalkingAnimation() {
-    if (this.isMoving && this.currentAnimationState === "walking") {
-      let i = this.currentImage % this.Character_Walking.length;
-      this.playAnimation(this.Character_Walking, i);
-      this.currentImage++;
-      this.idleTime = 0;
-    } else if (
-      !this.isMoving &&
-      !this.isJumping &&
-      this.currentAnimationState === "walking"
-    ) {
-      this.currentAnimationState = "idle";
-      this.currentImage = 0;
-    }
-  }
-
-/**
- * Updates camera position to follow character
- * @method
- */
-updateCamera() {
-    let canvasWidth = 720;
-    
-    let targetCameraX = -this.positionX + 360;
-    
-    let maxCameraX = 0;
-    let minCameraX = -(this.world.level.levelEndX - canvasWidth);
-    
-    this.world.camera_x = Math.max(minCameraX, Math.min(maxCameraX, targetCameraX));
-}
-
-
-/**
- * Main animation loop for character updates
- * @method
- */
-animate() {
-    setInterval(() => {
-        if (this.world && this.world.keyboard) {
-            if (this.isDeadCheck() && !this.isDead) {
-                this.isDead = true;
-                this.currentAnimationState = "dead";
-                this.currentImage = 0;
-            }
-            if (this.isDead) {
-                this.handleDeadAnimation();
-                return;
-            }
-            if (this.isHurt) {
-                this.handleHurtAnimation();
-                return;
-            }
-            if (this.isAttacking) {
-                this.handleAttackAnimation();
-                this.handleMovement();
-                return;
-            }
-            this.handleMovement();
-            this.handleJumpingAndWalking();
-            this.updateCamera();
-        }
-    }, 1000 / 30);
-}
-
-  /**
-   * Plays single idle animation frame
-   * @method
-   * @param {Array<string>} animationArray - Animation frames array
-   */
-  playIdleFrame(animationArray) {
-    let i = this.currentImage % animationArray.length;
-    this.playAnimation(animationArray, i);
-    this.currentImage++;
-  }
-
-  /**
-   * Checks if blinking animation should start
-   * @method
-   */
-  checkBlinkingTransition() {
-    if (
-      this.idleTime >= this.blinkInterval &&
-      this.currentAnimationState !== "blinking"
-    ) {
-      this.currentAnimationState = "blinking";
-      this.currentImage = 0;
-    }
-  }
-
-  /**
-   * Handles idle state animations (idle/blinking)
-   * @method
-   */
-  handleIdleState() {
-    this.checkBlinkingTransition();
-
-    if (this.currentAnimationState === "idle") {
-      this.playIdleFrame(this.Character_Idle);
-    }
-
-    if (this.currentAnimationState === "blinking") {
-      this.playIdleFrame(this.Character_Idle_Blinking);
-      this.checkBlinkingEnd();
-    }
-  }
-
-  /**
-   * Checks if blinking animation has finished
-   * @method
-   */
-  checkBlinkingEnd() {
-    if (this.currentImage >= this.Character_Idle_Blinking.length) {
-      this.currentAnimationState = "idle";
-      this.currentImage = 0;
-      this.idleTime = 0;
-    }
-  }
-
-  /**
    * Animation loop for idle states
    * @method
    */
@@ -482,7 +343,7 @@ animate() {
     setInterval(() => {
       if (!this.isMoving && !this.isJumping && !this.isDead && !this.isHurt) {
         this.idleTime += 100;
-        this.handleIdleState();
+        this.stateManager.handleIdleState();
       }
     }, 100);
   }
@@ -501,22 +362,22 @@ animate() {
     };
   }
 
-/**
- * Applies damage to character
- * @method
- * @param {number} damage - Damage amount (default 1)
- */
-hit(damage = 1) {
+  /**
+   * Applies damage to character
+   * @method
+   * @param {number} damage - Damage amount (default 1)
+   */
+  hit(damage = 1) {
     this.energy -= damage;
     if (this.energy < 0) {
-        this.energy = 0;
+      this.energy = 0;
     } else {
-        this.lastHit = Date.now();
-        this.isHurt = true;
-        this.currentAnimationState = "hurting";
-        this.currentImage = 0;
+      this.lastHit = Date.now();
+      this.isHurt = true;
+      this.currentAnimationState = "hurting";
+      this.currentImage = 0;
     }
-}
+  }
 
   /**
    * Checks if character was recently hurt (within 500ms)
@@ -538,45 +399,14 @@ hit(damage = 1) {
   }
 
   /**
-   * Handles hurt animation playback
-   * @method
-   */
-  handleHurtAnimation() {
-    if (this.isHurt && this.Character_Hurt.length > 0) {
-      let i = this.currentImage % this.Character_Hurt.length;
-      this.playAnimation(this.Character_Hurt, i);
-      this.currentImage++;
-      if (this.currentImage >= this.Character_Hurt.length) {
-        this.isHurt = false;
-        this.currentAnimationState = "idle";
-        this.currentImage = 0;
-      }
-    }
-  }
-
-  /**
-   * Handles death animation playback
-   * @method
-   */
-  handleDeadAnimation() {
-    if (this.isDead && this.Character_Dead.length > 0) {
-      let i = Math.min(this.currentImage, this.Character_Dead.length - 1);
-      this.playAnimation(this.Character_Dead, i);
-      if (this.currentImage < this.Character_Dead.length - 1) {
-        this.currentImage++;
-      }
-    }
-  }
-
-  /**
    * Coordinates jump and walking animations
    * @method
    */
   handleJumpingAndWalking() {
     if (this.isJumping) {
-      this.handleJumpAnimation();
+      this.stateManager.handleJumpAnimation();
     } else {
-      this.handleWalkingAnimation();
+      this.stateManager.handleWalkingAnimation();
     }
   }
 }
